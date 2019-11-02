@@ -18,7 +18,7 @@ First of all, please make sure that Docker is installed in your system, and the 
 
 ### Pull or build the image
 
-To pull the pre-built Docker image from its [Docker Hub repo](https://cloud.docker.com/repository/docker/sevenbridges/gcs), use:
+To pull the pre-built Docker image from its [Docker Hub repo](https://hub.docker.com/r/sevenbridges/gcs), use:
 
 ```bash
 docker pull sevenbridges/gcs
