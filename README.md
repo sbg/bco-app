@@ -1,8 +1,8 @@
 # Genomics Compliance Suite by Seven Bridges <a href="https://www.sevenbridges.com"><img src="https://raw.githubusercontent.com/sbg/gcs/master/logo.png" align="right" alt="logo" height="128" width="128" /></a>
 
 [![](https://img.shields.io/docker/cloud/build/sevenbridges/gcs.svg)](https://hub.docker.com/r/sevenbridges/gcs/builds)
+[![](https://images.microbadger.com/badges/version/sevenbridges/gcs.svg)](https://microbadger.com/images/sevenbridges/gcs)
 [![](https://img.shields.io/docker/pulls/sevenbridges/gcs.svg)](https://hub.docker.com/r/sevenbridges/gcs)
-[![](https://images.microbadger.com/badges/image/sevenbridges/gcs.svg)](https://microbadger.com/images/sevenbridges/gcs)
 
 Genomics Compliance Suite (GCS) is a Shiny app built by Seven Bridges to create, validate, and browse [BioCompute Objects](https://biocomputeobject.org/).
 
