@@ -1,8 +1,8 @@
 # Genomics Compliance Suite by Seven Bridges <a href="https://www.sevenbridges.com"><img src="https://raw.githubusercontent.com/sbg/gcs/master/logo.png" align="right" alt="logo" height="128" width="128" /></a>
 
-[![](https://img.shields.io/docker/cloud/build/sbg/gcs.svg)](https://hub.docker.com/r/sbg/gcs/builds)
-[![](https://img.shields.io/docker/pulls/sbg/gcs.svg)](https://hub.docker.com/r/sbg/gcs)
-[![](https://images.microbadger.com/badges/image/sbg/gcs.svg)](https://microbadger.com/images/sbg/gcs)
+[![](https://img.shields.io/docker/cloud/build/sevenbridges/gcs.svg)](https://hub.docker.com/r/sevenbridges/gcs/builds)
+[![](https://img.shields.io/docker/pulls/sevenbridges/gcs.svg)](https://hub.docker.com/r/sevenbridges/gcs)
+[![](https://images.microbadger.com/badges/image/sevenbridges/gcs.svg)](https://microbadger.com/images/sevenbridges/gcs)
 
 Genomics Compliance Suite (GCS) is a Shiny app built by Seven Bridges to create, validate, and browse [BioCompute Objects](https://biocomputeobject.org/).
 
@@ -16,10 +16,10 @@ First of all, please make sure that Docker is installed in your system, and the 
 
 ### Pull or build the image
 
-To pull the pre-built Docker image from its [Docker Hub repo](https://cloud.docker.com/repository/docker/sbg/gcs), use:
+To pull the pre-built Docker image from its [Docker Hub repo](https://cloud.docker.com/repository/docker/sevenbridges/gcs), use:
 
 ```bash
-docker pull sbg/gcs
+docker pull sevenbridges/gcs
 ```
 
 Alternatively, you can choose to build the image, which could take a few minutes:
@@ -35,7 +35,7 @@ docker build . -t gcs
 If the image was pulled from Docker Hub, use
 
 ```bash
-docker run --rm -p 3838:3838 --name sb sbg/gcs
+docker run --rm -p 3838:3838 --name sb sevenbridges/gcs
 ```
 
 If the image was built locally, use
@@ -55,7 +55,7 @@ After the container is running
 
 ```bash
 docker rm -f sb
-docker rmi sbg/gcs
+docker rmi sevenbridges/gcs
 ```
 
 or
