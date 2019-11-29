@@ -69,7 +69,8 @@ docker rmi gcs
 
 ## Links
 
-[PrecisionFDA BioCompute Object App-a-thon Challenge](https://precision.fda.gov/challenges/7/view)
+- [biocompute: Create and Manipulate BioCompute Objects](https://cran.r-project.org/package=biocompute)
+- [tidycwl: Tidy Common Workflow Language Tools and Workflows](https://cran.r-project.org/package=tidycwl)
 
 ## Copyright
 
