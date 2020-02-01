@@ -1,0 +1,11 @@
+---
+title: "GCS: BioCompute Object Genomics Compliance Suite User Manual"
+author: "Seven Bridges"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+link-citations: yes
+cover-image: "assets/cover.png"
+url: "https://sbg.github.io/gcs/"
+description: "User manual of the Genomics Compliance Suite by Seven Bridges"
+---
