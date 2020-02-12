@@ -1,0 +1,163 @@
+---
+output:
+  pdf_document:
+    template: bco-report-template.tex
+    latex_engine: xelatex
+    number_sections: yes
+mainfont: "Roboto"
+fontsize: 11pt
+
+title: '`r get_meta(meta_vec, "title")`'
+datetime: '`r get_meta(meta_vec, "datetime")`'
+
+classoption:
+  - letterpaper
+  - oneside
+graphics: null
+geometry: margin=1.0in
+shaded_quote: no
+colorlinks: yes
+# lof: yes
+# lot: yes
+toc: yes
+
+header-includes:
+- \usepackage{booktabs}
+- \usepackage{longtable}
+- \usepackage{array}
+- \usepackage{multirow}
+- \usepackage{wrapfig}
+- \usepackage{float}
+- \usepackage{colortbl}
+- \usepackage{pdflscape}
+- \usepackage{tabu}
+- \usepackage{threeparttable}
+- \usepackage{threeparttablex}
+- \usepackage[normalem]{ulem}
+- \usepackage{makecell}
+- \usepackage{xcolor}
+---
+
+```{r setup, include=FALSE, echo = FALSE, warning = FALSE, fig.align="center"}
+knitr::opts_chunk$set(echo = FALSE, comment = NA)
+```
+
+```{r wrap-hook}
+library("knitr")
+hook_output <- knit_hooks$get("output")
+knit_hooks$set(output = function(x, options) {
+  # this hook is used only when the linewidth option is not NULL
+  if (!is.null(n <- options$linewidth)) {
+    x <- knitr:::split_lines(x)
+    # any lines wider than n should be wrapped
+    if (any(nchar(x) > n)) x <- strwrap(x, width = n)
+    x <- paste(x, collapse = "\n")
+  }
+  hook_output(x, options)
+})
+```
+
+# BioCompute Object Domain Entries
+
+## Top Level Fields
+
+```{r, linewidth = 60}
+get_tlf_local() %>% convert_json()
+```
+
+## Provenance Domain
+
+```{r, linewidth = 60}
+get_provenance_local() %>% convert_json()
+```
+
+## Usability Domain
+
+```{r, linewidth = 60}
+get_usability_local() %>% convert_json()
+```
+
+## Extension Domain
+
+```{r, linewidth = 60}
+get_extension_local() %>% convert_json()
+```
+
+## Description Domain
+
+```{r, linewidth = 60}
+get_description_local() %>% convert_json()
+```
+
+## Execution Domain
+
+```{r, linewidth = 60}
+get_description_local() %>% convert_json()
+```
+
+## Parametric Domain
+
+```{r, linewidth = 60}
+get_description_local() %>% convert_json()
+```
+
+## Input/Output Domain
+
+```{r, linewidth = 60}
+get_io_local() %>% convert_json()
+```
+
+## Error Domain
+
+```{r, linewidth = 60}
+get_error_local() %>% convert_json()
+```
+
+\clearpage
+
+# Funding
+
+The Seven Bridges Cancer Genomics Cloud has been funded in whole or in part with Federal funds from the National Cancer Institute, National Institutes of Health, Contract No. HHSN261201400008C and ID/IQ Agreement No. 17X146 under Contract No. HHSN261201500003I.
+
+# References
+
+Lau et al (2017) The Cancer Genomics Cloud: Collaborative, Reproducible, and Democratized—A New Paradigm in Large-Scale Computational Research. Cancer Res. 77(21):e3-e6. doi: 10.1158/0008-5472.CAN-17-0387.
+
+\clearpage
+
+# Appendix 1: BioCompute Object Specification v1.3.0
+
+```{r echo=FALSE, warning=FALSE}
+suppressMessages(library("kableExtra"))
+
+gen_bco_kable <- function(dframe, name_header) {
+  dframe %>%
+    dplyr::select(-Domain) %>%
+    dplyr::select(-Optional) %>%
+    kable(format = "latex", longtable =T, booktabs = T, linesep = "") %>%
+    kable_styling(latex_options = c("striped", "hold_position", "repeat_header"),
+                  full_width = F, position ="center", font_size = 8) %>%
+    column_spec(1:2, width = "4cm") %>%
+    column_spec(3, width = "8cm") %>%
+    kableExtra::group_rows("Top Level Fields", 1, 4) %>%
+    kableExtra::group_rows("Provenance Domain", 5, 15) %>%
+    kableExtra::group_rows("Usability Domain", 16, 16) %>%
+    kableExtra::group_rows("Extension Domain", 17, 19) %>%
+    kableExtra::group_rows("Description Domain", 20, 23) %>%
+    kableExtra::group_rows("Execution Domain", 24, 32) %>%
+    kableExtra::group_rows("Parametric Domain", 33, 33)%>%
+    kableExtra::group_rows("Input and Output Domain", 34, 36)%>%
+    kableExtra::group_rows("Error Domain, acceptable range of variability", 37, 37)
+}
+
+dframe <- read.table("bco-spec.csv", header = TRUE, sep = ";")
+gen_bco_kable(dframe, "")
+```
+
+\clearpage
+
+# Appendix 2: The Complete BioCompute Object
+
+```{r}
+get_bco_json_local()
+```

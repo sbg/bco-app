@@ -10,7 +10,7 @@ Genomics Compliance Suite (GCS) is a Shiny app built by Seven Bridges to create,
 
 This repo offers the source code for the app's Docker image, including the Dockerfile and the app built by the Seven Bridges team. The app features BioCompute Object (BCO) creation (manually or by importing from CWL workflows), BCO checksum/schema validators, PDF report generator, and an interactive BCO browser.
 
-This `README` gives a brief introduction to pull the Docker image and run the app locally. For detailed usage of the app and more deployment options, please check our [PDF user manual](https://github.com/sbg/gcs/blob/master/sevenbridges-gcs-user-manual.pdf).
+This `README` gives a brief introduction to pull the Docker image and run the app locally. For detailed usage of the app and more deployment options, please check our [PDF user manual](https://sbg.github.io/gcs/gcs-user-manual.pdf).
 
 ## How to run the app locally
 
@@ -46,12 +46,11 @@ If the image was built locally, use
 docker run --rm -p 3838:3838 --name sb gcs
 ```
 
-### Log into the app
+### Open the app
 
-After the container is running
+After the container is running, open http://127.0.0.1:3838 in your web browser.
 
-- Open `http://127.0.0.1:3838` in your web browser.
-- Use the username/password `sevenbridges`/`sevenbridges` to log in.
+(If required, use the credential `sevenbridges`/`sevenbridges` to log in.)
 
 ### Clean up the container and image after running
 
