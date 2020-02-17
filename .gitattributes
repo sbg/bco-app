@@ -1,2 +1,2 @@
-app/www/* linguist-vendored
-app/css/* linguist-vendored
+www/* linguist-vendored
+css/* linguist-vendored
