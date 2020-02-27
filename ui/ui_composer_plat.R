@@ -39,7 +39,14 @@ tabPanel(
           selectInput(
             inputId = "plat",
             label = "Platform",
-            choices = c("Seven Bridges Platform (US)" = "aws-us", "Seven Bridges Platform (EU)" = "aws-eu", "Cancer Genomics Cloud (CGC)" = "cgc", "BioData Catalyst" = "f4c", "Cavatica" = "cavatica")
+            choices = c("Cancer Genomics Cloud (CGC)" = "cgc", "Seven Bridges Platform (US)" = "aws-us", "Seven Bridges Platform (EU)" = "aws-eu", "BioData Catalyst" = "f4c", "Cavatica" = "cavatica")
+          ),
+          conditionalPanel(
+            condition = "input.plat == 'cgc'",
+            tags$label(
+              "Paste the Auth Token from the",
+              tags$a(href = .platforms[["cgc"]][["token_url"]], "CGC Developer Dashboard", target = "_blank")
+            )
           ),
           conditionalPanel(
             condition = "input.plat == 'aws-us'",
@@ -53,13 +60,6 @@ tabPanel(
             tags$label(
               "Paste the Auth Token from the",
               tags$a(href = .platforms[["aws-eu"]][["token_url"]], "Seven Bridges Platform (EU) Developer Dashboard", target = "_blank")
-            )
-          ),
-          conditionalPanel(
-            condition = "input.plat == 'cgc'",
-            tags$label(
-              "Paste the Auth Token from the",
-              tags$a(href = .platforms[["cgc"]][["token_url"]], "CGC Developer Dashboard", target = "_blank")
             )
           ),
           conditionalPanel(
