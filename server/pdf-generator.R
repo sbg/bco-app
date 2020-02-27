@@ -52,12 +52,12 @@ output$btn_export_pdf_local <- downloadHandler(
   },
   content = function(file) {
     showModal(modalDialog("Generating report...", footer = NULL))
-    
+
     meta_vec <- set_meta(
       title = input$provenance_name_local,
       datetime = format(Sys.Date(), "%B %d, %Y")
     )
-    
+
     src_rmd <- normalizePath("template/report-local.Rmd")
     src_tex <- normalizePath("template/bco-report-template.tex")
     src_logo <- normalizePath("template/sbg-logo.pdf")
@@ -70,7 +70,9 @@ output$btn_export_pdf_local <- downloadHandler(
     file.copy(src_bco_spec, "bco-spec.csv")
     out <- rmarkdown::render("report-local.Rmd", quiet = TRUE)
     file.rename(out, file)
-    
+
     removeModal()
   }
 )
+
+# TODO: - add visual of workflow to the generated pdf report
