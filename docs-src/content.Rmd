@@ -63,19 +63,19 @@ You will see the landing page of the GCS app after your first login:
 
 ![Landing Page of the Genomics Compliance Suite](assets/landing.png)
 
-In the middle of all, you see the quick action buttons; you can quickly start to build your BioCompute (BCO) object file with "**Start Here**" button, or you can access the informative page about the BCO with "**Need Help?**" button.
+In the middle of all, you see the quick action buttons; you can quickly start to build your BioCompute (BCO) object file with any of the composer buttons: "**Test Composer**", "**File Composer**", and "**Platform Composer**", or you can access the informative page about the BCO with "**Need Help?**" button.
 
-In the navigation bar, you will see the list of tabs for the main features, such as **BCO Composer (manual mode), BCO Composer (from CWL)**, **BCO Validation, Interactive BCO Browser**, and **Help**.
+In the navigation bar, you will see the list of tabs for the main features, **Generators** which includes all composers, **Utilities** which includes "**Browser**", "**Validator**", and "**Standard**", and lastly **Help**.
 
-To save us some time, we will walk through the BCO Composer (from CWL) feature below in detail. All the other features should follow the same principles and are intuitive to use.
+To save us some time, we will walk through the Platform Composer (from CWL) with Cancer Genomics Cloud (CGC) feature below in detail. All the other features should follow the same principles and are intuitive to use.
 
-## BioCompute Object (BCO) Composer {#composer}
+## Platform Composer {#composer}
 
 ### Step 1 - Import the Target CWL App {#import-cwl}
 
-After you click the "**BCO Composer**" page of the GCS platform, you will see the initial step of the BCO generation, import step (Figure 3).
+After you click the "**Platform Composer**" page of the GCS platform under "**Generators**" tab, you will see the initial step of the BCO generation, import step (Figure 3).
 
-![Initial Page of the BCO Composer](assets/step-initial.png)
+![Initial Page of the Platform Composer](assets/step-initial.png)
 
 The BCO Creator/Composer has six different steps to generate a new BioCompute Object (BCO) to cover each of the BCO domains from the ground up (Figure 4).
 
@@ -83,9 +83,9 @@ It begins with Common Workflow Language (CWL) importing step then goes with Step
 
 The "Import" step collects some information from a user to initiate the generation process. These are: **Platform**, **Authentication Token**, **Project,** **Task of the Project** as an optional, and **Application Name** to import the CWL of the selected application.
 
-![Steps of the BCO Composer](assets/steps.png)
+![Steps of the Platform Composer](assets/steps.png)
 
-![Necessary information fields at the beginning of the BCO Composer](assets/import-blank.png)
+![Necessary information fields at the beginning of the Platform Composer](assets/import-blank.png)
 
 Select a name for a "**Platform**" that you want to fetch a CWL file of an application (Figure 5).
 
@@ -163,7 +163,7 @@ In addition to export features, there are two very useful save features in the G
 
 The first one is **Save to the Platform**, automatically saves the generated BCO file into "**BCO**" folder under "**Files**" of your project. You can see the example of the generated files in the project's "**Files/BCO**" folder in Figure 19.
 
-Also, there is no need to open the platform in the external browser window. When "**Save to the Platform**" button is clicked, the direct link button (to the platform) appears near the "**Save to the Platform**" button to access the generated file on the platform easily (Figure 20).
+Also, there is no need to open the platform in the external browser window. When "**Save to the Platform**" button is clicked, the direct link (to the platform) appears near the "**Upload Succeeeded**" warning to access the generated file on the platform easily (Figure 20).
 
 ![Generated BCO exported to the Seven Bridges Platform.](assets/output-platform.png)
 
