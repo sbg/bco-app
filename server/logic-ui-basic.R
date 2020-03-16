@@ -9,7 +9,7 @@
 
 # landing page buttons
 observeEvent(input$btn_nav_text, updateNavlistPanel(session, "nav_bco", selected = "Text Composer"))
-observeEvent(input$btn_nav_file, updateNavlistPanel(session, "nav_bco", selected = "File Composer"))
+observeEvent(input$btn_nav_file, updateNavlistPanel(session, "nav_bco", selected = "CWL Composer"))
 observeEvent(input$btn_nav_plat, updateNavlistPanel(session, "nav_bco", selected = "Platform Composer"))
 observeEvent(input$btn_nav_help, updateNavlistPanel(session, "nav_bco", selected = "Help"))
 
