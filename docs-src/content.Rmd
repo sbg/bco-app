@@ -6,6 +6,7 @@ The Genomics Compliance Suite (GCS) provides tools for generating, reviewing, an
 This user manual provides a brief introduction into BioCompute Objects, instructions for installing GCS, and an overview of GCS features. 
 
 In reviewing the user manual you will learn how to:
+
 -	Generate BCOs from text or CWL files
 -	Generate BCOs from CWL workflows or Task information from your Seven Bridges Platform project
 -	Download generated BCO JSON file to your local machine
@@ -207,7 +208,7 @@ The BCO validator checks an uploaded BCO JSON file with the BCO specification. R
 
 \clearpage
 
-## Interactive BCO Browser {#browser}
+### Interactive BCO Browser {#browser}
 
 The Interactive browser allows the user to open and review a BCO file stores on a local machine (See Figure 18).
 
