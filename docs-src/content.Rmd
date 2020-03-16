@@ -1,40 +1,61 @@
 
-# Goals {#goals}
+# Introduction {#goals}
 
-Hello, and welcome to the Genomics Compliance Suite (GCS). This manual walks through several steps involved in BioCompute object (BCO) file generation in the GCS. The app guides a user for the generation of BCO manually, or by first selecting bioinformatics workflows written in the Common Workflow Language (CWL), and then by allowing the user to enter text for BioCompute fields described in the BioCompute specification.
+The Genomics Compliance Suite (GCS) provides tools for generating, reviewing, and validating BioCompute Objects. The GCS can generate BioCompute Objects from user text input, workflows written in Common Workflow Language (CWL), and from CWL and task information generated on the Cancer Genomics Cloud. The GCS also include tools for reviewing and validating BioCompute Objects stored locally or on the cloud. Our goals in providing the GCS are to encourage further development of the standard, promoting the use of CWL to document complex bioinformatics workflows, and to facilitate the use of BCOs in operational settings; including developing the application to support FDA regulatory submissions. 
 
-Briefly, the goals of this user manual are:
+This user manual provides a brief introduction into BioCompute Objects, instructions for installing GCS, and an overview of GCS features. 
 
-- Learn about the application
-- Fetch the CWL workflows in your project, identify and manipulate to generate BCO files
-- Download the generated BCO JSON file
-- Generate PDF reports for the generated BCO file
-- Upload generated BCO file to any of the Seven Bridges platforms or your GitHub account.
+In reviewing the user manual you will learn how to:
+-	Generate BCOs from text or CWL files
+-	Generate BCOs from CWL workflows or Task information from your Seven Bridges Platform project
+-	Download generated BCO JSON file to your local machine
+-	Generate PDF reports from BCO JSON files
+-	Upload BCO file to any of the Seven Bridges platforms
+-	Publish BCOs to your GitHub account.
 
-# Getting Started with the Genomics Compliance Suite (GCS) {#getting-started}
+# BioCompute Objects {#getting-started}
 
-This section describes the basic usage of the GCS app.
+The BioCompute Object standard is an emerging standard that aims to facilitate the communication of Next Generation Sequencing (NGS) analyses by providing a structured way for documenting and communicating complex analyses as commonly seen in bioinformatics and precision medicine applications. The BCO standard defines 33 fields across nine domains (ex. identification and execution domains). The BCO JSON file is designed to be both human and machine readable. GCS supports BioCompute specification v1.3.0. See the appendix or the BioCompute Object website (https:// biocomputeobject.org/index.html) for additional details. 
 
-## App Access and Login {#login}
+## Genomic Compliance Suite Overview {#login}
 
-The GCS app is designed to be easily deployed locally for testing or on any remote servers for production. A containerized (Docker) version is available on GitHub. Seven Bridges employees can access the app from the internal portal. We are also testing access with academic groups through the Cancer Genomics Cloud.
+The current version of the Genomics Compliance Suite extends our initial prototype developed for the precisionFDA BioCompute Object Challenge. The challenge required the submitted tools to support the display, creation, and validation. Our current tool also includes support for selecting inputs from both your local machine and from files stored on the Cancer Genomics Cloud, as well as selecting inputs from the suite of Seven Bridges Platforms. GCS supports interactive as well as semi-automated BCO construction. For example, users have the options to select a CWL workflows on the CGC as a way to pre-populate workflows related BCO fields.
+
+## Menu Options
+
+The following menu options are available from the Genomics Compliance Suite
+
+
+| **Menu Entry**        | **Description**                                                                                                                                                                                                          |
+|-----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Home**              | App landing page with links to generators and help screen                                                                                                                                                            |
+| **Generators**        | Tools for generating BCO JSON Files, generating a BCO PDF, and publishing BCO to a GIT page                                                                                                                          |
+| Text Composer         | Interface allows users to interactively enter text into BCO fields. The composer steps the user through completing each of the BCO domains.                                                                          |
+| CWL Composer          | Interface allows a user to select a CWL file from their local machine to pre-populate the BCO fields with workflow related fields. Once loaded, the interface is identical to the Text Composer.                     |
+| Platform Composer     | Interface allows a user to select a CWL Workflow or Task on the Cancer Genomics Cloud to pre-populate the BCO fields with workflow/task related fields. Once loaded, the interface is identical to the Text Composer |
+| **Utilities**         | Tools that support BCO use.                                                                                                                                                                                          |
+| Browser               | The browser facilitates interactive review of a BCO JSON file                                                                                                                                                        |
+| Validator             | The validator allows a user to compare a BCO JSON file to the BCO specification.                                                                                                                                     |
+| Standard              | The Standard feature provides an interface to review the BCO field definitions by domain.                                                                                                                            |
+| **Help**              | Brief description of Menu items 
+
+## Installing and Accessing the Genomics Compliance Suite
+
+The GCS app can be deployed locally and on a remote server. Both the source code and a containerized (Docker) version is available on GitHub. The source code can also be executed from the Cancer Genomics Cloud, as well as any of the Seven Bridges Platforms, through the R Studio extension on out platforms. Additional GCS deployment details follow.
 
 ### Containerized app {#docker}
 
-Pull or build the Docker image from GitHub (see REAME.md) for details. Run the Docker container. Go to the app served by the Docker container at [[http://127.0.0.1:3838]{.underline}](http://127.0.0.1:3838) in your web browser, and login with the default username and password sevenbridges/sevenbridges (Figure 1).
+Running GCS from a containerize app will allow you to execute the app without having to install GCS requirements/dependencies on your local machine or server. Instructions for pulling, building, and running the Docker image can be found on the GCS GitHub page (https://github.com/sbg/gcs). The default username and password sevenbridges/sevenbridges (Figure 1).
 
-### Seven Bridges hosted app {#hosted}
+### Cancer Genomics Cloud hosted app {#hosted}
 
-If you are logging on within Seven Bridges, the following instructions
-are pertinent to those logging on from within the Seven Bridges VPN.
+The GCS can be executed from within the Cancer Genomics Cloud through R Studio. Execution instructions follow.
 
 Go to the hosted version [https://shiny-internal.sbgenomics.com/gcs/](https://shiny-internal.sbgenomics.com/gcs/) (behind the VPN) and log in with your username and password.
 
-### RStudio Server on the Cancer Genomics Cloud {#cgc}
-
 **Getting the app**
 
-Copy the 'biocompute-composer.zip' to your project folder. Please request access to the zip file if you do not currently have access.
+Copy the ‘biocompute-composer.zip’ to your project folder. Please request access to the zip file if you do not currently have access (support.at.sbgenomics.com).
 
 **Running the app**
 
@@ -55,79 +76,76 @@ To run the app:
 - A dialog about popup windows may appear if you're running this for the first time, click "Try Again" to proceed.
 - Note: if running the app from a restarted analysis session, remember to run app-setup.R again before running the app.
 
-![Login Page of the Genomics Compliance Suite](assets/login.png)
 
-## Start Page {#start-page}
+## Getting Started with the Genomics Compliance Suite {#start-page}
 
-You will see the landing page of the GCS app after your first login:
+Executing the GCS will result in an optional login page or the GCS landing page depending on the GCS settings. 
+
+### Login Page (Deployment Specific)
+The login credentials are installation dependent. The default login credentials for user and password are respectively sevenbridges and sevenbridges. 
+
+### Landing Page
+You will see the landing page of the GCS app after you login (See Figure 1).
 
 ![Landing Page of the Genomics Compliance Suite](assets/landing.png)
 
-In the middle of all, you see the quick action buttons; you can quickly start to build your BioCompute (BCO) object file with any of the composer buttons: "**Test Composer**", "**File Composer**", and "**Platform Composer**", or you can access the informative page about the BCO with "**Need Help?**" button.
+The navigation bar along the top of the screen provides access to primary GCS features including Generators and Utilities. Button along the bottom of the screen provide single click access to GCS BCO generators and to GCS help screen.
 
-In the navigation bar, you will see the list of tabs for the main features, **Generators** which includes all composers, **Utilities** which includes "**Browser**", "**Validator**", and "**Standard**", and lastly **Help**.
+## Generating BioCompute Objects with GCS
 
-To save us some time, we will walk through the Platform Composer (from CWL) with Cancer Genomics Cloud (CGC) feature below in detail. All the other features should follow the same principles and are intuitive to use.
+The following example details generating a BCO from a CWL workflow on the Cancer Genomics Cloud. 
+We selected the example since the Platform Composer includes elements of the text composer and the CWL composer. Reading through the example will outline the steps required to generate a BCO object.  
 
-## Platform Composer {#composer}
+### Platform Composer {#composer}
 
 ### Step 1 - Import the Target CWL App {#import-cwl}
 
-After you click the "**Platform Composer**" page of the GCS platform under "**Generators**" tab, you will see the initial step of the BCO generation, import step (Figure 3).
+After you click the "**Platform Composer**" page of the GCS platform under "**Generators**" tab, you will see the initial step of the BCO generation, import step (Figure 2).
 
 ![Initial Page of the Platform Composer](assets/step-initial.png)
 
-The BCO Creator/Composer has six different steps to generate a new BioCompute Object (BCO) to cover each of the BCO domains from the ground up (Figure 4).
+The BCO Creator/Composer includes six steps, each step corresponding to a BCO domain,  to generate a new BioCompute Object (BCO):
 
-It begins with Common Workflow Language (CWL) importing step then goes with Step 2, which has information about Provenance, Usability, and Extension Domains. In Step 3, you can see the Execution Domain and Parametric Domain fields of a BCO sample. Then it goes with Step 4 that has Description Domain. Step 5 follows with I/O Domain and Error Domain. In the end, the user can review the generated BCO and take action like download the BCO file, upload it to your Seven Bridges platform accounts or GitHub accounts.
+Step 1: Import workflow written Common Workflow Language (CWL).
 
-The "Import" step collects some information from a user to initiate the generation process. These are: **Platform**, **Authentication Token**, **Project,** **Task of the Project** as an optional, and **Application Name** to import the CWL of the selected application.
+Step 2: Set BCO fields in the Provenance, Usability, and Extension Domains.
 
-![Steps of the Platform Composer](assets/steps.png)
+Step 3: Set BCO fields in the Execution  and Parametric Domains.
 
-![Necessary information fields at the beginning of the Platform Composer](assets/import-blank.png)
+Step 4: Set the Description Domain fields. 
 
-Select a name for a "**Platform**" that you want to fetch a CWL file of an application (Figure 5).
+Step 5: Set the fields in the I/O and Error Domain. 
 
-After that, paste your authentication token to "**Paste the auth token from**..." field. Colored text in the name of the field is a direct link to the authentication token page of the selected platform (Please check **Appendix I** to learn more about how to generate authentication token).
+Step 6: Generate BCO
 
-When the authentication token of the user is pasted, projects, tasks, and applications that exist in the account of the user will be fetched.
+Once user entry is completed, the user can generate and review the BCO associated with the workflow. A generated BCO can be downloaded, published to a Git page, and uploaded it to your Seven Bridges platform.
 
-User can select a project to focus on in "**Choose a project**" field. Then, a task can be selected among the existing tasks in the selected project from "**Choose a task of the project**" field, which is optional.
+The “Import” step collects some information from a user to initiate the generation process. These are: Platform, Authentication Token, Project, Task of the Project as an optional, and Application Name to import the CWL of the selected application. Select a name for a “Platform” that you want to fetch a CWL file of an application (Figure 3).
 
-Finally, the target application can be selected from "**Choose the CWL workflow to import**" field to fetch a CWL of a target application to work with to generate a BioCompute Object.
 
-Filled entries of the page are illustrated in Figure 6 and Figure 7.
+![Required Platform Composer](assets/import-blank.png)
 
-![Illustration of the necessary information fields](assets/import-workflow-only.png)
-
-![Illustration of the necessary information fields with the optional (task) selection](assets/import-tasks.png)
+After that, paste your authentication token to "**Paste the auth token from…**" field. Colored text in the name of the field is a direct link to the authentication token page of the selected platform (See Appendix I for additional information). Projects, tasks, and applications that exist in the account of the user will be fetched once a valid authentication token is entered. Finally, the target application can be selected from "**Choose the CWL workflow to import**" field to fetch a CWL of a target application to work with to generate a BioCompute Object. Optionally, a user could selected an completed task at this step which would include the workflow information in the generated CWL. 
 
 ### Step 2 - Provenance, Usability, and Extension Domains {#provenance}
 
-In step 2, Provenance, Usability, and Extension Domains of BCO are listed with their identification fields.
+In step 2, User enters Provenance, Usability, and Extension Domains of BCO. 
 
-After selecting the target application's CWL file, the GCS app fetches and parses the selected CWL in the background to pre-fill standard information fields between CWL and BCO fields. It is illustrated in Figure 8. On the other hand, some of the fields of BCO cannot be filled by the information parsed from CWL, as shown in Figure 9. Users can add new information into these fields manually. Users can also edit the pre-filled fields according to their needs.
+The GCS app automatically enters some fields from information parsed from the selected CWL workflow. Users are prompted to complete the remaining fields. You can find the complete detailed list of Provenance, Usability, and Extension Domain fields in Appendix II. See Figure 4 and 5 for Provenance Domain Entry fields.
 
-You can find the complete detailed list of Provenance, Usability, and Extension Domain fields in Appendix II, Table 2, and Table 4.
+![Example of Provenance Domain fields automatically filled by the GCS.](assets/step-provenance-1.png)
 
-![Filled fields, by CWL of the selected application, of domains exist in Step 2.](assets/step-provenance-1.png)
-
-![Unfilled fields, by CWL of the selected application, of domains exist in Step 2.](assets/step-provenance-2.png)
+![Example of Provenance Domain Fields to be entered by the user.](assets/step-provenance-2.png)
 
 ### Step 3 - Execution and Parametric Domains {#execution}
 
-In step 3, Execution and Parametric Domains of BCO are listed with their identification fields.
-
-![Execution domain example from Step 3.](assets/step-execution.png)
+In step 3, You are prompted to enter text in the Execution and Parametric Domains fields. Some entries will spark a pop up box as shown in Figure 6. See Appendix II for a complete list of fields in the Execution and Parametric Domain.
 
 ![Example of adding a new entry or editing existence one in the field.](assets/edit-entry.png)
 
-You can find the complete detailed list of Execution and Parametric Domains' fields in Appendix II, Table 6, and Table 7.
-
 ### Step 4 - Description Domain {#description}
 
-In this step, Description Domain of BCO is listed with its identification fields.
+The user is prompted to enter information from the in the Description Domain. Some of the fields will be pre-populated as shown in Figure 7. See Appendix II for a complete list Description Domain fields. 
 
 ![Description Domain example from Step 4](assets/step-description.png)
 
@@ -135,57 +153,63 @@ You can find the complete list of the details of the Description Domain fields i
 
 ### Step 5 - I/O and Error Domain {#io-error}
 
-In step 5, Input/Output and Error Domains of BCO is listed with their identification fields.
+The user is prompted to enter information for the I/O and Error Domains. Some of the fields will be pre-populated as shown in Figure 8 and 9. See Appendix II for a complete list fields for the I/O and Error Domains.
 
 ![I/O Domain example from Step 5](assets/step-io.png)
 
 ![Error Domain example from Step 5](assets/step-error.png)
 
-You can find the complete detailed list of I/O and Error Domains' fields in Appendix II, Table 8, and Table 9.
+You can find the complete detailed list of I/O and Error Domains’ fields in Appendix II, Table 8, and Table 9.
 
 ### Step 6 - Review and Export {#export}
 
-As the last step of BCO Composer, you can review your generated BCO file in "**Review & Export**" after "**Generate & Preview BCO**" button is clicked. At the top of them, the "**BCO ID**" of the generated BCO file is automatically assigned.
+As the last step of BCO Composer, you can review your generated BCO file in "**Review & Export**" after "**Generate & Preview BCO**" button is clicked. At the top of them, the "**BCO ID**" of the generated BCO file is automatically assigned (See figure 10).
 
 ![Review the generated BCO file](assets/step-review-export.png)
 
-At the bottom of the review part, users can access some export and save features (Figure 16). The first one is the feature to export the generated BCO file in JSON file format, "**Export as JSON**". When it is clicked, the generated BCO file is downloaded as a JSON file. You can see the example of the exported file in Figure 17.
+The GCS includes several BCO export features (Figure 11). A user can export a  BCO file in JSON file format, "**Export as JSON**". The generated BCO file is downloaded as a JSON file (Figure 12).
 
 ![Export and save features](assets/export-buttons.png)
 
 ![Example View of the Downloaded BCO JSON file](assets/output-json.png)
 
-As the second feature, users can generate a PDF reports for the BioCompute Object with "**Export as PDF**" button. In the report, users can find all domains of the generated BCO file, BioCompute Object specifications, and typed raw JSON of the generated BCO, with white spaces for reviewers to review (Figure 18).
+Users can also generate a PDF reports for the BioCompute Object with "**Export as PDF**" button. The report includes human readable summaries for all the BCO domains, the BioCompute Object specification, and the raw JSON of the generated BCO (Figure 13).
 
 ![Example View of the Generated PDF Report in Step 6](assets/output-pdf.png)
 
 In addition to export features, there are two very useful save features in the Genomics Compliance Suite: **Save to the Platform** and **Save to GitHub**.
 
-The first one is **Save to the Platform**, automatically saves the generated BCO file into "**BCO**" folder under "**Files**" of your project. You can see the example of the generated files in the project's "**Files/BCO**" folder in Figure 19.
+The first one is **Save to the Platform**, automatically saves the generated BCO file into "**BCO**" folder under "**Files**" of your project. You can see the example of the generated files in the project's "**Files/BCO**" folder in Figure 14.
 
-Also, there is no need to open the platform in the external browser window. When "**Save to the Platform**" button is clicked, the direct link (to the platform) appears near the "**Upload Succeeeded**" warning to access the generated file on the platform easily (Figure 20).
+Also, there is no need to open the platform in the external browser window. When "**Save to the Platform**" button is clicked, the direct link (to the platform) appears near the "**Upload Succeeeded**" warning to access the generated file on the platform easily (Figure 15).
 
 ![Generated BCO exported to the Seven Bridges Platform.](assets/output-platform.png)
 
 ![Save to the Seven Bridges Platform with direct links to the platform in Step 6.](assets/export-buttons-2.png)
 
-As a second, **Save to GitHub**, automatically saves the generated BCO file into your Github account to make your projects up to date and easy-to-access to your BCO files. You can see the **GitHub Connection** popup window, when your click the **Push to GitHub** button (Figure 21).
+A second way to save the generated BCO is to publish the BCO to GitHub. "**Save to GitHub**", automatically saves the generated BCO file into your GitHub account. "**GitHub Connection**" popup window streamlines the process of publishing the BCO JSON file to your git page (Figure 16).
 
-The window will need the **username** and **password** of the user's GitHub account to make the connection and push operations. Then, the user can type the target **Repository Name** to push the generated BCO file. Also, there is the **Git Commit Message** field that is the explanatory message for the push operation. In the end, when the user clicks on **Push**, results of the push operation will be listed in **Git commit message** area (Figure 22).
+The "**Push to GitHub**" popup window requires the **username** and **password** of the user’s GitHub account to complete the connection and push operations. The user also enters the target "**Repository Name**" to push the generated BCO file. The "Git Commit Message" contains GitHub response messaged that may include indication of a successful or failed operation.
+
 
 ![GitHub connection window in Step 6](assets/git-page.png)
 
-![GitHub connection before/after push operation in Step 6](assets/git-popup.png)
 
 \clearpage
 
-## BioCompute Object (BCO) Validator {#validator}
+## BioCompute Object Utilities
+
+### BioCompute Object (BCO) Validator {#validator}
+
+The BCO validator checks an uploaded BCO JSON file with the BCO specification. Results of the check include a Checksum Validation and the Schema Validation.
 
 ![A screenshot of the BCO validator UI.](assets/bco-validator.png)
 
 \clearpage
 
 ## Interactive BCO Browser {#browser}
+
+The Interactive browser allows the user to open and review a BCO file stores on a local machine (See Figure 18).
 
 ![A screenshot of the interactive BCO browser UI.](assets/bco-browser.png)
 
@@ -201,7 +225,7 @@ Your authentication token encodes your Seven Bridges Platform credentials and un
 
 ## Locate Authentication Token {-}
 
-You can get your authentication token from the developer dashboard. For example, for Seven Bridges Platform users, click [[here]{.underline}](https://igor.sbgenomics.com/developer#token) to go to the developer dashboard to generate a new token or access your token (Figure 23).
+You can get your authentication token from the developer dashboard. For example, for Seven Bridges Platform users, click [[here]{.underline}](https://igor.sbgenomics.com/developer#token) to go to the developer dashboard to generate a new token or access your token (Figure 19).
 
 ![Authentication token generation page on the Seven Bridges Platform.](assets/auth-token.png)
 
@@ -209,7 +233,7 @@ You can get your authentication token from the developer dashboard. For example,
 
 # Appendix II: BioCompute Object Domains {-}
 
-This section summarizes the domains defined in the BioCompute Object specification.
+This section summarizes the domains defined in the BioCompute Object specification (v1.3.0).
 
 ![Top level fields of a BioCompute Object](assets/table-tlf.png)
 
