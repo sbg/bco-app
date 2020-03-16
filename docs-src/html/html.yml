@@ -1,5 +1,5 @@
 ---
-title: "GCS: BioCompute Object Genomics Compliance Suite User Manual"
+title: "Genomics Compliance Suite: BioCompute Object User Manual"
 author: "Seven Bridges"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site

@@ -19,7 +19,8 @@ $endif$
 \usepackage{ifxetex,ifluatex}
 \usepackage[nottoc]{tocbibind}
 
-
+% more font sizes
+\usepackage{anyfontsize}
 
 % some more packages...
 \usepackage{graphicx}
@@ -261,15 +262,15 @@ $endfor$
     \end{figure}
 
     \phantom{}
-    \vspace{10cm}
+    \vspace{3cm}
 
-  \begin{minipage}{0.55\textwidth}
+  \begin{minipage}{\textwidth}
   \begin{flushleft}
-    \begin{singlespace}
-      \LARGE{$title$}
-    \end{singlespace}
-    \vspace{0.1in}
-    \Large{$month$}
+    {\fontsize{30}{34}\selectfont $title$}
+  \end{flushleft}
+    \vspace{0.6in}
+  \begin{flushleft}
+    \Huge{$month$}
   \end{flushleft}
   \end{minipage}
 
