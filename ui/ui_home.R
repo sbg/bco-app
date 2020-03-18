@@ -28,7 +28,7 @@ tabPanel(
 
     br(), br(),
 
-    span(h1("Genomics Compliance Suite", style = "color:#FFF; text-shadow: rgba(0, 0, 0, 0.3) 0px 0px 15px; text-align: center; font-weight: 700;") , align = "center"),
+    span(h1("BCO App", style = "color:#FFF; text-shadow: rgba(0, 0, 0, 0.3) 0px 0px 15px; text-align: center; font-weight: 700;") , align = "center"),
 
     br(),
 
@@ -54,7 +54,7 @@ tabPanel(
         class = "btn btn-lg", style = "margin-left: 25px; background-color: rgb(28, 121, 96); border-color: rgb(28, 121, 96);"
       ),
       actionButton(
-        "btn_nav_file", "File Composer",
+        "btn_nav_file", "CWL Composer",
         icon("arrow-circle-o-right"),
         class = "btn btn-lg", style = "margin-left: 25px; background-color: rgb(117, 54, 133); border-color: rgb(117, 54, 133);"
       ),

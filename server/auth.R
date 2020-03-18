@@ -78,7 +78,7 @@ observeEvent(input$login_button, {
 # username and password text fields, login button
 output$uiLogin <- renderUI({
   wellPanel(
-    HTML('<h3 style="color:#555"; align="center">Genomics Compliance Suite&trade;</h3>'),
+    HTML('<h3 style="color:#555"; align="center">BCO App&trade;</h3>'),
     textInput("login_user_name", label = "", placeholder = "Username or email"),
     passwordInput("password", label = "", placeholder = "Password"),
     actionButton("login_button", "Login", width = "100%"),

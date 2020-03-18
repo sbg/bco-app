@@ -10,7 +10,7 @@
 navbarPage(
   id = nav_id,
 
-  windowTitle = "Genomics Compliance Suite - Seven Bridges",
+  windowTitle = "BCO App - Seven Bridges",
 
   title = div(
     img(src = "logo.svg", style = "margin:5px 0px 20px 0px;"),

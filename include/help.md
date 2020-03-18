@@ -1,10 +1,10 @@
 ## Overview
 
-The following help document describes the functionality presented in the Genomics Compliance Suite in additional detail. See the <a href="https://sbg.github.io/gcs/" target="_blank">Genomics Compliance Suite User Manual</a> for examples. The <a href="https://www.biocomputeobject.org/" target="_blank">BioCompute Object Website</a> is a good starting place for learning about BioCompute Objects.
+The following help document describes the functionality presented in the BCO App in additional detail. See the <a href="https://sbg.github.io/bco-app/" target="_blank">BCO App User Manual</a> for examples. The <a href="https://www.biocomputeobject.org/" target="_blank">BioCompute Object Website</a> is a good starting place for learning about BioCompute Objects.
 
 ### PDF User Manual
 
-Please check the <a href="https://sbg.github.io/gcs/gcs-user-manual.pdf" target="_blank">PDF user manual</a> for an app usage guide.
+Please check the <a href="https://sbg.github.io/bco-app/bco-app-user-manual.pdf" target="_blank">PDF user manual</a> for an app usage guide.
 
 ## Table of Contents
 

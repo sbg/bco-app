@@ -12,7 +12,7 @@ fluidPage(
   tags$head(tags$link(rel = "shortcut icon", href = "favicon.ico")),
   tags$head(tags$meta(name = "theme-color", content = "#083050")),
   theme = "custom.css",
-  title = "Genomics Compliance Suite - Seven Bridges",
+  title = "BCO App - Seven Bridges",
 
   fluidRow(
     column(
