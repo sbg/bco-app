@@ -1,16 +1,16 @@
-# Genomics Compliance Suite by Seven Bridges <a href="https://www.sevenbridges.com"><img src="https://raw.githubusercontent.com/sbg/gcs/master/logo.png" align="right" alt="logo" height="128" width="128" /></a>
+# Seven Bridges BCO App <a href="https://www.sevenbridges.com"><img src="https://raw.githubusercontent.com/sbg/bco-app/master/logo.png" align="right" alt="logo" height="128" width="128" /></a>
 
-[![](https://img.shields.io/docker/cloud/build/sevenbridges/gcs.svg)](https://hub.docker.com/r/sevenbridges/gcs/builds)
-[![](https://images.microbadger.com/badges/version/sevenbridges/gcs.svg)](https://microbadger.com/images/sevenbridges/gcs)
-[![](https://img.shields.io/docker/pulls/sevenbridges/gcs.svg)](https://hub.docker.com/r/sevenbridges/gcs)
+[![](https://img.shields.io/docker/cloud/build/sevenbridges/bco-app.svg)](https://hub.docker.com/r/sevenbridges/bco-app/builds)
+[![](https://images.microbadger.com/badges/version/sevenbridges/bco-app.svg)](https://microbadger.com/images/sevenbridges/bco-app)
+[![](https://img.shields.io/docker/pulls/sevenbridges/bco-app.svg)](https://hub.docker.com/r/sevenbridges/bco-app)
 
-Genomics Compliance Suite (GCS) is a Shiny app built by Seven Bridges to create, validate, and browse [BioCompute Objects](https://biocomputeobject.org/).
+The Seven Bridges BCO App is a Shiny app to create, validate, and browse [BioCompute Objects](https://biocomputeobject.org/).
 
 ## Overview
 
 This repo offers the source code for the app's Docker image, including the Dockerfile and the app built by the Seven Bridges team. The app features BioCompute Object (BCO) creation (manually or by importing from CWL workflows), BCO checksum/schema validators, PDF report generator, and an interactive BCO browser.
 
-This `README` gives a brief introduction to pull the Docker image and run the app locally. For detailed usage of the app and more deployment options, please check our [PDF user manual](https://sbg.github.io/gcs/gcs-user-manual.pdf).
+This `README` gives a brief introduction to pull the Docker image and run the app locally. For detailed usage of the app and more deployment options, please check our [PDF user manual](https://sbg.github.io/bco-app/bco-app-user-manual.pdf).
 
 ## How to run the app locally
 
@@ -18,18 +18,18 @@ First of all, please make sure that Docker is installed in your system, and the 
 
 ### Pull or build the image
 
-To pull the pre-built Docker image from its [Docker Hub repo](https://hub.docker.com/r/sevenbridges/gcs), use:
+To pull the pre-built Docker image from its [Docker Hub repo](https://hub.docker.com/r/sevenbridges/bco-app), use:
 
 ```bash
-docker pull sevenbridges/gcs
+docker pull sevenbridges/bco-app
 ```
 
 Alternatively, you can choose to build the image, which could take a few minutes:
 
 ```bash
-git clone https://github.com/sbg/gcs.git
-cd gcs
-docker build . -t gcs
+git clone https://github.com/sbg/bco-app.git
+cd bco-app
+docker build . -t bco-app
 ```
 
 ### Run the container
@@ -37,13 +37,13 @@ docker build . -t gcs
 If the image was pulled from Docker Hub, use
 
 ```bash
-docker run --rm -p 3838:3838 --name sb sevenbridges/gcs
+docker run --rm -p 3838:3838 --name sb sevenbridges/bco-app
 ```
 
 If the image was built locally, use
 
 ```bash
-docker run --rm -p 3838:3838 --name sb gcs
+docker run --rm -p 3838:3838 --name sb bco-app
 ```
 
 ### Open the app
@@ -56,14 +56,14 @@ After the container is running, open http://127.0.0.1:3838 in your web browser.
 
 ```bash
 docker rm -f sb
-docker rmi sevenbridges/gcs
+docker rmi sevenbridges/bco-app
 ```
 
 or
 
 ```bash
 docker rm -f sb
-docker rmi gcs
+docker rmi bco-app
 ```
 
 ## Links
