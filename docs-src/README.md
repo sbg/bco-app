@@ -1,4 +1,6 @@
-This directory (`docs-src/`) contains the source of the documentation of the GCS project. To update it:
+# Generate Docs
+
+This directory (`docs-src/`) contains the source of the documentation of the project. To update it:
 
 1. Modify `contents.Rmd`
 2. Run `build.R`

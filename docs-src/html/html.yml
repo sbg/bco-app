@@ -1,11 +1,11 @@
 ---
-title: "Genomics Compliance Suite: BioCompute Object User Manual"
+title: "BioCompute Object App User Manual"
 author: "Seven Bridges"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
 link-citations: yes
 cover-image: "assets/cover.png"
-url: "https://sbg.github.io/gcs/"
-description: "User manual of the Genomics Compliance Suite by Seven Bridges"
+url: "https://sbg.github.io/bco-app/"
+description: "User manual of the BCO App by Seven Bridges"
 ---

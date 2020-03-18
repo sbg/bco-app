@@ -4,7 +4,7 @@ bookdown::gitbook:
   config:
     toc:
       before: |
-        <li><a href="./">Genomics Compliance Suite</a></li>
+        <li><a href="./">BCO App</a></li>
       after: |
         <li><a href="https://www.sevenbridges.com/" target="blank">&copy; 2020 Seven Bridges</a></li>
     download: ["pdf", "epub"]
