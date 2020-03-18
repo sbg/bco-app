@@ -1,4 +1,4 @@
-# Seven Bridges BCO App <a href="https://www.sevenbridges.com"><img src="https://raw.githubusercontent.com/sbg/bco-app/master/logo.png" align="right" alt="logo" height="128" width="128" /></a>
+# Seven Bridges BCO App
 
 [![](https://img.shields.io/docker/cloud/build/sevenbridges/bco-app.svg)](https://hub.docker.com/r/sevenbridges/bco-app/builds)
 [![](https://images.microbadger.com/badges/version/sevenbridges/bco-app.svg)](https://microbadger.com/images/sevenbridges/bco-app)
