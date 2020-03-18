@@ -18,6 +18,7 @@ system("cp -R assets/ pdf/assets/")
 system("cat pdf/pdf.yml content.Rmd > pdf/bco-app-user-manual.Rmd")
 
 rmarkdown::render("pdf/bco-app-user-manual.Rmd", clean = TRUE)
+if (file.exists("pdf/bco-app-user-manual.log")) unlink("pdf/bco-app-user-manual.log")
 
 # replace pdf in bookdown site
 system("mv pdf/bco-app-user-manual.pdf ../docs/bco-app-user-manual.pdf")

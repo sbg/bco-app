@@ -24,16 +24,23 @@ $endif$
 
 % some more packages...
 \usepackage{graphicx}
-\usepackage{xcolor}
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue}
-\usepackage{eso-pic}
-
-\definecolor{sbgnavy}{HTML}{1A4B73}
+\usepackage{eso-pic} % background image
 
 %\renewcommand{\chaptername}{} %% remove the word \chapter
 
+% define color palette
+\usepackage{xcolor}
+\definecolor{sbblue}{HTML}{1A4B73}
+\definecolor{sbcoral}{HTML}{E86042}
+\definecolor{sbdarkgray}{HTML}{4D4D4F}
 
+% section title color
+\usepackage{sectsty}
+\sectionfont{\color{sbblue}}
+\subsectionfont{\color{sbblue}}
+\subsubsectionfont{\color{sbblue}}
 
 \usepackage{fixltx2e} % provides \textsubscript
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
@@ -95,9 +102,9 @@ $if(keywords)$
 $endif$
 $if(colorlinks)$
             colorlinks=true,
-            linkcolor=$if(linkcolor)$$linkcolor$$else$sbgnavy$endif$,
-            citecolor=$if(citecolor)$$citecolor$$else$sbgnavy$endif$,
-            urlcolor=$if(urlcolor)$$urlcolor$$else$sbgnavy$endif$,
+            linkcolor=$if(linkcolor)$$linkcolor$$else$sbblue$endif$,
+            citecolor=$if(citecolor)$$citecolor$$else$sbblue$endif$,
+            urlcolor=$if(urlcolor)$$urlcolor$$else$sbblue$endif$,
 $else$
             pdfborder={0 0 0},
 $endif$
@@ -234,8 +241,6 @@ $for(header-includes)$
 $header-includes$
 $endfor$
 
-
-
 % header and footer
 \usepackage{fancyhdr}
 \usepackage{lastpage}
@@ -262,17 +267,20 @@ $endfor$
     \end{figure}
 
     \phantom{}
-    \vspace{1.5cm}
+    \vspace{16.5cm}
 
-  \begin{minipage}{\textwidth}
+  \noindent
+  \makebox[\textwidth][r]{
+  \begin{minipage}{0.45\textwidth}
   \begin{flushleft}
-    {\fontsize{30}{34}\selectfont $title$}
+    \textcolor{sbblue}{{\fontsize{22}{22}\selectfont $title$}}
   \end{flushleft}
-    \vspace{0.6in}
+    \vspace{0.4in}
   \begin{flushleft}
-    \Huge{$month$}
+    \textcolor{sbcoral}{\large{$month$}}
   \end{flushleft}
   \end{minipage}
+  }
 
   \vfill
 

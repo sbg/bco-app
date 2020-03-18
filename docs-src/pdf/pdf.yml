@@ -5,13 +5,13 @@ output:
     latex_engine: xelatex
     number_sections: yes
   bookdown::gitbook: default
-mainfont: "Times New Roman"
+mainfont: "Arial"
 monofont: "Courier New"
 fontsize: "12pt"
 monofontoptions: "Scale=0.7"
 linestretch: 1.15
 
-title: "BioCompute Object App: \\newline \\vskip 0.3in BCO App \\newline \\newline User Manual"
+title: "BioCompute Object App \\newline \\vskip 0.1in BCO App \\newline \\newline User Manual"
 month: "March 2020"
 
 classoption:
