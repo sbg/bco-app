@@ -15,7 +15,7 @@ This repo offers the source code for the app's Docker image, including the Docke
 
 This `README` gives a brief introduction to pull the Docker image and run the app locally. For detailed usage of the app and more deployment options, please check our [PDF user manual](https://sbg.github.io/bco-app/bco-app-user-manual.pdf).
 
-## How to run the app locally
+## Installation
 
 First of all, please make sure that Docker is installed in your system, and the `docker` commands are available from the terminal. If not, here is the [official installation guide](https://docs.docker.com/install/).
 
@@ -55,7 +55,7 @@ After the container is running, open http://127.0.0.1:3838 in your web browser.
 
 (If required, use the credential `sevenbridges`/`sevenbridges` to log in.)
 
-### Clean up the container and image after running
+### Clean up the container and image
 
 ```bash
 docker rm -f sb
@@ -69,7 +69,7 @@ docker rm -f sb
 docker rmi bco-app
 ```
 
-## Links
+## Additional Resources
 
 - [biocompute: Create and Manipulate BioCompute Objects](https://cran.r-project.org/package=biocompute)
 - [tidycwl: Tidy Common Workflow Language Tools and Workflows](https://cran.r-project.org/package=tidycwl)
