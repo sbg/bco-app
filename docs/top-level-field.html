@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Authentication Token | BioCompute Object App User Manual</title>
+  <title>Top Level Field | BioCompute Object App User Manual</title>
   <meta name="description" content="User manual of the BCO App by Seven Bridges" />
   <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Authentication Token | BioCompute Object App User Manual" />
+  <meta property="og:title" content="Top Level Field | BioCompute Object App User Manual" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://sbg.github.io/bco-app/" />
   <meta property="og:image" content="https://sbg.github.io/bco-app/assets/cover.png" />
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Authentication Token | BioCompute Object App User Manual" />
+  <meta name="twitter:title" content="Top Level Field | BioCompute Object App User Manual" />
   
   <meta name="twitter:description" content="User manual of the BCO App by Seven Bridges" />
   <meta name="twitter:image" content="https://sbg.github.io/bco-app/assets/cover.png" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="appendix-i-platform-authentication-guide.html"/>
-<link rel="next" href="locate-authentication-token.html"/>
+<link rel="prev" href="appendix-ii-biocompute-object-domains.html"/>
+<link rel="next" href="provenance-domain.html"/>
 <script src="libs/header-attrs-2.1/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -202,17 +202,47 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="authentication-token" class="section level2 unnumbered" number="">
-<h2>Authentication Token</h2>
-<p>Your authentication token encodes your Seven Bridges Platform credentials and uniquely identifies you on the Seven Bridges Platform. It can be used with a number of API and automation features of the Seven Bridges Platform without the need of a manual, GUI authentication process.</p>
+<div id="top-level-field" class="section level2 unnumbered" number="">
+<h2>Top Level Field</h2>
+<table>
+<colgroup>
+<col width="16%" />
+<col width="10%" />
+<col width="72%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>ID</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>BCO version</td>
+<td>bco_spec _version</td>
+<td>The version of the BCO specification used to define the BCO.</td>
+</tr>
+<tr class="even">
+<td>BioCompute Object Indetifier</td>
+<td>BCO_id</td>
+<td>Unique identifier that should be apllied to each BCO instance. Assigned by a BCO database engine, like URL. It never be reused.</td>
+</tr>
+<tr class="odd">
+<td>Checksum</td>
+<td>checksum</td>
+<td>A string-type, read-only value, protecting the object from internal or external alterations without proper validaiton.</td>
+</tr>
+</tbody>
+</table>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="appendix-i-platform-authentication-guide.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="locate-authentication-token.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="appendix-ii-biocompute-object-domains.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="provenance-domain.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

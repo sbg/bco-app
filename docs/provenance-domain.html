@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Authentication Token | BioCompute Object App User Manual</title>
+  <title>Provenance Domain | BioCompute Object App User Manual</title>
   <meta name="description" content="User manual of the BCO App by Seven Bridges" />
   <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Authentication Token | BioCompute Object App User Manual" />
+  <meta property="og:title" content="Provenance Domain | BioCompute Object App User Manual" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://sbg.github.io/bco-app/" />
   <meta property="og:image" content="https://sbg.github.io/bco-app/assets/cover.png" />
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Authentication Token | BioCompute Object App User Manual" />
+  <meta name="twitter:title" content="Provenance Domain | BioCompute Object App User Manual" />
   
   <meta name="twitter:description" content="User manual of the BCO App by Seven Bridges" />
   <meta name="twitter:image" content="https://sbg.github.io/bco-app/assets/cover.png" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="appendix-i-platform-authentication-guide.html"/>
-<link rel="next" href="locate-authentication-token.html"/>
+<link rel="prev" href="top-level-field.html"/>
+<link rel="next" href="usability-domain.html"/>
 <script src="libs/header-attrs-2.1/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -202,17 +202,82 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="authentication-token" class="section level2 unnumbered" number="">
-<h2>Authentication Token</h2>
-<p>Your authentication token encodes your Seven Bridges Platform credentials and uniquely identifies you on the Seven Bridges Platform. It can be used with a number of API and automation features of the Seven Bridges Platform without the need of a manual, GUI authentication process.</p>
+<div id="provenance-domain" class="section level2 unnumbered" number="">
+<h2>Provenance Domain</h2>
+<table>
+<colgroup>
+<col width="17%" />
+<col width="17%" />
+<col width="65%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>ID</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Name</td>
+<td>name</td>
+<td>Name of the BCO.</td>
+</tr>
+<tr class="even">
+<td>Version</td>
+<td>version</td>
+<td>Records the versioning of this BCO instance object. A change in the BCO affecting the outcome of the computation should be deposited as a new BCO, not as a new version.</td>
+</tr>
+<tr class="odd">
+<td>Review</td>
+<td>review</td>
+<td>Describes the status of an object in the review process. Status flags: unreviewed, in-review, approved, suspended, rejected.</td>
+</tr>
+<tr class="even">
+<td>Inheritance /derivation</td>
+<td>derived from</td>
+<td>If the object is derived from another, this field will specify the parent object, in the form of the objectid. It is null, if inherits only from the base BioCompute Object or a type definition.</td>
+</tr>
+<tr class="odd">
+<td>Obsolescence</td>
+<td>obsolete</td>
+<td>If the object has an expiration date this field will specify that using the datetime type.</td>
+</tr>
+<tr class="even">
+<td>Embargo</td>
+<td>embargo</td>
+<td>If the object has a period of time that it is not public, that range can be specified using these fields. Using the datetime type a start and end time are specified for the embargo.</td>
+</tr>
+<tr class="odd">
+<td>Created</td>
+<td>created</td>
+<td>Using the datetime type the time of initial creation of the BCO is recorded.</td>
+</tr>
+<tr class="even">
+<td>Modification</td>
+<td>modified</td>
+<td>Using the datetime type the time of most recent modification of the BCO is recoded.</td>
+</tr>
+<tr class="odd">
+<td>Contributors</td>
+<td>contributors .</td>
+<td>List to hold contributor identifiers and a description of their type of contribution, including a field for ORCIDs to record author information, as they allow for the author to curate their information after submission.</td>
+</tr>
+<tr class="even">
+<td>License</td>
+<td>license</td>
+<td>A space for Creative commons licence or other licence information. The default or recommended licence can be Attribution 4.0 International.</td>
+</tr>
+</tbody>
+</table>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="appendix-i-platform-authentication-guide.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="locate-authentication-token.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="top-level-field.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="usability-domain.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

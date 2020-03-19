@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Authentication Token | BioCompute Object App User Manual</title>
+  <title>Description Domain | BioCompute Object App User Manual</title>
   <meta name="description" content="User manual of the BCO App by Seven Bridges" />
   <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Authentication Token | BioCompute Object App User Manual" />
+  <meta property="og:title" content="Description Domain | BioCompute Object App User Manual" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://sbg.github.io/bco-app/" />
   <meta property="og:image" content="https://sbg.github.io/bco-app/assets/cover.png" />
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Authentication Token | BioCompute Object App User Manual" />
+  <meta name="twitter:title" content="Description Domain | BioCompute Object App User Manual" />
   
   <meta name="twitter:description" content="User manual of the BCO App by Seven Bridges" />
   <meta name="twitter:image" content="https://sbg.github.io/bco-app/assets/cover.png" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="appendix-i-platform-authentication-guide.html"/>
-<link rel="next" href="locate-authentication-token.html"/>
+<link rel="prev" href="extension-domain.html"/>
+<link rel="next" href="execution-domain.html"/>
 <script src="libs/header-attrs-2.1/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -202,17 +202,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="authentication-token" class="section level2 unnumbered" number="">
-<h2>Authentication Token</h2>
-<p>Your authentication token encodes your Seven Bridges Platform credentials and uniquely identifies you on the Seven Bridges Platform. It can be used with a number of API and automation features of the Seven Bridges Platform without the need of a manual, GUI authentication process.</p>
+<div id="description-domain" class="section level2 unnumbered" number="">
+<h2>Description Domain</h2>
+<table>
+<colgroup>
+<col width="19%" />
+<col width="19%" />
+<col width="60%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>ID</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Description Domain</td>
+<td>description _domain</td>
+<td>Structured field for description of external references, the pipeline steps, and the relationship of IO objects. Information in this domain is not used for computation. Capture information that is currently being provided in FDA submission in journal format.</td>
+</tr>
+<tr class="even">
+<td>Keywords</td>
+<td>keywords</td>
+<td>List of key map fields to hold a list of keywords to aid in search-ability and description of the object.</td>
+</tr>
+<tr class="odd">
+<td>External References</td>
+<td>xref</td>
+<td>It contains a list of the databases and/or ontology IDs that are cross-referenced in the BCO. It provides more specificity in the information related to BCO entries.</td>
+</tr>
+<tr class="even">
+<td>Platform  /Environment</td>
+<td>platform</td>
+<td>The multi-value reference to a particular deployment of an existing platform where this BCO can be reproduced (Galaxy or HIVE or CASAVA).</td>
+</tr>
+<tr class="odd">
+<td>Pipeline tools</td>
+<td>pipeline _steps  </td>
+<td>For recording the specifics of a pipeline. Each individual tool is represented as step, at the discretion of the author. Step Number (step_number), Name (name), Tool Description (description), Tool Version (version), Tool Prerequisites (prerequisite), Input List (input_list), Output List (output_list).</td>
+</tr>
+</tbody>
+</table>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="appendix-i-platform-authentication-guide.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="locate-authentication-token.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="extension-domain.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="execution-domain.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
