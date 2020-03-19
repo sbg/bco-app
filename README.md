@@ -7,6 +7,8 @@
 
 The BCO App is a Shiny app to create, validate, and browse [BioCompute Objects](https://biocomputeobject.org/).
 
+![](https://sbg.github.io/bco-app/assets/landing.png)
+
 ## Overview
 
 This repo offers the source code for the app's Docker image, including the Dockerfile and the app built by the Seven Bridges team. The app features BioCompute Object (BCO) creation (manually or by importing from CWL workflows), BCO checksum/schema validators, PDF report generator, and an interactive BCO browser.
