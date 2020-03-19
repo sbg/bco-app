@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 1 Introduction | BioCompute Object App User Manual</title>
+  <title>2.3 Installing and Accessing the Genomics Compliance Suite | BioCompute Object App User Manual</title>
   <meta name="description" content="User manual of the BCO App by Seven Bridges" />
   <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 1 Introduction | BioCompute Object App User Manual" />
+  <meta property="og:title" content="2.3 Installing and Accessing the Genomics Compliance Suite | BioCompute Object App User Manual" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://sbg.github.io/bco-app/" />
   <meta property="og:image" content="https://sbg.github.io/bco-app/assets/cover.png" />
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 Introduction | BioCompute Object App User Manual" />
+  <meta name="twitter:title" content="2.3 Installing and Accessing the Genomics Compliance Suite | BioCompute Object App User Manual" />
   
   <meta name="twitter:description" content="User manual of the BCO App by Seven Bridges" />
   <meta name="twitter:image" content="https://sbg.github.io/bco-app/assets/cover.png" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="getting-started.html"/>
+<link rel="prev" href="menu-options.html"/>
+<link rel="next" href="start-page.html"/>
 <script src="libs/header-attrs-2.1/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -202,27 +202,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="goals" class="section level1" number="1">
-<h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
-<p>The BCO App provides tools for generating, reviewing, and validating BioCompute Objects (BCOs). The BCO APP can generate BioCompute Objects from user text input, workflows written in Common Workflow Language (CWL), and from CWL and task information generated on the Cancer Genomics Cloud. The BCO App also includes tools for reviewing and validating BioCompute Objects stored locally or on the cloud. Our goals in providing the BCO App are to encourage further development of the BCO standard, promoting the use of CWL to document complex bioinformatics workflows, and to facilitate the use of BCOs in operational settings; including developing the application to support FDA regulatory submissions.</p>
-<p>This user manual provides a brief introduction into BioCompute Objects, instructions for installing BCO App, and an overview of BCO App features.</p>
-<p>In reviewing the user manual you will learn how to:</p>
+<div id="installing-and-accessing-the-genomics-compliance-suite" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Installing and Accessing the Genomics Compliance Suite</h2>
+<p>The BCO APP can be deployed locally and on a remote server. Both the source code and a containerized (Docker) version are available on GitHub. The source code can also be executed from the Cancer Genomics Cloud, as well as any of the Seven Bridges Platforms, through the R Studio extension on our platforms. Additional BCO APP deployment details are explained below.</p>
+<div id="docker" class="section level3" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Containerized app</h3>
+<p>Running BCO App from a containerized app will allow you to execute the app without having to install BCO App requirements/dependencies on your local machine or server (Figure 1). Instructions for pulling, building, and running the Docker image can be found on the BCO App GitHub page (<a href="https://github.com/sbg/gcs" class="uri">https://github.com/sbg/gcs</a>). The default username and password are both: sevenbridges</p>
+</div>
+<div id="hosted" class="section level3" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> Cancer Genomics Cloud hosted app</h3>
+<p>The BCO APP can be executed from within the Cancer Genomics Cloud through R Studio, as explained in each section below.</p>
+<p>Go to the hosted version <a href="https://shiny-internal.sbgenomics.com/gcs/">https://shiny-internal.sbgenomics.com/gcs/</a> (behind the VPN) and log in with your username and password.</p>
+<p><strong>Getting the app</strong></p>
+<p>Copy the ‘biocompute-composer.zip’ to your project folder. Please request access to the zip file if you do not currently have access (support.at.sbgenomics.com).</p>
+<p><strong>Running the app</strong></p>
+<p>To run the app:</p>
 <ul>
-<li>Generate BCOs from text or CWL files</li>
-<li>Generate BCOs from CWL workflows or Task information from your Seven Bridges Platform project</li>
-<li>Download generated BCO JSON file to your local machine</li>
-<li>Generate PDF reports from BCO JSON files</li>
-<li>Upload BCO file to any of the Seven Bridges platforms</li>
-<li>Publish BCOs to your GitHub account.</li>
+<li><p>Click “Interactive Analysis”, then open “Data Cruncher”.</p></li>
+<li><p>Click “Create your first analysis”, select “RStudio” and start the analysis.</p></li>
+<li><p>When the editor is launched, switch to the “Terminal” tab in the lower left panel, run the following commands to copy the app from the project to the analysis session:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="installing-and-accessing-the-genomics-compliance-suite.html#cb1-1"></a><span class="fu">cp</span> /sbgenomics/project-files/biocompute-composer.zip /sbgenomics/workspace/</span>
+<span id="cb1-2"><a href="installing-and-accessing-the-genomics-compliance-suite.html#cb1-2"></a><span class="fu">unzip</span> -q /sbgenomics/workspace/biocompute-composer.zip</span>
+<span id="cb1-3"><a href="installing-and-accessing-the-genomics-compliance-suite.html#cb1-3"></a><span class="fu">rm</span> /sbgenomics/workspace/biocompute-composer.zip</span></code></pre></div></li>
+<li><p>Go to the biocompute-composer folder in the files panel (lower right), open and run through the code in app-setup.R to setup the environment (use Ctrl + Enter to run the code line-by-line).</p></li>
+<li><p>Open app.R, click the “Run App” button in the code editor panel to run the app.</p></li>
+<li><p>A dialog about popup windows may appear if you’re running this for the first time, click “Try Again” to proceed.</p></li>
+<li><p>Note: if running the app from a restarted analysis session, remember to run app-setup.R again before running the app.</p></li>
 </ul>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="getting-started.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="menu-options.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="start-page.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
