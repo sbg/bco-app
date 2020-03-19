@@ -21,17 +21,17 @@ The BioCompute Object standard is an emerging standard that aims to facilitate t
 
 ## BCO APP Overview {#login}
 
-The current version of the Genomics Compliance Suite expands upon our initial prototype developed for the precisionFDA BioCompute Object Challenge. The precisionFDA challenge required the submitted tools to support the display, creation, and validation of BCOs. Our current tool also includes support for selecting inputs from both your local machine and from files stored on the Cancer Genomics Cloud, as well as selecting inputs from the suite of Seven Bridges Platforms. BCO APP supports interactive as well as semi-automated BCO construction. For example, you have the option to select a CWL workflow on the CGC as a way to pre-populate workflows-related BCO fields.
+The current version of the BCO App expands upon our initial prototype developed for the precisionFDA BioCompute Object Challenge. The precisionFDA challenge required the submitted tools to support the display, creation, and validation of BCOs. Our current tool also includes support for selecting inputs from both your local machine and from files stored on the Cancer Genomics Cloud, as well as selecting inputs from the suite of Seven Bridges Platforms. BCO APP supports interactive as well as semi-automated BCO construction. For example, you have the option to select a CWL workflow on the CGC as a way to pre-populate workflows-related BCO fields.
 
 ## Menu Options
 
-The following menu options are available from the Genomics Compliance Suite:
+The following menu options are available from the BCO App:
 
 
 | **Menu Entry**        | **Description**                                                                                                                                                                                                          |
 |-----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Home**              | App landing page with links to generators and help screen                                                                                                                                                            |
-| **Generators**        | Tools for generating BCO JSON Files, generating a BCO PDF, and publishing BCO to a GIT page                                                                                                                          |
+| **Generators**        | Tools for generating BCO JSON Files, generating a BCO PDF, and publishing BCO to a GitHub page                                                                                                                          |
 | Text Composer         | Interface allows users to interactively enter text into BCO fields. The composer steps the user through completing each of the BCO domains.                                                                          |
 | CWL Composer          | Interface allows a user to select a CWL file from their local machine to pre-populate the BCO fields with workflow related fields. Once loaded, the interface is identical to the Text Composer.                     |
 | Platform Composer     | Interface allows a user to select a CWL Workflow or Task on the Cancer Genomics Cloud to pre-populate the BCO fields with workflow/task related fields. Once loaded, the interface is identical to the Text Composer |
@@ -41,19 +41,17 @@ The following menu options are available from the Genomics Compliance Suite:
 | Standard              | The Standard feature provides an interface to review the BCO field definitions by domain.                                                                                                                            |
 | **Help**              | Brief description of Menu items
 
-## Installing and Accessing the Genomics Compliance Suite
+## Installing and Accessing the BCO App
 
 The BCO APP can be deployed locally and on a remote server. Both the source code and a containerized (Docker) version are available on GitHub. The source code can also be executed from the Cancer Genomics Cloud, as well as any of the Seven Bridges Platforms, through the R Studio extension on our platforms. Additional BCO APP deployment details are explained below.
 
 ### Containerized app {#docker}
 
-Running BCO App from a containerized app will allow you to execute the app without having to install BCO App requirements/dependencies on your local machine or server (Figure 1). Instructions for pulling, building, and running the Docker image can be found on the BCO App GitHub page (https://github.com/sbg/gcs). The default username and password are both: sevenbridges
+Running BCO App from a containerized app will allow you to execute the app without having to install BCO App requirements/dependencies on your local machine or server (Figure 1). Instructions for pulling, building, and running the Docker image can be found in the [BCO App GitHub repo](https://github.com/sbg/bco-app). The default username and password are both: `sevenbridges`.
 
 ### Cancer Genomics Cloud hosted app {#hosted}
 
-The BCO APP can be executed from within the Cancer Genomics Cloud through R Studio, as explained in each section below.
-
-Go to the hosted version [https://shiny-internal.sbgenomics.com/gcs/](https://shiny-internal.sbgenomics.com/gcs/) (behind the VPN) and log in with your username and password.
+The BCO APP can be executed from within the Cancer Genomics Cloud through RStudio, as explained in each section below.
 
 **Getting the app**
 
@@ -89,11 +87,11 @@ The login credentials are installation dependent. The default login credentials 
 ### Landing Page
 You will see the landing page of the BCO APP after you log in:
 
-![Landing Page of the Genomics Compliance Suite](assets/landing.png)
+![Landing Page of the BCO App](assets/landing.png)
 
 The navigation bar along the top of the screen provides access to primary BCO App features including Generators and Utilities. Button along the bottom of the screen provide single-click access to BCO App BCO generators and to the BCO App help screen.
 
-## Generating BioCompute Objects with GCS
+## Generating BioCompute Objects with BCO App
 
 The following example details generating a BCO from a CWL workflow on the Cancer Genomics Cloud. We selected this example because the Platform Composer includes elements of the text composer and the CWL composer. Reading through the example will outline the steps required to generate a BCO object.
 
@@ -178,7 +176,7 @@ Users can also generate a PDF reports for the BioCompute Object with "**Export a
 
 ![Example View of the Generated PDF Report in Step 6](assets/output-pdf.png)
 
-In addition to export features, there are two very useful save features in the Genomics Compliance Suite: **Save to the Platform** and **Save to GitHub**.
+In addition to export features, there are two very useful save features in the BCO App: **Save to the Platform** and **Save to GitHub**.
 
 The first one is **Save to the Platform**, automatically saves the generated BCO file into "**BCO**" folder under "**Files**" of your project. You can see the example of the generated files in the project's "**Files/BCO**" folder in Figure 14.
 
@@ -237,7 +235,7 @@ You can get your authentication token from the developer dashboard. For example,
 This section summarizes the domains defined in the BioCompute Object specification (v1.3.0).
 
 
-### Top Level Field  
+### Top Level Field {-}
 
 | Name                         	| ID                	| Description                                                                                                                     	|
 |------------------------------	|-------------------	|---------------------------------------------------------------------------------------------------------------------------------	|
@@ -247,7 +245,7 @@ This section summarizes the domains defined in the BioCompute Object specificati
 
 \clearpage
 
-### Provenance Domain
+### Provenance Domain {-}
 
 | Name                                                     | ID                                                       | Description                                                                                                                                                                                                                 |
 |----------------------------------------------------------|----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -264,14 +262,14 @@ This section summarizes the domains defined in the BioCompute Object specificati
 
 \clearpage
 
-### Usability Domain
+### Usability Domain {-}
 
 | Name                     | ID                     | Description                                                                                                                                                                                                                                                  |
 |--------------------------|------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Usability Domain         | usability _domain      | Provides a space for the author to define the usability domain of the BCO. It is an array of free text values. This field is to aid in search-ability and provide a specific description of the object. It helps determine when and how the BCO can be used. |
 
 
-### Extension Domain
+### Extension Domain {-}
 
 | Name                                                     | ID                                                       | Description                                                                                                                                                                         |
 |----------------------------------------------------------|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -281,7 +279,7 @@ This section summarizes the domains defined in the BioCompute Object specificati
 
 \clearpage
 
-### Description Domain
+### Description Domain {-}
 
 | Name                                                     | ID                                                       | Description                                                                                                                                                                         |
 |----------------------------------------------------------|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -293,7 +291,7 @@ This section summarizes the domains defined in the BioCompute Object specificati
 
 \clearpage
 
-### Execution Domain
+### Execution Domain {-}
 
 | Name                                                     | ID                                                       | Description                                                                                                                                                                                                                                                                                                                                              |
 |----------------------------------------------------------|----------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -305,13 +303,13 @@ This section summarizes the domains defined in the BioCompute Object specificati
 | Enviromental Variables                       | environment _variables  | This is an array of key-value pairs useful to configure the execution enviroment on the target platform.                                                                                                                                                                                                                                                 |
 \clearpage
 
-### Parametric Domain
+### Parametric Domain {-}
 
 | Name                                                     | ID                                                       |Description                                                                                                                                                                                                   |
 |----------------------------------------------------------|----------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Parametric Domain | parametric _domain &emsp; | List of parameters customizing the computational flow which can affect the output of the calculations. These fields are custom to each type of analysis and are tied to a particular pipeline implementation. |
 
-### Input Output Domain
+### Input Output Domain {-}
 
 | Name                                                     | ID                                                       | Description                                                                                                                             |
 |----------------------------------------------------------|----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
@@ -319,10 +317,8 @@ This section summarizes the domains defined in the BioCompute Object specificati
 | Input Subdomain         | input _subdomain  | This field records the references and input files for the entire pipeline. Each type of input file is listed under a key for that type. |
 | Output Subdomain        | output _subdomain | This field records the outputs for the entire pipeline .                                                                                |
 
-### Error Domain
+### Error Domain {-}
 
 | Name                                                     | ID                                                       | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 |----------------------------------------------------------|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Error Domain, acceptable range of variability            | error _domain                                            | Consists of two subdomains: empirical and algorithmic. The empirical subdomain contains the limits of detectability fps, fns, statistical confidence of outcomes, etc. The algorithmic subdomain is descriptive of errors that originated by fuzziness of the algorithms, driven by stochastic processes, in dynamically parallelized multi-threaded executions, or in machine learning methodologies where the state of the machine can affect the outcomeConsists of two subdomains: empirical and algorithmic. The empirical subdomain contains the limits of detectability FPs, FNs, statistical confidence of outcomes, etc. The algorithmic subdomain is descriptive of errors that originated by fuzziness of the algorithms, driven by stochastic processes, in dynamically parallelized multi-threaded executions, or in machine learning methodologies where the state of the machine can affect the outcome. |
-
-
