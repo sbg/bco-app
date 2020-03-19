@@ -235,7 +235,7 @@ You can get your authentication token from the developer dashboard. For example,
 This section summarizes the domains defined in the BioCompute Object specification (v1.3.0).
 
 
-### Top Level Field {-}
+## Top Level Field {-}
 
 | Name                         	| ID                	| Description                                                                                                                     	|
 |------------------------------	|-------------------	|---------------------------------------------------------------------------------------------------------------------------------	|
@@ -245,7 +245,7 @@ This section summarizes the domains defined in the BioCompute Object specificati
 
 \clearpage
 
-### Provenance Domain {-}
+## Provenance Domain {-}
 
 | Name                                                     | ID                                                       | Description                                                                                                                                                                                                                 |
 |----------------------------------------------------------|----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -262,14 +262,14 @@ This section summarizes the domains defined in the BioCompute Object specificati
 
 \clearpage
 
-### Usability Domain {-}
+## Usability Domain {-}
 
 | Name                     | ID                     | Description                                                                                                                                                                                                                                                  |
 |--------------------------|------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Usability Domain         | usability _domain      | Provides a space for the author to define the usability domain of the BCO. It is an array of free text values. This field is to aid in search-ability and provide a specific description of the object. It helps determine when and how the BCO can be used. |
 
 
-### Extension Domain {-}
+## Extension Domain {-}
 
 | Name                                                     | ID                                                       | Description                                                                                                                                                                         |
 |----------------------------------------------------------|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -279,7 +279,7 @@ This section summarizes the domains defined in the BioCompute Object specificati
 
 \clearpage
 
-### Description Domain {-}
+## Description Domain {-}
 
 | Name                                                     | ID                                                       | Description                                                                                                                                                                         |
 |----------------------------------------------------------|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -291,7 +291,7 @@ This section summarizes the domains defined in the BioCompute Object specificati
 
 \clearpage
 
-### Execution Domain {-}
+## Execution Domain {-}
 
 | Name                                                     | ID                                                       | Description                                                                                                                                                                                                                                                                                                                                              |
 |----------------------------------------------------------|----------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -303,13 +303,13 @@ This section summarizes the domains defined in the BioCompute Object specificati
 | Enviromental Variables                       | environment _variables  | This is an array of key-value pairs useful to configure the execution enviroment on the target platform.                                                                                                                                                                                                                                                 |
 \clearpage
 
-### Parametric Domain {-}
+## Parametric Domain {-}
 
 | Name                                                     | ID                                                       |Description                                                                                                                                                                                                   |
 |----------------------------------------------------------|----------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Parametric Domain | parametric _domain &emsp; | List of parameters customizing the computational flow which can affect the output of the calculations. These fields are custom to each type of analysis and are tied to a particular pipeline implementation. |
 
-### Input Output Domain {-}
+## Input Output Domain {-}
 
 | Name                                                     | ID                                                       | Description                                                                                                                             |
 |----------------------------------------------------------|----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
@@ -317,7 +317,7 @@ This section summarizes the domains defined in the BioCompute Object specificati
 | Input Subdomain         | input _subdomain  | This field records the references and input files for the entire pipeline. Each type of input file is listed under a key for that type. |
 | Output Subdomain        | output _subdomain | This field records the outputs for the entire pipeline .                                                                                |
 
-### Error Domain {-}
+## Error Domain {-}
 
 | Name                                                     | ID                                                       | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 |----------------------------------------------------------|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
