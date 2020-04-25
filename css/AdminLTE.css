@@ -18,7 +18,7 @@ body {
   height: 100%;
 }
 body {
-  font-family: Muli,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-family: Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   font-weight: 400;
   overflow-x: hidden;
   overflow-y: auto;
@@ -161,7 +161,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-family: Muli,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-family: Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
 }
 /* General Links */
 a {
@@ -293,7 +293,7 @@ a:focus {
   line-height: 50px;
   text-align: center;
   width: 230px;
-  font-family: Muli,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-family: Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   padding: 0 15px;
   font-weight: 300;
   overflow: hidden;
@@ -1565,13 +1565,13 @@ a:focus {
   color: #444444;
 }
 .box.box-solid.box-primary {
-  border: 1px solid rgb(199, 199, 199);
+  border: 1px solid #cdd7df;
 }
 .box.box-solid.box-primary > .box-header {
   color: #ffffff;
-  background: rgb(249, 249, 249);
-  background-color: rgb(249, 249, 249);
-  border-bottom: 1px solid rgb(199, 199, 199);
+  background: #f3f5f7;
+  background-color: #f3f5f7;
+  border-bottom: 1px solid #cdd7df;
 }
 .box.box-solid.box-primary > .box-header a,
 .box.box-solid.box-primary > .box-header .btn {
@@ -1703,11 +1703,12 @@ a:focus {
 .box-header > .ion,
 .box-header .box-title {
   display: inline-block;
-  font-size: 15px;
-  margin: 0;
-  line-height: 1;
+  font-size: 14px;
   font-weight: 700;
-  color: rgb(102, 102, 102);
+  color: #222c35;
+  padding-left: 20px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 .box-header > .fa,
 .box-header > .glyphicon,
