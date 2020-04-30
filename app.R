@@ -31,10 +31,10 @@ max_lockout <- 4
 num_pages <- 6
 num_pages_basic <- 5
 
-# Add variable to control whether login page will be allowed
+# add variable to control whether login page will be allowed
 source(file.path("ui", "interface_variables.R"), local = TRUE)
 
-# Define User Interface baraible
+# define user interface variable
 ui <- uiOutput("ui")
 
 server <- function(input, output, session) {
