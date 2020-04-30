@@ -8,10 +8,7 @@ observeEvent(get_rawcwl_local(), {
 })
 
 observeEvent(input$provenance_name_local, {
-  feedbackSuccess(
-    inputId = "provenance_name_local",
-    condition = nchar(input$provenance_name_local) >= 3
-  )
+  if (nchar(input$provenance_name_local) >= 3) showFeedbackSuccess("provenance_name_local") else hideFeedback("provenance_name_local")
 })
 
 # version
@@ -20,10 +17,7 @@ observeEvent(get_rawcwl_local(), {
 })
 
 observeEvent(input$provenance_version_local, {
-  feedbackSuccess(
-    inputId = "provenance_version_local",
-    condition = nchar(input$provenance_version_local) >= 5
-  )
+  if (nchar(input$provenance_version_local) >= 5) showFeedbackSuccess("provenance_version_local") else hideFeedback("provenance_version_local")
 })
 
 # derived_from
@@ -32,18 +26,12 @@ observeEvent(get_rawcwl_local(), {
 })
 
 observeEvent(input$provenance_derived_from_local, {
-  feedbackSuccess(
-    inputId = "provenance_derived_from_local",
-    condition = nchar(input$provenance_derived_from_local) >= 0
-  )
+  if (nchar(input$provenance_derived_from_local) >= 0) showFeedbackSuccess("provenance_derived_from_local") else hideFeedback("provenance_derived_from_local")
 })
 
 # license
 observeEvent(input$provenance_license_local, {
-  feedbackSuccess(
-    inputId = "provenance_license_local",
-    condition = nchar(input$provenance_license_local) >= 2
-  )
+  if (nchar(input$provenance_license_local) >= 2) showFeedbackSuccess("provenance_license_local") else hideFeedback("provenance_license_local")
 })
 
 # review
@@ -222,18 +210,12 @@ observeEvent(get_rawcwl_local(), {
 
 # fhir_endpoint
 observeEvent(input$fhir_endpoint_local, {
-  feedbackSuccess(
-    inputId = "fhir_endpoint_local",
-    condition = nchar(input$fhir_endpoint_local) >= 7
-  )
+  if (nchar(input$fhir_endpoint_local) >= 7) showFeedbackSuccess("fhir_endpoint_local") else hideFeedback("fhir_endpoint_local")
 })
 
 # fhir_version
 observeEvent(input$fhir_version_local, {
-  feedbackSuccess(
-    inputId = "fhir_version_local",
-    condition = nchar(input$fhir_version_local) >= 1
-  )
+  if (nchar(input$fhir_version_local) >= 1) showFeedbackSuccess("fhir_version_local") else hideFeedback("fhir_version_local")
 })
 
 # fhir_resources
@@ -281,18 +263,12 @@ load_df_fhir_resources_local <- reactive(if (file.exists(fhir_resources_fname_lo
 
 # platform
 observeEvent(input$desc_platform_local, {
-  feedbackSuccess(
-    inputId = "desc_platform_local",
-    condition = nchar(input$desc_platform_local) >= 3
-  )
+  if (nchar(input$desc_platform_local) >= 3) showFeedbackSuccess("desc_platform_local") else hideFeedback("desc_platform_local")
 })
 
 # keywords
 observeEvent(input$desc_keywords_local, {
-  feedbackSuccess(
-    inputId = "desc_keywords_local",
-    condition = nchar(input$desc_keywords_local) >= 3
-  )
+  if (nchar(input$desc_keywords_local) >= 3) showFeedbackSuccess("desc_keywords_local") else hideFeedback("desc_keywords_local")
 })
 
 # xref
@@ -538,19 +514,14 @@ load_desc_pipeline_output_local <- reactive(if (file.exists(desc_pipeline_output
 observeEvent(get_rawcwl_local(), {
   updateTextInput(session, "execution_script_local", value = tidycwl::parse_meta(get_rawcwl_local())$"id")
 })
+
 observeEvent(input$execution_script_local, {
-  feedbackSuccess(
-    inputId = "execution_script_local",
-    condition = nchar(input$execution_script_local) >= 7
-  )
+  if (nchar(input$execution_script_local) >= 7) showFeedbackSuccess("execution_script_local") else hideFeedback("execution_script_local")
 })
 
 # script_driver
 observeEvent(input$execution_script_driver_local, {
-  feedbackSuccess(
-    inputId = "execution_script_driver_local",
-    condition = nchar(input$execution_script_driver_local) >= 2
-  )
+  if (nchar(input$execution_script_driver_local) >= 2) showFeedbackSuccess("execution_script_driver_local") else hideFeedback("execution_script_driver_local")
 })
 
 # execution_software_prerequisites
@@ -913,8 +884,5 @@ load_error_algo_local <- reactive(if (file.exists(error_algorithmic_fname_local)
 
 # top level fields
 observeEvent(input$bco_id_local, {
-  feedbackSuccess(
-    inputId = "bco_id_local",
-    condition = nchar(input$bco_id_local) >= 7
-  )
+  if (nchar(input$bco_id_local) >= 7) showFeedbackSuccess("bco_id_local") else hideFeedback("bco_id_local")
 })

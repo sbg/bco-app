@@ -8,10 +8,7 @@ observeEvent(get_rawcwl(), {
 })
 
 observeEvent(input$provenance_name, {
-  feedbackSuccess(
-    inputId = "provenance_name",
-    condition = nchar(input$provenance_name) >= 3
-  )
+  if (nchar(input$provenance_name) >= 3) showFeedbackSuccess("provenance_name") else hideFeedback("provenance_name")
 })
 
 # version
@@ -20,10 +17,7 @@ observeEvent(get_rawcwl(), {
 })
 
 observeEvent(input$provenance_version, {
-  feedbackSuccess(
-    inputId = "provenance_version",
-    condition = nchar(input$provenance_version) >= 5
-  )
+  if (nchar(input$provenance_version) >= 5) showFeedbackSuccess("provenance_version") else hideFeedback("provenance_version")
 })
 
 # derived_from
@@ -32,18 +26,12 @@ observeEvent(get_rawcwl(), {
 })
 
 observeEvent(input$provenance_derived_from, {
-  feedbackSuccess(
-    inputId = "provenance_derived_from",
-    condition = nchar(input$provenance_derived_from) >= 0
-  )
+  if (nchar(input$provenance_derived_from) >= 0) showFeedbackSuccess("provenance_derived_from") else hideFeedback("provenance_derived_from")
 })
 
 # license
 observeEvent(input$provenance_license, {
-  feedbackSuccess(
-    inputId = "provenance_license",
-    condition = nchar(input$provenance_license) >= 2
-  )
+  if (nchar(input$provenance_license) >= 2) showFeedbackSuccess("provenance_license") else hideFeedback("provenance_license")
 })
 
 # review
@@ -177,18 +165,12 @@ observeEvent(get_rawcwl(), {
 
 # fhir_endpoint
 observeEvent(input$fhir_endpoint, {
-  feedbackSuccess(
-    inputId = "fhir_endpoint",
-    condition = nchar(input$fhir_endpoint) >= 7
-  )
+  if (nchar(input$fhir_endpoint) >= 7) showFeedbackSuccess("fhir_endpoint") else hideFeedback("fhir_endpoint")
 })
 
 # fhir_version
 observeEvent(input$fhir_version, {
-  feedbackSuccess(
-    inputId = "fhir_version",
-    condition = nchar(input$fhir_version) >= 1
-  )
+  if (nchar(input$fhir_version) >= 1) showFeedbackSuccess("fhir_version") else hideFeedback("fhir_version")
 })
 
 # fhir_resources
@@ -236,18 +218,12 @@ load_df_fhir_resources <- reactive(if (file.exists(fhir_resources_fname)) readRD
 
 # platform
 observeEvent(input$desc_platform, {
-  feedbackSuccess(
-    inputId = "desc_platform",
-    condition = nchar(input$desc_platform) >= 3
-  )
+  if (nchar(input$desc_platform) >= 3) showFeedbackSuccess("desc_platform") else hideFeedback("desc_platform")
 })
 
 # keywords
 observeEvent(input$desc_keywords, {
-  feedbackSuccess(
-    inputId = "desc_keywords",
-    condition = nchar(input$desc_keywords) >= 3
-  )
+  if (nchar(input$desc_keywords) >= 3) showFeedbackSuccess("desc_keywords") else hideFeedback("desc_keywords")
 })
 
 # TODO: Fix that, no need to give blank row, added due to error in biocompute package
@@ -499,18 +475,12 @@ observeEvent(get_rawcwl(), {
 })
 
 observeEvent(input$execution_script, {
-  feedbackSuccess(
-    inputId = "execution_script",
-    condition = nchar(input$execution_script) >= 7
-  )
+  if (nchar(input$execution_script) >= 7) showFeedbackSuccess("execution_script") else hideFeedback("execution_script")
 })
 
 # script_driver
 observeEvent(input$execution_script_driver, {
-  feedbackSuccess(
-    inputId = "execution_script_driver",
-    condition = nchar(input$execution_script_driver) >= 2
-  )
+  if (nchar(input$execution_script_driver) >= 2) showFeedbackSuccess("execution_script_driver") else hideFeedback("execution_script_driver")
 })
 
 # execution_software_prerequisites
@@ -896,10 +866,7 @@ load_error_algorithmic <- reactive(if (file.exists(error_algorithmic_fname)) rea
 
 # top level fields
 observeEvent(input$bco_id, {
-  feedbackSuccess(
-    inputId = "bco_id",
-    condition = nchar(input$bco_id) >= 7
-  )
+  if (nchar(input$bco_id) >= 7) showFeedbackSuccess("bco_id") else hideFeedback("bco_id")
 })
 
 # Git window
@@ -910,17 +877,11 @@ observe({
 })
 
 observeEvent(input$userName, {
-  feedbackSuccess(
-    inputId = "userName",
-    condition = nchar(input$userName) > 3
-  )
+  if (nchar(input$userName) > 3) showFeedbackSuccess("userName") else hideFeedback("userName")
 })
 
 observeEvent(input$passUser, {
-  feedbackSuccess(
-    inputId = "passUser",
-    condition = nchar(input$passUser) > 5
-  )
+  if (nchar(input$passUser) > 5) showFeedbackSuccess("passUser") else hideFeedback("passUser")
 })
 
 observeEvent(push_to_git(), {

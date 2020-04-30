@@ -3,36 +3,23 @@
 # 1. provenance
 
 # name
-
 observeEvent(input$provenance_name_basic, {
-  feedbackSuccess(
-    inputId = "provenance_name_basic",
-    condition = nchar(input$provenance_name_basic) >= 3
-  )
+  if (nchar(input$provenance_name_basic) >= 3) showFeedbackSuccess("provenance_name_basic") else hideFeedback("provenance_name_basic")
 })
 
 # version
 observeEvent(input$provenance_version_basic, {
-  feedbackSuccess(
-    inputId = "provenance_version_basic",
-    condition = nchar(input$provenance_version_basic) > 0
-  )
+  if (nchar(input$provenance_version_basic) > 0) showFeedbackSuccess("provenance_version_basic") else hideFeedback("provenance_version_basic")
 })
 
 # derived_from
 observeEvent(input$provenance_derived_from_basic, {
-  feedbackSuccess(
-    inputId = "provenance_derived_from_basic",
-    condition = nchar(input$provenance_derived_from_basic) > 0
-  )
+  if (nchar(input$provenance_derived_from_basic) > 0) showFeedbackSuccess("provenance_derived_from_basic") else hideFeedback("provenance_derived_from_basic")
 })
 
 # license
 observeEvent(input$provenance_license_basic, {
-  feedbackSuccess(
-    inputId = "provenance_license_basic",
-    condition = nchar(input$provenance_license_basic) > 0
-  )
+  if (nchar(input$provenance_license_basic) > 0) showFeedbackSuccess("provenance_license_basic") else hideFeedback("provenance_license_basic")
 })
 
 # review
@@ -137,18 +124,12 @@ load_df_contributors_basic <- reactive(if (file.exists(contributors_fname_basic)
 
 # fhir_endpoint
 observeEvent(input$fhir_endpoint_basic, {
-  feedbackSuccess(
-    inputId = "fhir_endpoint_basic",
-    condition = nchar(input$fhir_endpoint_basic) >= 7
-  )
+  if (nchar(input$fhir_endpoint_basic) >= 7) showFeedbackSuccess("fhir_endpoint_basic") else hideFeedback("fhir_endpoint_basic")
 })
 
 # fhir_version
 observeEvent(input$fhir_version_basic, {
-  feedbackSuccess(
-    inputId = "fhir_version_basic",
-    condition = nchar(input$fhir_version_basic) >= 1
-  )
+  if (nchar(input$fhir_version_basic) >= 1) showFeedbackSuccess("fhir_version_basic") else hideFeedback("fhir_version_basic")
 })
 
 # fhir_resources
@@ -196,18 +177,12 @@ load_df_fhir_resources_basic <- reactive(if (file.exists(fhir_resources_fname_ba
 
 # platform
 observeEvent(input$desc_platform_basic, {
-  feedbackSuccess(
-    inputId = "desc_platform_basic",
-    condition = nchar(input$desc_platform_basic) >= 3
-  )
+  if (nchar(input$desc_platform_basic) >= 3) showFeedbackSuccess("desc_platform_basic") else hideFeedback("desc_platform_basic")
 })
 
 # keywords
 observeEvent(input$desc_keywords_basic, {
-  feedbackSuccess(
-    inputId = "desc_keywords_basic",
-    condition = nchar(input$desc_keywords_basic) >= 3
-  )
+  if (nchar(input$desc_keywords_basic) >= 3) showFeedbackSuccess("desc_keywords_basic") else hideFeedback("desc_keywords_basic")
 })
 
 # xref
@@ -457,18 +432,12 @@ load_desc_pipeline_output_basic <- reactive(if (file.exists(desc_pipeline_output
 
 # script
 observeEvent(input$execution_script_basic, {
-  feedbackSuccess(
-    inputId = "execution_script_basic",
-    condition = nchar(input$execution_script_basic) >= 7
-  )
+  if (nchar(input$execution_script_basic) >= 7) showFeedbackSuccess("execution_script_basic") else hideFeedback("execution_script_basic")
 })
 
 # script_driver
 observeEvent(input$execution_script_driver_basic, {
-  feedbackSuccess(
-    inputId = "execution_script_driver_basic",
-    condition = nchar(input$execution_script_driver_basic) >= 2
-  )
+  if (nchar(input$execution_script_driver_basic) >= 2) showFeedbackSuccess("execution_script_driver_basic") else hideFeedback("execution_script_driver_basic")
 })
 
 # execution_software_prerequisites
@@ -831,9 +800,5 @@ load_error_algorithmic_basic <- reactive(if (file.exists(error_algorithmic_fname
 
 # top level fields
 observeEvent(input$bco_id_basic, {
-  feedbackSuccess(
-    inputId = "bco_id_basic",
-    condition = nchar(input$bco_id_basic) >= 7
-  )
+  if (nchar(input$bco_id_basic) >= 7) showFeedbackSuccess("bco_id_basic") else hideFeedback("bco_id_basic")
 })
-
