@@ -4,6 +4,7 @@
 [![](https://img.shields.io/docker/cloud/build/sevenbridges/bco-app.svg)](https://hub.docker.com/r/sevenbridges/bco-app/builds)
 [![](https://images.microbadger.com/badges/version/sevenbridges/bco-app.svg)](https://microbadger.com/images/sevenbridges/bco-app)
 [![](https://img.shields.io/docker/pulls/sevenbridges/bco-app.svg)](https://hub.docker.com/r/sevenbridges/bco-app)
+[![DOI](https://zenodo.org/badge/218053074.svg)](https://zenodo.org/badge/latestdoi/218053074)
 
 The BCO App is a Shiny app to create, validate, and browse [BioCompute Objects](https://biocomputeobject.org/).
 
