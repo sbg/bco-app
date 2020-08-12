@@ -158,7 +158,7 @@ tabPanel(
 
           fluidRow(column(
             width = 10, offset = 1,
-            h3("Visualization of the Workflow"),
+            h3("Workflow Visualization"),
             hr()
           )),
 

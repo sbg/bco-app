@@ -10,7 +10,7 @@ Please check the <a href="https://sbg.github.io/bco-app/bco-app-user-manual.pdf"
 
 - **Generators**
   - Text Composer
-  - File Composer
+  - CWL Composer
   - Platform Composer
 
 - **Utilities**
@@ -26,7 +26,7 @@ The Generators menu includes tools for generating BioCompute Objects from user p
 
 Use this interface to generate a BioCompute Object from user provided text.
 
-### File Composer
+### CWL Composer
 
 Use this tool to generate a BioCompute Object from user provided text and a text file that contains a workflow written in Common Workflow Language.
 
