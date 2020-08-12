@@ -139,9 +139,9 @@ output$vis_cwl_workflow <- renderVisNetwork({
               get_rawcwl() %>% parse_outputs(),
               get_rawcwl() %>% parse_steps()
               ) %>% visualize_graph() %>%
-                    visGroups(groupname = "input", color = "#C3C3C3", shadow = list(enabled = TRUE)) %>%
-                    visGroups(groupname = "output", color = "#FF8F00", shadow = list(enabled = TRUE)) %>%
-                    visGroups(groupname = "step", color = "#00AAA8", shadow = list(enabled = TRUE)) %>%
+                    visGroups(groupname = "input", color = "#E69F00", shadow = list(enabled = TRUE)) %>%
+                    visGroups(groupname = "output", color = "#56B4E9", shadow = list(enabled = TRUE)) %>%
+                    visGroups(groupname = "step", color = "#009E73", shadow = list(enabled = TRUE)) %>%
                     visLegend(width = 0.1, position = "right", main = "Legend") %>%
                     visInteraction(navigationButtons = TRUE)
             }, error = function(err){
