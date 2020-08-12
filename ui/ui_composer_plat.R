@@ -10,11 +10,9 @@
 # Add variable to control whether login page will be allowed
 # source(file.path("ui", "interface_variables.R"), local = TRUE)
 
-# Generate Navigation Page
-# CWL
 tabPanel(
   title = title_cgc_composer,
-  icon = icon("cloud"), # icon(list(src='bg.svg'), class = NULL, lib = "local"),
+  icon = icon("cloud"),
   useShinyFeedback(),
 
   useShinyjs(),
@@ -662,12 +660,15 @@ tabPanel(
 
           fluidRow(
             column(
-              width = 3, offset = 3,
-              downloadButton("btn_export_json", "Export as JSON", class = "btn btn-primary btn-block", style = "margin-left: 36px;")
-            ),
-            column(
-              width = 3, # offset = 1,
-              downloadButton("btn_export_pdf", "Export as PDF", class = "btn btn-primary btn-block"), style = "margin-left: 20px;"
+              width = 10, offset = 1,
+              column(
+                width = 6,
+                downloadButton("btn_export_json", "Export as JSON", class = "btn btn-primary btn-block", style = "margin-left: -6px;")
+              ),
+              column(
+                width = 6,
+                downloadButton("btn_export_pdf", "Export as PDF", class = "btn btn-primary btn-block"),
+              )
             )
           ),
 
@@ -685,17 +686,16 @@ tabPanel(
 
           fluidRow(
             column(
-              width = 3, offset = 3,
-              actionButton("btn_push_git", "Push to GitHub", icon = icon("cloud-upload-alt"), class = "btn btn-primary btn-block", style = "margin-left: 36px;")
-            ),
-            column(
-              width = 3, # offset = 1,
-              actionButton("btn_upload_plat", "Upload to Platform", icon = icon("cloud-upload-alt"), class = "btn btn-primary btn-block", style = "margin-left: 20px;")
+              width = 10, offset = 1,
+              column(
+                width = 6,
+                actionButton("btn_push_git", "Push to GitHub", icon = icon("cloud-upload-alt"), class = "btn btn-primary btn-block", style = "margin-left: -6px;")
+              ),
+              column(
+                width = 6,
+                actionButton("btn_upload_plat", "Upload to Platform", icon = icon("cloud-upload-alt"), class = "btn btn-primary btn-block")
+              )
             )
-            # column(
-            #   width = 3, offset = 1,
-            #   uiOutput("btn_open_bco_plat")
-            # )
           ),
 
           # fluidRow(

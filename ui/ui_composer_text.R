@@ -10,8 +10,6 @@
 # Add variable to control whether login page will be allowed
 source(file.path("ui", "interface_variables.R"), local = TRUE)
 
-# Generate Navigation Page
-# CWL
 tabPanel(
   title = title_txt_creator,
   icon = icon("edit"),
