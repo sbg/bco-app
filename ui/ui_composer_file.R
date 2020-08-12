@@ -35,7 +35,7 @@ tabPanel(
         fluidRow(column(
           width = 10, offset = 1,
 
-          h3("Load your CWL to compose a brand-new BCO"),
+          h4("Upload your CWL to compose a brand-new BCO"),
           hr(),
 
           fluidRow(
@@ -69,7 +69,7 @@ tabPanel(
 
           fluidRow(column(
             width = 10, offset = 1,
-            h3("Visualization of the Workflow"),
+            h3("Workflow Visualization"),
             hr()
           )),
 
@@ -84,8 +84,6 @@ tabPanel(
               ),
             )
           )),
-
-          hr(),
 
           hr(),
 
@@ -575,11 +573,11 @@ tabPanel(
 
           fluidRow(
             column(
-              width = 4, offset = 1,
+              width = 5,
               downloadButton("btn_export_json_local", "Export as JSON", class = "btn btn-primary btn-block", style = "margin-left: 100px;")
             ),
             column(
-              width = 4, offset = 1,
+              width = 5, offset = 1,
               downloadButton("btn_export_pdf_local", "Export as PDF", class = "btn btn-primary btn-block"), style = "margin-left: 100px;"
             )
           )
