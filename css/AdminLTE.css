@@ -18,7 +18,7 @@ body {
   height: 100%;
 }
 body {
-  font-family: Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-family: "DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   font-weight: 400;
   overflow-x: hidden;
   overflow-y: auto;
@@ -161,7 +161,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-family: Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-family: "DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
 }
 /* General Links */
 a {
@@ -180,7 +180,6 @@ a:focus {
   font-size: 22px;
 }
 .page-header > small {
-  color: #666;
   display: block;
   margin-top: 5px;
 }
@@ -293,7 +292,7 @@ a:focus {
   line-height: 50px;
   text-align: center;
   width: 230px;
-  font-family: Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-family: "DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   padding: 0 15px;
   font-weight: 300;
   overflow: hidden;
@@ -1075,7 +1074,6 @@ a:focus {
   font-size: 14px;
   padding: 0;
   margin: 0 0 10px 0;
-  color: #666666;
 }
 .navbar-nav > .tasks-menu > .dropdown-menu > li .menu > li > a > .progress {
   padding: 0;
@@ -1150,9 +1148,6 @@ a:focus {
 }
 .navbar-nav > .user-menu > .dropdown-menu > .user-footer:after {
   clear: both;
-}
-.navbar-nav > .user-menu > .dropdown-menu > .user-footer .btn-default {
-  color: #666666;
 }
 @media (max-width: 991px) {
   .navbar-nav > .user-menu > .dropdown-menu > .user-footer .btn-default:hover {
@@ -2121,7 +2116,6 @@ a:focus {
   font-size: 15px;
   line-height: 30px;
   position: absolute;
-  color: #666;
   background: #d2d6de;
   border-radius: 50%;
   text-align: center;
@@ -2394,7 +2388,6 @@ a:focus {
 /* PAGINATION */
 .pagination > li > a {
   background: #fafafa;
-  color: #666;
 }
 .pagination.pagination-flat > li > a {
   border-radius: 0 !important;
@@ -2922,7 +2915,6 @@ table.text-center th {
 }
 .mailbox-attachment-name {
   font-weight: bold;
-  color: #666;
 }
 .mailbox-attachment-icon,
 .mailbox-attachment-info,
@@ -2940,7 +2932,6 @@ table.text-center th {
 .mailbox-attachment-icon {
   text-align: center;
   font-size: 65px;
-  color: #666;
   padding: 20px 10px;
 }
 .mailbox-attachment-icon.has-img {
@@ -3052,7 +3043,6 @@ table.text-center th {
   background: #fff;
   padding: 20px;
   border-top: 0;
-  color: #666;
 }
 .login-box-body .form-control-feedback,
 .register-box-body .form-control-feedback {
@@ -3141,7 +3131,6 @@ table.text-center th {
   border-bottom: 1px solid #d2d6de;
   margin-bottom: 15px;
   padding-bottom: 15px;
-  color: #666;
 }
 .post:last-of-type {
   border-bottom: 0;
@@ -3930,7 +3919,6 @@ table.text-center th {
 .fc-header-title h2 {
   font-size: 15px;
   line-height: 1.6em;
-  color: #666;
   margin-left: 10px;
 }
 .fc-header-right {
@@ -4390,9 +4378,7 @@ table.text-center th {
 .link-muted:focus {
   color: #606c84;
 }
-.link-black {
-  color: #666;
-}
+
 .link-black:hover,
 .link-black:focus {
   color: #999;
@@ -4547,7 +4533,6 @@ table.text-center th {
   font-size: 15px;
   padding: 10px 4px;
   font-weight: bold;
-  color: #666;
 }
 .list-seperator {
   height: 1px;
