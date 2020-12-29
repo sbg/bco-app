@@ -16,6 +16,12 @@ This repo offers the source code for the app's Docker image, including the Docke
 
 This `README` gives a brief introduction to pull the Docker image and run the app locally. For detailed usage of the app and more deployment options, please check our [PDF user manual](https://sbg.github.io/bco-app/bco-app-user-manual.pdf).
 
+## Citation
+
+To cite this software and the R packages tidycwl and biocompute, please use
+
+Xiao N, Koc S, Roberson D et al. [BCO App: tools for generating BioCompute Objects from next-generation sequencing workflows and computations](https://doi.org/10.12688/f1000research.25902.1) [version 1; peer review: 2 approved]. F1000Research 2020, 9:1144
+
 ## Installation
 
 First of all, please make sure that Docker is installed in your system, and the `docker` commands are available from the terminal. If not, here is the [official installation guide](https://docs.docker.com/install/).
