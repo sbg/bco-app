@@ -1,6 +1,6 @@
 # BCO App
 
-[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental-1)
 [![](https://img.shields.io/docker/cloud/build/sevenbridges/bco-app.svg)](https://hub.docker.com/r/sevenbridges/bco-app/builds)
 [![](https://images.microbadger.com/badges/version/sevenbridges/bco-app.svg)](https://microbadger.com/images/sevenbridges/bco-app)
 [![](https://img.shields.io/docker/pulls/sevenbridges/bco-app.svg)](https://hub.docker.com/r/sevenbridges/bco-app)
