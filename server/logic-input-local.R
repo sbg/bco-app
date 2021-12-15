@@ -203,8 +203,17 @@ output$vis_cwl_workflow_local <- renderVisNetwork({
 
 # text
 observeEvent(get_rawcwl_local(), {
-  updateTextAreaInput(session, "usability_text_local", value = tidycwl::parse_meta(get_rawcwl_local())$"description")
-})
+
+  # CWL1.0+ descriptions are stored in the "doc" metadata field
+  # Some legacy workflows use the "description" metadata field
+  if (!is.null(tidycwl::parse_meta(get_rawcwl_local())$"doc")) {
+    wf_description <- tidycwl::parse_meta(get_rawcwl_local())$"doc"
+  } else {
+    wf_description <- tidycwl::parse_meta(get_rawcwl_local())$"description"
+  }
+  updateTextAreaInput(session, "usability_text_local", value = wf_description)
+  }
+)
 
 # 3.1 fhir
 
