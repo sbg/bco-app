@@ -9,7 +9,11 @@
 
 library("sevenbridges")
 library("tools")
+library("httr")
 
+### Seven Bridges API Interface
+
+# Seven Bridges API token can be stored locally
 # tk <- readLines("credentials/token.txt")
 
 # get app list in a project
@@ -318,6 +322,8 @@ gen_bco_domain_table_gt <- function(dframe, name_header, filter_domain) {
     )
 }
 
+### Git Integration
+
 # Git connection
 push_bco_to_git <- function(username, password, commit_text, filename_bco, file_bco, repository_url) {
   str_error <- ""
@@ -388,4 +394,15 @@ filename_fixer <- function(str, sep = "_", date.format = "%Y_%m_%d_%H_%M_%S", ex
   fname <- paste(str, format(Sys.time(), date.format), sep = sep)
   fname <- paste(fname, extension, sep = ".")
   return(fname)
+}
+
+### BCO Database API Integration
+
+upload_draft_bco_to_db <- function(bco_file_path, token, api_endpoint = 'https://biocomputeobject.org/api/', prefix = 'BCO', schema = 'IEEE', owner_group = 'bco_drafter') {
+  httr::POST(
+    url = paste0(api_endpoint, 'objects/drafts/create/'),
+    body = list(httr::upload_file(bco_file_path), prefix, schema, owner_group),  # TODO: the BCO file needs to be parsed and wrapped in a "POST_api_objects_draft_create" json field
+    httr::add_headers(Authorization = paste0('Token ', token)),
+    httr::content_type('application/json')
+  )
 }
