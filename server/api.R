@@ -398,10 +398,12 @@ filename_fixer <- function(str, sep = "_", date.format = "%Y_%m_%d_%H_%M_%S", ex
 
 ### BCO Database API Integration
 
-upload_draft_bco_to_db <- function(bco_file_path, token, api_endpoint = 'https://biocomputeobject.org/api/', prefix = 'BCO', schema = 'IEEE', owner_group = 'bco_drafter') {
+upload_draft_bco_to_db <- function(bco_file_path, token, api_endpoint = 'https://biocomputeobject.org/api/', bco_prefix = 'BCO', bco_schema = 'IEEE', bco_owner_group = 'bco_drafter') {
+  bco_json <- jsonlite::fromJSON(bco_file_path)
   httr::POST(
     url = paste0(api_endpoint, 'objects/drafts/create/'),
-    body = list(httr::upload_file(bco_file_path), prefix, schema, owner_group),  # TODO: the BCO file needs to be parsed and wrapped in a "POST_api_objects_draft_create" json field
+    # Need to wrap the entire bco json in more json for the POST body
+    body = paste0('{"POST_api_objects_draft_create": {[', jsonlite::toJSON(bco_json, auto_unbox = TRUE), '"prefix": ', '"', bco_prefix, '",', '"schema": ', '"', bco_schema, '",', '"owner_group": ', '"', bco_owner_group, '"', '}]}'),
     httr::add_headers(Authorization = paste0('Token ', token)),
     httr::content_type('application/json')
   )
