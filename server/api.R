@@ -403,7 +403,7 @@ upload_draft_bco_to_db <- function(bco_file_path, token, api_endpoint = 'https:/
   httr::POST(
     url = paste0(api_endpoint, 'objects/drafts/create/'),
     # Need to wrap the entire bco json in more json for the POST body
-    body = paste0('{"POST_api_objects_draft_create": {[', jsonlite::toJSON(bco_json, auto_unbox = TRUE), '"prefix": ', '"', bco_prefix, '",', '"schema": ', '"', bco_schema, '",', '"owner_group": ', '"', bco_owner_group, '"', '}]}'),
+    body = paste0('{"POST_api_objects_draft_create": {[', jsonlite::toJSON(bco_json), '"prefix": ', '"', bco_prefix, '",', '"schema": ', '"', bco_schema, '",', '"owner_group": ', '"', bco_owner_group, '"', '}]}'),
     httr::add_headers(Authorization = paste0('Token ', token)),
     httr::content_type('application/json')
   )
