@@ -23,6 +23,21 @@ library("listviewer")
 library("visNetwork")
 library("tidycwl")
 library("biocompute")
+library("markdown")
+library("reactR")
+# 24aeb22ed4224a1387ce6ccb31f98684
+# install.packages("BiocManager")
+# BiocManager::install("sevenbridges")
+# devtools::install_github('jbryer/DTedit')
+# library(BiocManager)
+options(repos = BiocManager::repositories())
+# if (!require("BiocManager", quietly = TRUE))
+#   install.packages("BiocManager")
+#
+# BiocManager::install("BiocGenerics")
+# BiocManager::install("sevenbridges")
+# devtools::install_github('jbryer/DTedit')
+
 
 # the number of failed attempts allowed before a user is locked out
 max_lockout <- 4

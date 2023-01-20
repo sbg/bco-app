@@ -152,6 +152,30 @@ observeEvent(input$btn_upload_plat, {#upload_react <- eventReactive(input$btn_up
   lst_upload
 })
 
+# BCO DB Object Local
+output$btn_open_bco_db_local <- renderUI({
+  url <- "https://biocomputeobject.org/objects"
+  actionButton(
+    "link_bco_db_object", "Open BioCompute DB",
+    icon("external-link"),
+    class = "btn btn-primary btn-block",
+    onclick = paste0("window.open('", url, "', '_blank')"),
+    style = "margin-left: 20px;"
+  )
+})
+
+# BCO DB Object Text
+output$btn_open_bco_db_txt <- renderUI({
+  url <- "https://biocomputeobject.org/objects"
+  actionButton(
+    "link_bco_db_object", "Open BioCompute DB",
+    icon("external-link"),
+    class = "btn btn-primary btn-block",
+    onclick = paste0("window.open('", url, "', '_blank')"),
+    style = "margin-left: 20px;"
+  )
+})
+
 # render button with link to task
 output$btn_open_bco_plat <- renderUI({
   url <- upload_react()$"url"
@@ -231,10 +255,25 @@ output$btn_open_git <- renderUI({
 
 })
 
+# CGC
 check_entries <- eventReactive(input$push_yes, {
   ifelse (is.null(input$userName) ||
             is.null(input$passUser) ||
             is.null(input$repo_name), FALSE, TRUE)
+})
+
+# Text
+check_entries_txt <- eventReactive(input$push_yes_txt, {
+  ifelse (is.null(input$userName_txt) ||
+            is.null(input$passUser_txt) ||
+            is.null(input$repo_name_txt), FALSE, TRUE)
+})
+
+# Local
+check_entries_loc <- eventReactive(input$push_yes_loc, {
+  ifelse (is.null(input$userName_loc) ||
+            is.null(input$passUser_loc) ||
+            is.null(input$repo_name_loc), FALSE, TRUE)
 })
 
 push_to_git <- eventReactive(input$push_yes, {
@@ -266,4 +305,143 @@ push_to_git <- eventReactive(input$push_yes, {
   } else{
     return("Please check your Username, password and URL!")
   }
+})
+
+push_to_git_txt <- eventReactive(input$push_yes_txt, {
+  # bco
+  fname_user_bco <- filename_fixer(input$app_name_txt)
+  bco_user <- get_bco_json_basic()
+
+  # #cwl
+  # fname_user_cwl <- filename_fixer(input$app_name, extension = "cwl.json")
+  # cwl_user <- as.character(get_rawcwl())
+
+  link_user <- as.character(paste("https://github.com", input$userName_txt, input$repo_name_txt, sep = "/"))
+
+  if(check_entries_txt()) {
+    # push bco
+    push_bco_to_git(username = input$userName_txt,
+                    password = input$passUser_txt,
+                    commit_text = input$commit_info_txt,
+                    filename_bco = fname_user_bco,
+                    file_bco = bco_user,
+                    repository_url = link_user)
+  } else{
+    return("Please check your Username, password and URL!")
+  }
+})
+
+# CGC
+check_entries_bco <- eventReactive(input$push_yes_bco, {
+  ifelse (is.null(input$token_bco) || is.null(input$bco_prefix) ||
+          is.null(input$bco_schema) || is.null(input$bco_owner_group), FALSE, TRUE)
+})
+# Text
+check_entries_bco_txt <- eventReactive(input$push_yes_bco_txt, {
+  ifelse (is.null(input$token_bco_txt) || is.null(input$bco_prefix_txt) ||
+          is.null(input$bco_schema_txt) || is.null(input$bco_owner_group_txt), FALSE, TRUE)
+})
+# Local
+check_entries_bco_local <- eventReactive(input$push_yes_bco_local, {
+  ifelse (is.null(input$token_bco_local) || is.null(input$bco_prefix_local) ||
+          is.null(input$bco_schema_local) || is.null(input$bco_owner_group_local), FALSE, TRUE)
+})
+
+observeEvent(input$push_yes_bco, {
+
+  msg_return <- "Please check your Token, BCO Prefix, Schema, and Owner Group!"
+
+  if(check_entries_bco()) {
+    bco_object <- get_bco_json()
+    # bco_file_path <- "bco-example.json"
+
+    token <- input$token_bco
+    bco_prefix <- input$bco_prefix
+    bco_schema <- input$bco_schema
+    bco_owner_group <- input$bco_owner_group
+
+    # msg_push_bco <- upload_draft_bco_to_db_from_file(bco_file_path=bco_file_path, 
+    #                                                 token=token, 
+    #                                                 bco_prefix=bco_prefix, 
+    #                                                 bco_schema=bco_schema, 
+    #                                                 bco_owner_group=bco_owner_group)
+
+    msg_push_bco <- upload_draft_bco_to_db(bco_object=bco_object, 
+                                            token=token, 
+                                            bco_prefix=bco_prefix, 
+                                            bco_schema=bco_schema, 
+                                            bco_owner_group=bco_owner_group)
+    msg_return <- msg_push_bco
+
+  }
+
+  updateTextAreaInput(session, "bco_return_msg", value = msg_return)
+
+})
+
+observeEvent(input$push_yes_bco_txt, {
+
+  msg_return <- "Please check your Token, BCO Prefix, Schema, and Owner Group!"
+
+  if(check_entries_bco_txt()) {
+    bco_object <- get_bco_json_basic()
+    # bco_file_path <- "bco-example.json"
+
+    token <- input$token_bco_txt
+    bco_prefix <- input$bco_prefix_txt
+    bco_schema <- input$bco_schema_txt
+    bco_owner_group <- input$bco_owner_group_txt
+
+    msg_push_bco <- upload_draft_bco_to_db(bco_object=bco_object, 
+                                            token=token, 
+                                            bco_prefix=bco_prefix, 
+                                            bco_schema=bco_schema, 
+                                            bco_owner_group=bco_owner_group)
+    msg_return <- msg_push_bco
+
+  }
+
+  updateTextAreaInput(session, "bco_return_msg_txt", value = msg_return)
+
+})
+
+observeEvent(input$push_yes_bco_local, {
+
+  msg_return <- "Please check your Token, BCO Prefix, Schema, and Owner Group!"
+
+  if(check_entries_bco_local()) {
+    bco_object <- get_bco_json_local()
+    # bco_file_path <- "bco-example.json"
+
+    token <- input$token_bco_local
+    bco_prefix <- input$bco_prefix_local
+    bco_schema <- input$bco_schema_local
+    bco_owner_group <- input$bco_owner_group_local
+
+    # msg_push_bco <- upload_draft_bco_to_db_from_file(bco_file_path=bco_file_path, 
+    #                                                 token=token, 
+    #                                                 bco_prefix=bco_prefix, 
+    #                                                 bco_schema=bco_schema, 
+    #                                                 bco_owner_group=bco_owner_group)
+
+    msg_push_bco <- upload_draft_bco_to_db(bco_object=bco_object, 
+                                            token=token, 
+                                            bco_prefix=bco_prefix, 
+                                            bco_schema=bco_schema, 
+                                            bco_owner_group=bco_owner_group)
+    msg_return <- msg_push_bco
+
+  }
+
+  updateTextAreaInput(session, "bco_return_msg_local", value = msg_return)
+
+})
+output$btn_open_bco_db <- renderUI({
+  url <- "https://biocomputeobject.org/objects"
+  actionButton(
+    "link_bco_db", "Open biocomputeobject.org",
+    icon("external-link"),
+    class = "btn btn-primary btn-block",
+    onclick = paste0("window.open('", url, "', '_blank')")
+  )
 })

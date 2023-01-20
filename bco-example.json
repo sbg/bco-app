@@ -1,0 +1,309 @@
+{
+    "object_id": "https://raw.githubusercontent.com/HadleyKing/bco-tool/1.1.0/tests/collapsed-cwl-blastn-homologs.json",
+    "etag": "f37a6806e8e5979b3e1527af258df96a4af116247727f8d1ad8bf2ba6173bece",
+    "spec_version": "https://w3id.org/ieee/ieee-2791-schema/2791object.json",
+    "provenance_domain": {
+        "name": "HCV1a BLASTN homologue identification, with collapsed secondary files.",
+        "version": "1.0",
+        "derived_from": "https://github.com/HadleyKing/bco-tool/1.1.0/tests/cwl-blastn-homologs.json",
+        "obsolete_after": "2118-09-26T14:43:43-0400",
+        "embargo": {
+            "start_time": "2021-08-13T10:45:22-0500",
+            "end_time": "2021-08-13T10:45:22-0500"
+        },
+        "created": "2021-08-13T10:45:22-0500",
+        "modified": "2021-08-16T13:33:54.527692",
+        "contributors": [
+            {
+                "name": "Charles Hadley King",
+                "affiliation": "George Washington University",
+                "email": "hadley_king@gwu.edu",
+                "contribution": [
+                    "curatedBy"
+                ],
+                "orcid": "https://orcid.org/0000-0003-1409-4549"
+            },
+            {
+                "name": "Alex Coleman",
+                "affiliation": "George Washington University",
+                "email": "acoleman29@gwmail.gwu.edu",
+                "contribution": [
+                    "createdBy"
+                ],
+                "orcid": "https://orcid.org/0000-0003-3465-0557"
+            },
+            {
+                "name": "Raja Mazumder",
+                "affiliation": "George Washington University",
+                "email": "mazumder@gwu.edu",
+                "contribution": [
+                    "authoredBy"
+                ],
+                "orcid": "https://orcid.org/0000-0001-8823-9945"
+            }
+        ],
+        "license": "https://creativecommons.org/licenses/by/4.0/legalcode.txt"
+    },
+    "usability_domain": [
+        "Run blastn to identify homologs. This is an essentual 'Hello, World!' for bioinformatics. The input file is a HCV 1a isolate H77 complete genome [taxid:63746] (nucinput.fa) nucleotide sequence. The database (nucdb.fa) is a collection of HCV sequences.",
+        "Step 1. Make blast database: makeblastdb -in nucdb.fa -dbtype nucl.",
+        "Step 2. Run nucleotide blast blastn -db nucdb.fa -query nucinput.fa -out result."
+    ],
+    "extension_domain": [
+        {
+            "extension_schema": "https://w3id.org/biocompute/extension_domain/1.1.0/scm/scm_extension.json",
+            "scm_extension": {
+                "scm_repository": "https://github.com/hadleyking/bcotool",
+                "scm_type": "git",
+                "scm_commit": "aeb0121c392f02364563dd57c19dbefd8b4948f6",
+                "scm_path": "/tests/blast/blastn-homologs.cwl",
+                "scm_preview": "https://github.com/HadleyKing/bcotool/blob/aeb0121c392f02364563dd57c19dbefd8b4948f6/tests/blast/blastn-homologs.cwl"
+            }
+        }
+    ],
+    "description_domain": {
+        "keywords": [
+            "HCV1a",
+            "Common Workflow Language",
+            "BLASTN",
+            "homologue"
+        ],
+        "xref": [
+            {
+                "namespace": "taxonomy",
+                "name": "Taxonomy",
+                "ids": [
+                    "63746"
+                ],
+                "access_time": "2021-01-15T10:10:50-0500"
+            },
+            {
+                "namespace": "ena.embl",
+                "name": "ENA",
+                "ids": [
+                    "M67463.1"
+                ],
+                "access_time": "2021-01-15T10:10:50-0500"
+            }
+        ],
+        "platform": [
+            "CWL"
+        ],
+        "pipeline_steps": [
+            {
+                "step_number": 1,
+                "name": "makeblastdb",
+                "description": "Make blast database",
+                "version": "Nucleotide-Nucleotide BLAST 2.11.0+",
+                "input_list": [
+                    {
+                        "uri": "https://raw.githubusercontent.com/HadleyKing/bco-tool/main/tests/blast/HepC-DB.fasta",
+                        "access_time": "2021-08-13T11:25:40-0500"
+                    }
+                ],
+                "output_list": [
+                    {
+                        "uri": "file://./M67463-HepC.fa.nsq",
+                        "access_time": "2021-08-13T10:53:18-0500"
+                    },
+                    {
+                        "uri": "file://./M67463-HepC.fa.nin",
+                        "access_time": "2021-08-13T10:53:18-0500"
+                    },
+                    {
+                        "uri": "file://./M67463-HepC.fa.nhr",
+                        "access_time": "2021-08-13T10:53:18-0500"
+                    }
+                ]
+            },
+            {
+                "step_number": 2,
+                "name": "blastn",
+                "description": "Run nucleotide blast",
+                "version": "1.3",
+                "input_list": [
+                    {
+                        "uri": "https://raw.githubusercontent.com/HadleyKing/bco-tool/main/tests/blast/M67463-HepC.fa",
+                        "access_time": "2021-08-13T10:53:18-0500"
+                    },
+                    {
+                        "uri": "file://./M67463-HepC.fa.nsq",
+                        "access_time": "2021-08-13T10:53:18-0500"
+                    },
+                    {
+                        "uri": "file://./M67463-HepC.fa.nin",
+                        "access_time": "2021-08-13T10:53:18-0500"
+                    },
+                    {
+                        "uri": "file://./M67463-HepC.fa.nhr",
+                        "access_time": "2021-08-13T10:53:18-0500"
+                    }
+                ],
+                "output_list": [
+                    {
+                        "uri": "file://./blast-out.txt",
+                        "access_time": "2021-08-13T10:53:18-0500"
+                    }
+                ]
+            }
+        ]
+    },
+    "execution_domain": {
+        "script": [
+            {
+                "uri": {
+                    "uri": "https://raw.githubusercontent.com/HadleyKing/bco-tool/main/tests/blast/blastn.cwl"
+                }
+            },
+            {
+                "uri": {
+                    "uri": "https://raw.githubusercontent.com/HadleyKing/bco-tool/main/tests/blast/makeblastdb.cwl"
+                }
+            },
+            {
+                "uri": {
+                    "uri": "https://raw.githubusercontent.com/HadleyKing/bco-tool/main/tests/blast/blastn-homologs.yml"
+                }
+            },
+            {
+                "uri": {
+                    "uri": "https://raw.githubusercontent.com/HadleyKing/bco-tool/main/tests/blast/blastn-homologs.cwl"
+                }
+            }
+        ],
+        "script_driver": "cwltool",
+        "software_prerequisites": [
+            {
+                "name": "cwltool",
+                "version": "3.0.20201121085451",
+                "uri": {
+                    "uri": "https://github.com/common-workflow-language/cwltool.git"
+                }
+            },
+            {
+                "name": "BLAST",
+                "version": "2.11.0+",
+                "uri": {
+                    "uri": "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/"
+                }
+            }
+        ],
+        "external_data_endpoints": [
+            {
+                "name": "GitHub",
+                "url": "https://raw.githubusercontent.com/"
+            },
+            {
+                "name": "access to ftp",
+                "url": "https://ftp.ncbi.nlm.nih.gov/blast/executables"
+            }
+        ],
+        "environment_variables": {
+            "HOSTTYPE": "x86_64-linux",
+            "EDITOR": "vim"
+        }
+    },
+    "parametric_domain": [
+        {
+            "param": "-dbtype",
+            "value": "nucl",
+            "step": "1"
+        },
+        {
+            "param": "outputBinding",
+            "value": "glob: $(inputs.database.basename)",
+            "step": "1"
+        }
+    ],
+    "io_domain": {
+        "input_subdomain": [
+            {
+                "uri": {
+                    "filename": "HepC-DB",
+                    "uri": "https://raw.githubusercontent.com/HadleyKing/bco-tool/main/tests/blast/HepC-DB.fasta"
+                }
+            },
+            {
+                "uri": {
+                    "filename": "M67463-HepC",
+                    "uri": "https://raw.githubusercontent.com/HadleyKing/bco-tool/main/tests/blast/M67463-HepC.fa"
+                }
+            }
+        ],
+        "output_subdomain": [
+            {
+                "mediatype": "text",
+                "uri": {
+                    "uri": "file://./blast-out.txt",
+                    "access_time": "2021-08-13T10:53:27-0500"
+                }
+            }
+        ]
+    },
+    "error_domain": {
+        "empirical_error": {
+            "Database": {
+                "sequences": 12,
+                "total letters": 37763
+            },
+            "Query": {
+                "accession": "M67463.1",
+                "length": 9416,
+                "name": "Hepatitis C virus subtype 1a, complete genome"
+            },
+            "Sequences producing significant alignments": {
+                "NC_038882.1:1-9416 Hepatitis C virus (isolate H77) genotype 1, co...": {
+                    "Score": "16879",
+                    "E value": "0.0"
+                },
+                "NC_004102.1:1-9416 Hepatitis C virus genotype 1, complete genome": {
+                    "Score": "16857",
+                    "E value": "0.0"
+                },
+                "NC_009825.1:1-2495 Hepatitis C virus genotype 4, genome": {
+                    "Score": "1251",
+                    "E value": "0.0"
+                },
+                "NC_009824.1:16-2609 Hepatitis C virus genotype 3, genome": {
+                    "Score": "1123",
+                    "E value": "0.0"
+                },
+                "NC_009827.1:3211-7143 Hepatitis C virus genotype 6, complete genome": {
+                    "Score": "1075",
+                    "E value": "0.0"
+                },
+                "NC_030791.1:1-1073 Hepatitis C virus genotype 7, complete genome": {
+                    "Score": "1068",
+                    "E value": "0.0"
+                },
+                "NC_009827.1:1-896 Hepatitis C virus genotype 6, complete genome": {
+                    "Score": "1061",
+                    "E value": "0.0"
+                },
+                "NC_009826.1:1-908 Hepatitis C virus genotype 5, genome": {
+                    "Score": "1035",
+                    "E value": "0.0"
+                },
+                "NC_009823.1:6-892 Hepatitis C virus genotype 2, complete genome": {
+                    "Score": "1024",
+                    "E value": "0.0"
+                },
+                "NC_009824.1:3292-6176 Hepatitis C virus genotype 3, genome": {
+                    "Score": "542",
+                    "E value": "2e-155"
+                },
+                "NC_009824.1:7618-9385 Hepatitis C virus genotype 3, genome": {
+                    "Score": "518",
+                    "E value": "4e-148"
+                },
+                "NC_009823.1:7942-9433 Hepatitis C virus genotype 2, complete genome": {
+                    "Score": "383",
+                    "E value": "1e-107"
+                }
+            }
+        },
+        "algorithmic_error": {
+            "Expect_threshold": "<0.001"
+        }
+    }
+}

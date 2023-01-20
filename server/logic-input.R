@@ -876,6 +876,12 @@ observe({
                 (nchar(input$userName) > 3) & (nchar(input$passUser) > 5))
 })
 
+observe({
+  toggleState(id = "push_txt_yes",
+              condition = (str_detect(input$urlRepo_txt, regex("^(?:http(s)?://)?[\\w.-]+(?:\\.[\\w\\.-]+)+")) == TRUE) &
+                (nchar(input$userName_txt) > 3) & (nchar(input$passUser_txt) > 5))
+})
+
 observeEvent(input$userName, {
   if (nchar(input$userName) > 3) showFeedbackSuccess("userName") else hideFeedback("userName")
 })
@@ -884,11 +890,28 @@ observeEvent(input$passUser, {
   if (nchar(input$passUser) > 5) showFeedbackSuccess("passUser") else hideFeedback("passUser")
 })
 
+observeEvent(input$userName_txt, {
+  if (nchar(input$userName_txt) > 3) showFeedbackSuccess("userName_txt") else hideFeedback("userName_txt")
+})
+
+observeEvent(input$passUser_txt, {
+  if (nchar(input$passUser_txt) > 5) showFeedbackSuccess("passUser_txt") else hideFeedback("passUser_txt")
+})
+
 observeEvent(push_to_git(), {
 
   if (is.null(input$userName) || is.null(input$passUser) || is.null(input$repo_name)) {
     updateTextAreaInput(session, "git_text", value = "Please check your Username, password and URL!")
   } else {
     updateTextAreaInput(session, "git_text", value = push_to_git()$"summary")
+  }
+})
+
+observeEvent(push_to_git_txt(), {
+
+  if (is.null(input$userName_txt) || is.null(input$passUser_txt) || is.null(input$repo_name_txt)) {
+    updateTextAreaInput(session, "git_txt_text", value = "Please check your Username, password and URL!")
+  } else {
+    updateTextAreaInput(session, "git_txt_text", value = push_to_git_txt()$"summary")
   }
 })

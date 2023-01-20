@@ -186,7 +186,7 @@ tabPanel(
               textInput(
                 inputId = "provenance_name",
                 label = "Name for the BCO",
-                placeholder = "e.g. My CWL Workflow",
+                placeholder = "e.g. My CWL Workflow"
               )
             ),
 
@@ -676,7 +676,7 @@ tabPanel(
 
           fluidRow(column(
             width = 10, offset = 1,
-            h4("Save to Platform or GitHub Project")
+            h4("Save to CGC Platform, BCO Database, or GitHub Project")
           )),
 
           fluidRow(column(
@@ -688,12 +688,16 @@ tabPanel(
             column(
               width = 10, offset = 1,
               column(
-                width = 6,
+                width = 4,
                 actionButton("btn_push_git", "Push to GitHub", icon = icon("cloud-upload-alt"), class = "btn btn-primary btn-block", style = "margin-left: -6px;")
               ),
               column(
-                width = 6,
-                actionButton("btn_upload_plat", "Upload to Platform", icon = icon("cloud-upload-alt"), class = "btn btn-primary btn-block")
+                width = 4,
+                actionButton("btn_push_bco", "Upload to biocomputeobject.org", icon = icon("cloud-upload-alt"), class = "btn btn-primary btn-block", style = "margin-left: -6px;")
+              ),
+              column(
+                width = 4,
+                actionButton("btn_upload_plat", "Upload to SevenBridges", icon = icon("cloud-upload-alt"), class = "btn btn-primary btn-block")
               )
             )
           ),
@@ -769,6 +773,59 @@ tabPanel(
               column(
                 width = 5, offset = 0,
                 uiOutput("btn_open_git")
+              )
+            )
+          ),
+
+          bsModal(
+            "bcoaccount", "Upload to biocomputeobject.org", "btn_push_bco",
+
+            p("Push your genereated BCO file to biocomputeobject.org"),
+            p("Note: we don't record any of your account information."),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                passwordInput("token_bco", label = "Token: ")
+              ),
+              column(
+                width = 5, offset = 0,
+                textInput("bco_prefix", label = "BCO Prefix: ", value = "BCO")
+              )
+            ),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                textInput("bco_schema", label = "BCO Schema: ", value = "IEEE")
+              ),
+              column(
+                width = 5, offset = 0,
+                textInput("bco_owner_group", label = "BCO Owner Group: ", placeholder = "e.g. bco_drafter")
+              )
+            ),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 10, offset = 1,
+                textAreaInput("bco_return_msg", label = "BCO return message: ", resize = "none", width = "400px", height = "250px")
+              )
+            ),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                actionButton("push_yes_bco", "Push", class = "btn btn-primary btn-block")
+              ),
+              column(
+                width = 5, offset = 0,
+                uiOutput("btn_open_bco_db")
               )
             )
           ),
