@@ -23,6 +23,7 @@ library("listviewer")
 library("visNetwork")
 library("tidycwl")
 library("biocompute")
+library('shinyalert')
 
 # the number of failed attempts allowed before a user is locked out
 max_lockout <- 4
