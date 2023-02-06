@@ -1,3 +1,4 @@
+
 get_cwl_local <- function(file_path, format=c('cwl', 'json', 'yaml')) {
   # out <- tryCatch({
     format <- match.arg(format)
@@ -39,14 +40,12 @@ inputcheck <- function(input.filepath) {
       }
     }
 
-  }else{
-    return(shinyalert('Unsupported File Type', "That filetype is not supported by the BCO app. Please select a .cwl, .yaml, or .json file.", type = 'error'))
   }
 
   if (flag.ext & flag.cwl == T) {
-    return(TRUE)
+    enable(input$next_btn_local)
   }else{
-    return(FALSE)
+    disabled(input$next_btn_local)
   }
 }
 
@@ -66,5 +65,3 @@ get_rawcwl_local <- eventReactive(input$upfile_local_composer, {
   cwl_out <- get_cwl_local(input$upfile_local_composer$datapath, format = file_ext(input$upfile_local_composer$datapath))
 })
 
-#
-# observeEvent(input$upfile_local_composer$datapath, {enable("btn_upfile_local_composer")})
