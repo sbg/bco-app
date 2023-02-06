@@ -1,8 +1,8 @@
 library("tidycwl")
-
+library('tools')
 # Test Input File
 input.example.1 <- "workflow_examples/broad-best-practices-rna-seq-variant-calling.json"
-input.example.2 <- "~/Downloads/2954_hovernet_cellcount_seurat.pdf"
+input.example.2 <- "~/Documents/rnaseq-test.bco.json"
 
 # STEP 1 - BASIC tidycwl TEST
 
@@ -40,16 +40,24 @@ inputcheck <- function(input.filepath) {
     if (extension %in% c("json", "cwl")) {
       flow <- input.filepath %>% tidycwl::read_cwl(format = "json")
       cwl.version <- flow$cwlVersion
-      if (cwl.version %in% c("sbg:draft-2 ", "v1.0")) {
-        flag.cwl <- TRUE
+      if(!is.null(cwl.version)){
+        if (cwl.version %in% c("sbg:draft-2 ", "v1.0")) {
+          flag.cwl <- TRUE
+        }
+      }else{
+        print(paste('While this file has a .json extension, it is not the correct file type.'))
       }
     }
 
+  }else{
+    return(shinyalert('Unsupported File Type', "That filetype is not supported by the BCO app. Please select a .cwl, .yaml, or .json file.", type = 'error'))
   }
-  if (flag.ext & flag.cwl) {
-    return(TRUE)
-  }
+
+   if (flag.ext & flag.cwl) {
+  return(TRUE)
+  }else{
   return(FALSE)
+  }
 }
 
 # Run function to get T or F flag to use in downstram Shiny staff
