@@ -1,0 +1,151 @@
+{
+  "spec_version": "https://w3id.org/biocompute/1.4.2/",
+  "object_id": "https://biocompute.sbgenomics.com/bco/3dbfb3b5-74ab-46a9-911f-ea966e0ec5a1",
+  "etag": "2f11c75f8a98d6b519e77e51ddec42a291b5226821c1842adad1e76b7b6e1184",
+  "provenance_domain": {
+    "name": "Neoepitope Analysis",
+    "version": "1.0.0",
+    "review": [],
+    "derived_from": "https://cgc-api.sbgenomics.com/v2/apps/phil_webster/bco-cwl-examples/neoepitope-analysis-main-published/0/raw/",
+    "obsolete_after": "2023-01-24T00:00:00+0000",
+    "embargo": ["2023-01-24T00:00:00+0000", "2023-01-24T00:00:00+0000"],
+    "created": "2023-01-24T00:00:00+0000",
+    "modified": "2023-01-24T00:00:00+0000",
+    "contributors": [],
+    "license": "https://spdx.org/licenses/CC-BY-4.0.html"
+  },
+  "usability_domain": "",
+  "extension_domain": {
+    "fhir_extension": {
+      "fhir_endpoint": "",
+      "fhir_version": "",
+      "fhir_resources": {}
+    },
+    "scm_extension": {
+      "scm_repository": "",
+      "scm_type": "git",
+      "scm_commit": "",
+      "scm_path": "",
+      "scm_preview": ""
+    }
+  },
+  "description_domain": {
+    "keywords": [],
+    "xref": [],
+    "platform": [
+      "Seven Bridges Platform"
+    ],
+    "pipeline_steps": [
+      {
+        "step_number": "1",
+        "name": "#bwa_aln",
+        "description": "",
+        "version": "NA",
+        "prerequisite": [],
+        "input_list": [],
+        "output_list": []
+      },
+      {
+        "step_number": "2",
+        "name": "#bwa_sampe",
+        "description": "",
+        "version": "NA",
+        "prerequisite": [],
+        "input_list": [],
+        "output_list": []
+      },
+      {
+        "step_number": "3",
+        "name": "#Variant_Effect_Predictor",
+        "description": "The VEP determines the effect of your variants (SNPs, insertions, deletions, CNVs or structural variants) on genes, transcripts, and protein sequence, as well as regulatory regions. Using it, you can find out the:\n\n* genes and transcripts affected by the variants\n\n* location of the variants (e.g. upstream of a transcript, in coding sequence, in non-coding RNA, in regulatory regions)\n\n* consequence of your variants on the protein sequence (e.g. stop gained, missense, stop lost, frameshift)\n\n* known variants that match yours, and associated minor allele frequencies from the 1000 Genomes Project\n\n* SIFT and PolyPhen scores for changes to protein sequence\n\n**Important note:** This tool is always working in offline mode, meaning that you will have to provide species cache file and you will not be able to establish any database connection. In addition, features (parameters) that require database connection were not added to the platform. Unpacking archived cache files is included in the tool.",
+        "version": "83",
+        "prerequisite": [],
+        "input_list": [],
+        "output_list": []
+      },
+      {
+        "step_number": "4",
+        "name": "#hlaminer",
+        "description": "",
+        "version": "NA",
+        "prerequisite": [],
+        "input_list": [],
+        "output_list": []
+      },
+      {
+        "step_number": "5",
+        "name": "#samtools_fastq",
+        "description": "",
+        "version": "NA",
+        "prerequisite": [],
+        "input_list": [],
+        "output_list": []
+      },
+      {
+        "step_number": "6",
+        "name": "#vcf_parser",
+        "description": "",
+        "version": "NA",
+        "prerequisite": [],
+        "input_list": [],
+        "output_list": []
+      },
+      {
+        "step_number": "7",
+        "name": "#netmhcpan",
+        "description": "",
+        "version": "NA",
+        "prerequisite": [],
+        "input_list": [],
+        "output_list": []
+      },
+      {
+        "step_number": "8",
+        "name": "#protein_translator",
+        "description": "",
+        "version": "NA",
+        "prerequisite": [],
+        "input_list": [],
+        "output_list": []
+      }
+    ]
+  },
+  "execution_domain": {
+    "script": [
+      "https://cgc-api.sbgenomics.com/v2/apps/phil_webster/bco-cwl-examples/neoepitope-analysis-main-published/0/raw/"
+    ],
+    "script_driver": "Seven Bridges Common Workflow Language Executor",
+    "software_prerequisites": [],
+    "external_data_endpoints": [],
+    "environment_variables": []
+  },
+  "parametric_domain": [],
+  "io_domain": {
+    "input_subdomain": [
+      {
+        "uri": [
+          {
+            "filename": "",
+            "uri": "",
+            "access_time": ""
+          }
+        ]
+      }
+    ],
+    "output_subdomain": [
+      {
+        "mediatype": "",
+        "uri": [
+          {
+            "uri": "",
+            "access_time": ""
+          }
+        ]
+      }
+    ]
+  },
+  "error_domain": {
+    "empirical_error": [],
+    "algorithmic_error": []
+  }
+}
