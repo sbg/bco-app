@@ -1,8 +1,11 @@
 get_cwl_local <- function(file_path, format=c('cwl', 'json', 'yaml')) {
   # out <- tryCatch({
     format <- match.arg(format)
-    if (format == 'cwl') {
+    if (format == 'cwl' & configr::is.yaml.file(file_path)) {
       return(read_cwl_yaml(file_path))
+    }
+    if (format == 'cwl' & configr::is.json.file(file_path)) {
+      return(read_cwl_json(file_path))
     }
     if (format == 'json') {
       return(read_cwl_json(file_path))
@@ -64,6 +67,7 @@ observeEvent(input$upfile_local_composer, {
 # get raw cwl
 get_rawcwl_local <- eventReactive(input$upfile_local_composer, {
   cwl_out <- get_cwl_local(input$upfile_local_composer$datapath, format = file_ext(input$upfile_local_composer$datapath))
+  cwl_out
 })
 
 #
