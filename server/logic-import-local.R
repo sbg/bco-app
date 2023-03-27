@@ -1,42 +1,40 @@
-get_cwl_local <- function(file_path, format=c('cwl', 'json', 'yaml')) {
-  # out <- tryCatch({
-    format <- match.arg(format)
-    if (format == 'cwl' & configr::is.yaml.file(file_path)) {
-      return(read_cwl_yaml(file_path))
-    }
-    if (format == 'cwl' & configr::is.json.file(file_path)) {
-      return(read_cwl_json(file_path))
-    }
-    if (format == 'json') {
-      return(read_cwl_json(file_path))
-    }
-    if (format == 'yaml') {
-      return(read_cwl_yaml(file_path))
-    }
-}
+get_cwl_local <- function(file_path, format = c('cwl', 'json', 'yaml')) {
 
+  # out <- tryCatch({
+  file.extension <- file_ext(file_path)
+  format <- match.arg(file.extension, format)
+
+  if(format == 'cwl' & configr::is.yaml.file(file_path)){
+    return(read_cwl_yaml(file_path))
+    }else if(format == 'cwl' & configr::is.json.file(file_path)){
+    return(read_cwl_json(file_path))
+  }else if(format == 'json'){
+    return(read_cwl_json(file_path))
+  }else if(format == 'yaml'){
+    return(read_cwl_yaml(file_path))
+  }
+}
 inputcheck <- function(input.filepath) {
   extension <- file_ext(input.filepath)
   flag.ext <- FALSE
   flag.cwl <- FALSE
 
-  if (extension %in% c('json', 'cwl', 'yaml')) {
+  if (str_detect(extension, "json|cwl|yaml")) {
     print(paste("[INFO] Extention of input filepath:", extension))
     flag.ext <- TRUE
 
     if (extension == "yaml") {
       flow <- input.filepath %>% tidycwl::read_cwl(format = "yaml")
       cwl.version <- flow$cwlVersion
-      if (cwl.version %in% c("sbg:draft-2 ", "v1.0")) {
+      if(str_detect(cwl.version, "v1\\.\\d*|sbg:draft-2|")){
         flag.cwl <- TRUE
       }
     }
-
-    if (extension %in% c("json", "cwl")) {
+    if (str_detect(extension, "json|cwl")) {
       flow <- input.filepath %>% tidycwl::read_cwl(format = "json")
       cwl.version <- flow$cwlVersion
       if(!is.null(cwl.version)){
-        if (cwl.version %in% c("sbg:draft-2 ", "v1.0")) {
+        if(str_detect(cwl.version, "v1\\.\\d*|sbg:draft-2")){
           flag.cwl <- TRUE
         }
       }
@@ -60,7 +58,7 @@ observeEvent(input$upfile_local_composer, {
     return(shinyalert('Unsupported File Type', "That filetype is not supported by the BCO app. Please select a .cwl, .yaml, or .json file.", type = 'error'))
   }
 
-  inputcheck(input$upfile_local_composer)
+  inputcheck(input$upfile_local_composer$datapath)
 
 }, ignoreNULL = T, ignoreInit = T)
 
