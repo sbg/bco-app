@@ -29,6 +29,7 @@ library("markdown")
 library("reactR")
 library('tools')
 library('shinyalert')
+library('tidyverse')
 
 # 24aeb22ed4224a1387ce6ccb31f98684
 # install.packages("BiocManager")

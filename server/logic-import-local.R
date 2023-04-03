@@ -26,7 +26,7 @@ inputcheck <- function(input.filepath) {
     if (extension == "yaml") {
       flow <- input.filepath %>% tidycwl::read_cwl(format = "yaml")
       cwl.version <- flow$cwlVersion
-      if(str_detect(cwl.version, "v1\\.\\d*|sbg:draft-2|")){
+      if(str_detect(cwl.version, "v1\\.\\d*|sbg:draft-2")){
         flag.cwl <- TRUE
       }
     }
