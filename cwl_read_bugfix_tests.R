@@ -118,12 +118,111 @@ get_graph <- function (inputs, outputs, steps){
   list(nodes = nodes, edges = edges)
   }
 
+#test get_nodes line by line
+inputs <- pathway_analysis %>% parse_inputs()
+outputs <- pathway_analysis %>% parse_outputs()
+steps <- pathway_analysis %>% parse_steps()
+
+#### nested functions of get_nodes tested for error of not matching rows ####
+# As I've had to rewrite or add to most of the functions in the tidycwl package for get_graph()
+#You will have to add each function below to the global environment for other functions to run.
+#They will not just run from the default package since they are all on this same R script.
+
+#get_steps_id nested in get_nodes
+get_steps_id <- function (steps) {
+  if (is_cwl_dict(steps)) {
+    id <- steps$id
+  } else if (is_cwl_list(steps)) {
+    id <- get_el_from_list(steps, "id")
+  } else {
+    stop("`steps` is not a proper dict or list")
+  }
+  id
+}
+
+#get_outputs_id nested in get_nodes()
+get_outputs_id <- function (outputs) {
+  if (is_cwl_dict(outputs)) {
+    id <- outputs$id
+  } else if (is_cwl_list(outputs)) {
+    id <- get_el_from_list(outputs, "id")
+  } else {
+    stop("`outputs` is not a proper dict or list")
+  }
+  id
+}
+
+#get_inputs_id
+get_inputs_id <- function (inputs) {
+  if (is_cwl_dict(inputs)) {
+    id <- inputs$id
+  } else if (is_cwl_list(inputs)) {
+    id <- get_el_from_list(inputs, "id")
+  } else {
+    stop("`inputs` is not a proper dict or list")
+  }
+  id
+}
+
+#get_steps_label
+get_steps_label <- function (steps) {
+  if (!is.null(steps$run)) {
+    run <- steps$run
+    if (is_cwl_dict(run)) {
+      label <- run$label
+    } else if (is_cwl_list(run)) {
+      label <- get_el_from_list(run, "label")
+    } else {
+      stop("`steps$run` is not a proper dict or list")
+    }
+  } else {
+    if (is_cwl_dict(steps)) {
+      label <- steps$label
+    } else if (is_cwl_list(steps)) {
+      label <- get_el_from_list(steps, "label")
+    } else {
+      stop("`steps` is not a proper dict or list")
+    }
+  }
+  label
+}
+
+#get_outputs_label
+get_outputs_label <- function (outputs) {
+  #Added this if statement in case workflow creators did not add a label column.
+  #Without one the rows don't match when creating a data table for nodes of workflow.
+  if(is.null(outputs$label)){
+    outputs$label <- 'Stand In For BCO Creation - No Label Given In Workflow'
+  }
+
+  if (is_cwl_dict(outputs)) {
+    label <- outputs$label
+  } else if (is_cwl_list(outputs)) {
+    label <- get_el_from_list(outputs, "label")
+  } else {
+    stop("`outputs` is not a proper dict or list")
+  }
+  label
+}
+
+#get_inputs_label
+get_inputs_label <- function (inputs) {
+  if (is_cwl_dict(inputs)) {
+    label <- inputs$label
+  } else if (is_cwl_list(inputs)) {
+    label <- get_el_from_list(inputs, "label")
+  } else {
+    stop("`inputs` is not a proper dict or list")
+  }
+  label
+}
+
+
 #get_nodes() nested within get_graph
 get_nodes <- function (inputs, outputs, steps){
   nodes <- data.frame(id = c(get_inputs_id(inputs), get_outputs_id(outputs),
                              get_steps_id(steps)), label = c(get_inputs_label(inputs),
-                                                             get_outputs_label(outputs), get_steps_label(steps)))
-  ,
+                                                             get_outputs_label(outputs), get_steps_label(steps)),
                       group = c(rep("input", length(get_inputs_id(inputs))),
                                 rep("output", length(get_outputs_id(outputs))),
                                 rep("step", length(get_steps_id(steps)))), stringsAsFactors = FALSE)
@@ -135,6 +234,7 @@ novis_nodes <- get_nodes(novis_inputs, novis_outputs, novis_steps)
 vis_nodes <- get_nodes(vis_inputs, vis_outputs, vis_steps)
 pathway_nodes <- get_nodes(path_inputs, path_outputs, path_steps)
 
+#### Testing and changes to the get_edges function and its nested functions ####
 #nodes table generates for novis fine. This section is to test the edges - Changed to str_detect to fix versioning issue
 get_edges <- function (outputs, steps) {
   #changed to str_detect to capture all versions of cwl. This was the reason some workflows weren't visualizing or generating bcos
@@ -509,6 +609,8 @@ get_cwl_version_steps(novis_steps)
     visGroups(groupname = "step", color = "#009E73", shadow = list(enabled = TRUE)) %>%
     visLegend(width = 0.1, position = "right", main = "Legend") %>%
     visInteraction(navigationButtons = TRUE)
+
+
 
 
 
