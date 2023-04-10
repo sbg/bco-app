@@ -86,6 +86,7 @@ server <- function(input, output, session) {
   source(file.path("server", "api.R"), local = TRUE)$value
 
   # app logic
+  source(file.path("server", "logic-new-visualization-functions.R"), local = TRUE)$value
   source(file.path("server", "logic-ui-basic.R"), local = TRUE)$value
   source(file.path("server", "logic-import.R"), local = TRUE)$value
   source(file.path("server", "logic-import-local.R"), local = TRUE)$value
@@ -97,6 +98,7 @@ server <- function(input, output, session) {
   source(file.path("server", "logic-export-local.R"), local = TRUE)$value
   source(file.path("server", "logic-help.R"), local = TRUE)$value
   source(file.path("server", "pdf-generator.R"), local = TRUE)$value
+
 
   # authentication logic
   source(file.path("server", "auth.R"), local = TRUE)$value

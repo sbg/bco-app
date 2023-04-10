@@ -178,7 +178,7 @@ load_df_contributors_local <- reactive(if (file.exists(contributors_fname)) read
 output$vis_cwl_workflow_local <- renderVisNetwork({
   if(tidycwl::is_cwl(get_rawcwl_local())) {
     if(!is.null(get_rawcwl_local() %>% parse_inputs())) {
-      tryCatch({get_graph(
+      tryCatch({new_get_graph(
         get_rawcwl_local() %>% parse_inputs(),
         get_rawcwl_local() %>% parse_outputs(),
         get_rawcwl_local() %>% parse_steps()
