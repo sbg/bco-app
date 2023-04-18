@@ -503,7 +503,7 @@ tabPanel(
             column(
               width = 10, offset = 1,
               p(strong("Pipeline Metadata")),
-              DT::DTOutput("desc_pipeline_meta")
+              DT::DTOutput("desc_pipeline_meta") #changed from uiOutput to DTOutput to render
             )
           ),
 
@@ -519,8 +519,7 @@ tabPanel(
             column(
               width = 10, offset = 1,
               p(strong("Pipeline Input List")),
-              uiOutput("desc_pipeline_input")
-              # DT::DTOutput("desc_pipeline_input")
+              DT::DTOutput("desc_pipeline_input") #changed from uiOutput to DTOutput to render correctly
             )
           ),
 
@@ -528,8 +527,7 @@ tabPanel(
             column(
               width = 10, offset = 1,
               p(strong("Pipeline Output List")),
-              uiOutput("desc_pipeline_output")
-              # DT::DTOutput("desc_pipeline_output")
+              DT::DTOutput("desc_pipeline_output") #changed from uiOutput to DTOutput to render correctly
             )
           ),
 

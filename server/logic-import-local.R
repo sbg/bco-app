@@ -1,14 +1,16 @@
-#load local cwl
+####This is to test the import and button disable function when loading the wrong file type ####
+# setwd("~/Documents/bco-app-latest/workflow_examples/non-working examples to import buttons")
+# input.filepath <- file.path('broad-best-practices-rna-seq-variant-calling-4-1-0-0.bco.json')
+
+#### local import functions ####
 get_cwl_local <- function(file_path, format = c('cwl', 'json', 'yaml')) {
 
   file.extension <- file_ext(file_path)
   format <- match.arg(file.extension, format)
 
-  if(format == 'cwl' & configr::is.yaml.file(file_path)){
+  if(format == 'cwl' && configr::is.yaml.file(file_path)){
     return(read_cwl_yaml(file_path))
-  }
-
-  if(format == 'cwl' && configr::is.json.file(file_path)){
+  } else if(format == 'cwl' && configr::is.json.file(file_path)){
     return(read_cwl_json(file_path))
   }
 
@@ -46,19 +48,19 @@ inputcheck <- function(input.filepath) {
       cwl.version <- flow$cwlVersion
       if(!is.null(cwl.version)){
         # if (cwl.version %in% c("sbg:draft-2 ", "v1.0")) {
-        flag.cwl <- TRUE
-        print(paste('flag.cwl standing by'))
-        # }
+          flag.cwl <- TRUE
+          print(paste('flag.cwl standing by'))
+          # }
+        }
       }
     }
-  }
 
-  toggleState(id = 'next_btn_local', condition = flag.ext & flag.cwl == T)
+    toggleState(id = 'next_btn_local', condition = flag.ext & flag.cwl == T)
 
-  if (flag.ext & flag.cwl != T) {
-    disable('next_btn_local')
-    print(paste('Be careful not to choke on your aspirations.'))
-  }else{
+    if (flag.ext & flag.cwl != T) {
+      disable('next_btn_local')
+      print(paste('Be careful not to choke on your aspirations.'))
+    }else{
     print(paste('Great shot, kid! That was one in a million!'))
   }
 }

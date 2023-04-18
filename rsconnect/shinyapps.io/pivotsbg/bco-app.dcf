@@ -1,0 +1,11 @@
+name: bco-app
+title:
+username:
+account: pivotsbg
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 8885467
+bundleId: 7106227
+url: https://pivotsbg.shinyapps.io/bco-app/
+when: 1681848268.8618
+lastSyncTime: 1681848268.86182

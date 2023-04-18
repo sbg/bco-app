@@ -1,0 +1,97 @@
+{
+  "spec_version": "https://w3id.org/biocompute/1.4.2/",
+  "object_id": "https://biocompute.sbgenomics.com/bco/55d76176-f2cd-4715-a644-8f783a02be9d",
+  "etag": "892347ba541d10f7242896c00f1bb616955062f907def5d591db994b6ff91335",
+  "provenance_domain": {
+    "name": "CGC RNASeq",
+    "version": "1.0.0",
+    "review": [],
+    "derived_from": "https://cgc-api.sbgenomics.com/v2/apps/phil_webster/bco-cwl-examples/cgc-rnaseq/0/raw/",
+    "obsolete_after": "2023-01-24T00:00:00+0000",
+    "embargo": ["2023-01-24T00:00:00+0000", "2023-01-24T00:00:00+0000"],
+    "created": "2023-01-24T00:00:00+0000",
+    "modified": "2023-01-24T00:00:00+0000",
+    "contributors": [],
+    "license": "https://spdx.org/licenses/CC-BY-4.0.html"
+  },
+  "usability_domain": "This RSEM workflow (RSEM 1.2.31) for quantifying gene expression uses the STAR aligner and is optimized to work with FASTQ input files.\n\nTo process multiple samples, please consider running batch tasks with this workflow and aggregating the results using **Prepare Multisample Data** [workflow](https://cgc.sbgenomics.com/u/pdxnet/pdxnet-jax-rna-seq-workflow/apps/#pdxnet/pdxnet-jax-rna-seq-workflow/prepare-multisample-data).\n\n###Essential Requirements\n\nThe following metadata fields are essential and should be assigned to input FASTQ files:\n\n1. **Sample ID**: Any string. The identifier should be identical for both paired-end FASTQ files. \n2. **Paired-end**: 1 or 2\n\nThis workflow will process both uncompressed and compressed FASTQ files (FASTQ.GZ, FASTQ.BZ2) and has been designed for paired-end data. By default, the workflow assumes unstranded data (**Forward probability** input parameter set to 0.5). Please adjust the value of this parameter (0.0 or 1.0) based on the library prep of your data. \n\n\n####The following output files will be generated:\n\n\tGene level expression estimates\n\tIsoform level expression estimates\n\tRSEM model plot\n\tBAM in transcript coordinates \n\tBAM in genome coordinates\n\tFASTQC reports ZIP archive\n\tFASTQC HTML report\n\tIntegrated QC report\n\tPicard CollectRNASeqMetrics report\n\tSomalier extracted sites file for input to Somalier `relate` cohort QC tool (see notes below)\n\n###Reference Files and Workflow Details\n\nRequired reference input files:\n\n1. STAR indices archive prepared by **RSEM Prepare Reference** (v.1.2.31). The default input file (GRCh38.91.chr_patch_hapl_scaf_rsem-1.2.31.star-index-archive.tar) was built using a GRCh38 FASTA file (primary assembly, EBV, alt contigs, decoys, and HLA contigs) and an annotation GRCh38 GTF file from Ensembl (release 91) (ftp://ftp.ensembl.org/pub/release-91/gtf/homo_sapiens/Homo_sapiens.GRCh38.91.chr_patch_hapl_scaff.gtf.gz) \n\n2. refFlat file (hg38) used by **Picard CollectRnaSeqMetrics** tool. Downloaded from:\nhttp://hgdownload.cse.ucsc.edu/goldenPath/hg38/database/refFlat.txt.gz Default file input: refFlat.ucsc_hg38.txt\n\n3. Ribosomal intervals (hg38) used by **Picard CollectRnaSeqMetrics** tool. Default file input: rRNA_hg38.interval\n\n4. Somalier sites file.\nThis is a VCF of known polymorphic sites in VCF format. A good set is provided in the tools [releases](https://github.com/brentp/somalier/releases) but any set of common variants will work. Ensure that Hg38 is used.\n\n###Workflow Steps and Notable Parameters\n\n####Step 1: Optional input preprocessing\n\nIf FASTQ.BZ2 files are provided as inputs, the files will be decompressed before further analysis (as Xenome will only accept FASTQ and FASTQ.GZ files). FASTQ.GZ and uncompressed FASTQ input files will be passed on to other tools in the workflow.\n\n####Step 2: FASTQC analysis\n\nQuality of the input FASTQ files is checked with **FASTQC**. \n\n####Step 3: RSEM expression estimation\n\nExpression is estimated using **RSEM Calculate Expression** tool (RSEM 1.2.31), with STAR as the aligner. Please ensure that the reference indices archive supplied to the tool has been prepared accordingly. **RSEM Plot Model** tool is used to generate RSEM plots.\n\nPlease note that by default, the workflow is setup to process unstranded data (**Forward probability** input parameter set to 0.5). Please make sure to adjust the value of this parameter (0.0, 0.5 or 1.0) based on the library-prep used.\n\n####Step 4: Additional QC\n\nAdditional QC reports are collected from **Picard CollectRnaSeqMetrics** tool.\n\nNote, select QC metrics are annotated to the metadata of the genomic coordinate BAM, gene level and isoform level counts files. \n\n#### Step 5: Somalier Extract\n\nFrom the Somalier documentation: \nThe tool takes a list of known polymorphic sites, and extracts regions for each sample. Even a few hundred (or dozen) sites can be a very good indicator of relatedness. The best sites are those with a population allele frequency close to 0.5 as that maximizes the probability that any 2 samples will differ. A list of such sites is provided in the tool release for GRCh37 and hg38. The relate step (available as a separate tool on CGC) is run on a group of outputs from the extract command, and will produce pairwise relatedness among.",
+  "extension_domain": {
+    "fhir_extension": {
+      "fhir_endpoint": "",
+      "fhir_version": "",
+      "fhir_resources": {}
+    },
+    "scm_extension": {
+      "scm_repository": "",
+      "scm_type": "git",
+      "scm_commit": "",
+      "scm_path": "",
+      "scm_preview": ""
+    }
+  },
+  "description_domain": {
+    "keywords": [],
+    "xref": [],
+    "platform": [
+      "Seven Bridges Platform"
+    ],
+    "pipeline_steps": [
+      {
+        "step_number": "1",
+        "name": "sbg_decompressor_cwl1_0",
+        "description": "The **SBG Decompressor** performs extraction of files from an input archive file. \n\nThe supported formats are:\n1. TAR\n2. TAR.GZ (TGZ)\n3. TAR.BZ2 (TBZ2)\n4. GZ\n5. BZ2\n6. ZIP\n\n*A list of all inputs and parameters with corresponding descriptions can be found at the bottom of this page.*\n\n\n###Common use cases\n\nThis tool can be used to extract necessary files from input archives, or in workflows to uncompress and pass on contained files. \n\nThe two modes of work include outputting archive contents with preserved folder structure, and outputting extracted files as a list.\n\n* Select the mode by setting the parameter **Flatten outputs**. Setting the parameter to **True** extracts all files from the archive and outputs them to a list. \n* To preserve the folder structure of the archive, set the **Flatten outputs** parameter to **False** (default is **True**).\n\n###Common Issues and Important Notes\n\nThis tool cannot extract archives of different types than those noted above.\n\n###Performance Benchmarking\n\nBelow is a table describing the runtimes and task costs for different file sizes:\n\n| Input Archive Type | Input Archive Size | Duration | Cost   | Instance (AWS) |\n|--------------------|--------------------|----------|--------|----------------|\n| TAR.GZ             | 100MB              | 2min     | $0.006 | c4.2xlarge     |\n| TAR.GZ             | 1GB                | 8min     | $0.05  | c4.2xlarge     |\n\n*Cost can be significantly reduced by using spot instances. Visit the [Knowledge Center](https://docs.sevenbridges.com/docs/about-spot-instances) for more details.*",
+        "version": "v1.0",
+        "prerequisite": [],
+        "input_list": [],
+        "output_list": []
+      },
+      {
+        "step_number": "2",
+        "name": "deseq2_1_26_0",
+        "description": "**DESeq2** performs differential gene expression analysis by use of negative binomial generalized linear models. It analyzes estimated read counts from several samples, each belonging to one of two or more conditions under study, searching for systematic changes between conditions, as compared to within-condition variability. \n\nThe Bioconductor/R package **DESeq2** provides a set of functions for importing data, performing exploratory analysis and finally testing for differential expression. This CWL tool is a wrapper around the script based on the standard workflow for this type of analysis [1].\n\n**DESeq2** offers two kinds of hypothesis tests: the Wald test, where we use the estimated standard error of a log2 fold change to test if it is equal to zero, and the likelihood ratio test (LRT). The LRT examines two models for the counts, a full model with a certain number of terms and a reduced model, in which some of the terms of the full model are removed. The test determines if the increased likelihood of the data using the extra terms in the full model is more than expected if those extra terms are truly zero. The LRT is therefore useful for testing multiple terms at once, for example testing 3 or more levels of a factor at once, or all interactions between two variables [2].\n\n*A list of **all inputs and parameters** with corresponding descriptions can be found at the end of the page.*\n\n### Common Use Cases\n\nAs input files, please use one of the following: \n\n- **HTSeq**, **RSEM** or **StringTie** gene level abundance estimates;\n- **Salmon**, **Sailfish** or **Kallisto** transcript level abundance estimates.\n\nIf the abundance estimates provided are on a transcript-level, **tximport** will be used to summarize them for gene-level analysis. **Gene annotation** (in GTF format) needs to be supplied then.\n\nTo fit a generalized linear model for each gene, besides gene abundance estimates - some phenotype information is needed. In the simplest case, only a single independant variable is used to explain the expression levels. Experiments with more than one variable influencing the counts can be analyzed using design formula that includes the additional covariates. \n\nThere are two options for providing phenotype information:\n\n1. By indicating API keys for metadata fields that need to be included in the design. Phenotype information will then consist of variables you listed as **Covariate of interest** and **Control variables**.\n2. By including a CSV file (**Phenotype data** input) that contains a row for each sample, with Sample ID in the first column. These Sample IDs need to match those in input files metadata. Also, a single line header with variable names should be included.\n\nExample CSV content below:\n\n```\nsample_id,library,sex,condition\ntreated1,paired-end,male,treated\ntreated2,single-end,male,treated\ntreated3,paired-end,female,treated\nuntreated1,single-end,male,untreated\nuntreated2,paired-end,female,untreated\nuntreated3,paired-end,female,untreated\nuntreated4,paired-end,male,untreated\n```\n\nSupplying a CSV like this while entering \"condition\" for the value of the **Covariate of interest** parameter and \"library\" in **Control variables** will test for differential expression between treated and untreated samples, while controlling for effect of library preparation.\n\nThe information about sample belonging to the treated or the untreated group can also be kept in the metadata. To use a metadata field for splitting the samples into groups for testing, enter its metadata key for the **Covariate of interest** parameter. All the input files need to have this metadata field populated. To control for possible confounders, enter their API keys as **Control variables**.\n\n### Changes Introduced by Seven Bridges\n\nAlthough the script covers different use cases and gives the user some flexibility to tailor the analysis to his own needs, not everything is customizable.\n\nThe user does not choose the type of test that will be performed. The appropriate test is chosen automatically:\n\n- if there are more than two values (levels) to a chosen **Covariate of interest** - LRT is used. \n- if the **Covariate of interest** has only two different values - Wald test is used to test for differential expression.\n\nThe analysis report contains the list of input parameters, phenotype data table, a heatmap of input samples with cluster dendrogram, dispersion estimates plot and an MA plot showing the log2 fold changes attributable to a given gene over the mean of normalized counts and a short summary of results.\n\n### Common Issues and Important Notes\n\n- Any metadata key entered as **Covariate of interest** or **Control variables** needs to exist and it's field be populated in all the samples (**Expression data**) if phenotype data is read from the metadata. Otherwise, if a CSV is supplied - these keys need to match the column names in it's header. Keep in mind that metadata keys are usually different to what is seen on the front-end. To match metadata keys to their corresponding values on the front-end please refer to the table on [this link](https://docs.sevenbridges.com/docs/metadata-on-the-seven-bridges-platform). To learn how to add custom metadata field to expression data files refer to the [following document](https://docs.sevenbridges.com/docs/format-of-a-manifest-file) (section: _Modifying metadata via the visual interface_).\n- Be careful when choosing covariates - generalized linear model fitting will fail if model matrix is not full rank!\n- If your task fails with \"none of the transcripts in the quantification files are present in the first column of tx2gene\" message in the error log, and you are certain that you are using the proper GTF file - you can try rerunning the task with **ignoreTxVersion** option selected. This can happen if you, for example, download the transcriptome FASTA from the Ensembl website and use it to build aligner index - transcript version will then be included in transcript ID in the quantification output file, while in the GTF it's kept as a separate attribute so the transcript IDs will not match.\n\n### Performance Benchmarking\n\nThe execution time for performing differential expression analysis on 6 samples (3 in each group), using transcripts from GENCODE Release 27 (GRCh38.p10) takes 5-6 minutes on the default instance; the price is negligible (~ 0.01$). Unless specified otherwise, the default instance used to run the __DESeq2__ tool will be c4.large (AWS) with 256GB storage.\n\n### References\n\n[1] [RNA-seq workflow: gene-level exploratory analysis and differential expression](https://www.bioconductor.org/help/workflows/rnaseqGene/)\n\n[2] [DESeq2 vignette](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html)",
+        "version": "1.26.0",
+        "prerequisite": [],
+        "input_list": [],
+        "output_list": []
+      }
+    ]
+  },
+  "execution_domain": {
+    "script": [
+      "https://cgc-api.sbgenomics.com/v2/apps/phil_webster/bco-cwl-examples/cgc-rnaseq/0/raw/"
+    ],
+    "script_driver": "Seven Bridges Common Workflow Language Executor",
+    "software_prerequisites": [],
+    "external_data_endpoints": [],
+    "environment_variables": []
+  },
+  "parametric_domain": [],
+  "io_domain": {
+    "input_subdomain": [
+      {
+        "uri": [
+          {
+            "filename": "",
+            "uri": "",
+            "access_time": ""
+          }
+        ]
+      }
+    ],
+    "output_subdomain": [
+      {
+        "mediatype": "",
+        "uri": [
+          {
+            "uri": "",
+            "access_time": ""
+          }
+        ]
+      }
+    ]
+  },
+  "error_domain": {
+    "empirical_error": [],
+    "algorithmic_error": []
+  }
+}

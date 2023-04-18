@@ -2,7 +2,7 @@ library("tidycwl")
 library('tools')
 # Test Input File
 input.example.1 <- "workflow_examples/broad-best-practices-rna-seq-variant-calling.json"
-input.example.2 <- "~/Documents/rnaseq-test.bco.json"
+# input.example.2 <- "~/Documents/rnaseq-test.bco.json"
 
 # STEP 1 - BASIC tidycwl TEST
 

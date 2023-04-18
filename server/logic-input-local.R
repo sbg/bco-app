@@ -326,23 +326,25 @@ load_desc_xref_local <- reactive(if (file.exists(desc_xref_fname_local)) readRDS
 # pipeline_meta
 load_desc_pipeline_meta_local <- reactive(
   if (!is.null(get_rawcwl_local() %>% parse_steps())) {
-    data.frame(
-      "step_number" = as.character(1:length(get_rawcwl_local() %>% parse_steps() %>% get_steps_id())),
-      "name" = get_rawcwl_local() %>% parse_steps() %>% get_steps_id(),
-      "description" = unlist(get_rawcwl_local() %>% parse_steps() %>% get_steps_doc()),
-      "version" = get_rawcwl_local() %>% parse_steps() %>% get_steps_version(),
-      stringsAsFactors = FALSE
-    )
-  } else {
-    data.frame(
-      "step_number" = character(),
-      "name" = character(),
-      "description" = character(),
-      "version" = character(),
-      stringsAsFactors = FALSE
+  data.frame(
+    "step_number" = as.character(1:length(get_rawcwl_local() %>% parse_steps() %>% new_get_steps_id())),
+    "name" = get_rawcwl_local() %>% parse_steps() %>% new_get_steps_id(),
+    "description" = unlist(get_rawcwl_local() %>% parse_steps() %>% new_get_steps_doc()),
+    "version" = get_rawcwl_local() %>% parse_steps() %>% new_get_steps_version(),
+    stringsAsFactors = FALSE
+  )
+} else {
+  data.frame(
+    "step_number" = character(),
+    "name" = character(),
+    "description" = character(),
+    "version" = character(),
+    stringsAsFactors = FALSE
     )
   }
 )
+
+
 output$desc_pipeline_meta_local <- DT::renderDT({
   load_desc_pipeline_meta_local()
 })

@@ -134,26 +134,26 @@ load_df_contributors <- reactive(if (file.exists(contributors_fname)) readRDS(co
 output$vis_cwl_workflow <- renderVisNetwork({
   if(tidycwl::is_cwl(get_rawcwl()) ) {
     if(!is.null(get_rawcwl() %>% parse_inputs())) {
-    tryCatch({new_get_graph(
-              get_rawcwl() %>% parse_inputs(),
-              get_rawcwl() %>% parse_outputs(),
-              get_rawcwl() %>% parse_steps()
-            ) %>% visualize_graph() %>%
-                  visGroups(groupname = "input", color = "#E69F00", shadow = list(enabled = TRUE)) %>%
-                  visGroups(groupname = "output", color = "#56B4E9", shadow = list(enabled = TRUE)) %>%
-                  visGroups(groupname = "step", color = "#009E73", shadow = list(enabled = TRUE)) %>%
-                  visLegend(width = 0.1, position = "right", main = "Legend") %>%
-                  visInteraction(navigationButtons = TRUE)
-            }, error = function(err){
-            print("Could not prepare the visualizatoin data!")              # give warning on the visual
-            nodes <- data.frame(id = 1:5, label = c('Not', 'Valid', 'App', 'to', 'Visualize'), shape = c('text'))
-            edges <- data.frame(from = c(1,2,3,4), to = c(2,3,4,5))
-            visNetwork(nodes, edges) %>% visInteraction(navigationButtons = TRUE)
+      tryCatch({new_get_graph(
+        get_rawcwl() %>% parse_inputs(),
+        get_rawcwl() %>% parse_outputs(),
+        get_rawcwl() %>% parse_steps()
+      ) %>% visualize_graph() %>%
+          visGroups(groupname = "input", color = "#E69F00", shadow = list(enabled = TRUE)) %>%
+          visGroups(groupname = "output", color = "#56B4E9", shadow = list(enabled = TRUE)) %>%
+          visGroups(groupname = "step", color = "#009E73", shadow = list(enabled = TRUE)) %>%
+          visLegend(width = 0.1, position = "right", main = "Legend") %>%
+          visInteraction(navigationButtons = TRUE)
+      }, error = function(err){
+        print("Could not prepare the visualizatoin data!")
+        # give warning on the visual
+        nodes <- data.frame(id = 1:5, label = c('Not', 'Valid', 'App', 'to', 'Visualize'), shape = c('text'))
+        edges <- data.frame(from = c(1,2,3,4), to = c(2,3,4,5))
+        visNetwork(nodes, edges) %>% visInteraction(navigationButtons = TRUE)
       })
     }
   }
 })
-
 # 2. usability
 
 # text
@@ -274,10 +274,10 @@ load_desc_xref <- reactive(if (file.exists(desc_xref_fname)) readRDS(desc_xref_f
 load_desc_pipeline_meta <- reactive(
   if (!is.null(get_rawcwl() %>% parse_steps())) {
     data.frame(
-      "step_number" = as.character(1:length(get_rawcwl() %>% parse_steps() %>% get_steps_id())),
-      "name" = get_rawcwl() %>% parse_steps() %>% get_steps_id(),
-      "description" = unlist({get_rawcwl() %>% parse_steps() %>% get_steps_doc()}),
-      "version" = get_rawcwl() %>% parse_steps() %>% get_steps_version(),
+      "step_number" = as.character(1:length(get_rawcwl() %>% parse_steps() %>% new_get_steps_id())),
+      "name" = get_rawcwl() %>% parse_steps() %>% new_get_steps_id(),
+      "description" = unlist({get_rawcwl() %>% new_get_steps_doc()}),
+      "version" = get_rawcwl() %>% parse_steps() %>% new_get_steps_version(),
       stringsAsFactors = FALSE
     )
   } else {

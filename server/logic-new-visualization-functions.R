@@ -23,6 +23,7 @@ new_is_cwl_list <-  function(steps) {
 
 #new_get_steps_id nested in new_get_nodes
 new_get_steps_id <- function (steps) {
+
   if (new_is_cwl_dict(steps)) {
     id <- steps$id
   } else if (new_is_cwl_list(steps)) {
@@ -114,7 +115,7 @@ new_get_inputs_label <- function (inputs) {
 new_get_nodes <- function (inputs, outputs, steps){
   nodes <- data.frame(id = c(new_get_inputs_id(inputs), new_get_outputs_id(outputs),
                              new_get_steps_id(steps)), label = c(new_get_inputs_label(inputs),
-                                                             new_get_outputs_label(outputs), new_get_steps_label(steps)),
+                                                                 new_get_outputs_label(outputs), new_get_steps_label(steps)),
                       group = c(rep("input", length(new_get_inputs_id(inputs))),
                                 rep("output", length(new_get_outputs_id(outputs))),
                                 rep("step", length(new_get_steps_id(steps)))), stringsAsFactors = FALSE)
@@ -244,7 +245,7 @@ new_get_cwl_version_steps <- function (steps){
            ver <- unique(steps$run$cwlVersion), ver)
 
     if ("sbg:draft-2" %in% new_get_el_from_list(new_get_el_from_list(steps,
-                                                             "run"), "cwlVersion")){
+                                                                     "run"), "cwlVersion")){
       ver <- "sbg:draft-2"
     }
   }
@@ -308,8 +309,102 @@ new_get_edges <- function (outputs, steps) {
 
 #### new_get_graph() ####
 new_get_graph <- function (inputs, outputs, steps){
-  nodes <- new_get_nodes(inputs, outputs, steps)
-  edges <- new_get_edges(outputs, steps)
-  list(nodes = nodes, edges = edges)
+  new_nodes <- new_get_nodes(inputs, outputs, steps)
+  new_edges <- new_get_edges(outputs, steps)
+  list(nodes = new_nodes, edges = new_edges)
 }
 
+#### new_get_steps_doc ####
+new_get_steps_doc <- function(steps){
+
+  param <- NULL
+
+  if(!is.null(steps$run$cwlVersion)){
+    param <- ifelse(str_detect(steps$run$cwlVersion, 'v\\d+\\.\\d+') == T, "doc", param)
+  }else if(!is.null(steps$cwlVersion)){
+    param <- ifelse(str_detect(steps$cwlVersion, 'v\\d+\\.\\d+') == T, "doc", param)
+  }
+
+  if ("sbg:draft-2" %in% c(steps$run$cwlVersion, steps$cwlVersion)){
+    param <- "description"
+  }
+
+  if (is.null(param)) {
+    param <- ifelse(str_detect(steps$run$cwlVersion, "v\\d+\\.\\d+"),
+                    "doc", param)
+
+    if ("sbg:draft-2" %in% new_get_el_from_list(new_get_el_from_list(steps,
+                                                                     "run"), "cwlVersion"))
+      param <- "description"
+  }
+
+  if (!is.null(steps$run)) {
+    run <- steps$run
+
+    if (new_is_cwl_dict(run)) {
+      if(!is.null(run$doc)){
+        desc <- run[param]
+
+        if(is.null(desc)){
+          desc <- 'No Description Given'
+        }
+
+      }else{
+        desc <- run[[param]]
+
+        if(is.null(desc)){
+          desc <- 'No Description Given'
+        }
+      }
+
+    }else if (new_is_cwl_list(run)) {
+      desc <- new_get_el_from_list(run, param)
+    } else {
+      stop("`steps$run` is not a proper dict or list")
+    }
+
+  }else{
+
+    if (new_is_cwl_dict(steps) == T) {
+      desc <- steps[param]
+      if(is.null(desc)){
+        desc <- 'No Description Given'
+      }
+    } else if (new_is_cwl_list(steps) == T) {
+      desc <- new_get_el_from_list(new_get_el_from_list(steps,
+                                                        "run"), param)
+    } else {
+      stop("`steps` is not a proper dict or list")
+    }
+  }
+
+  desc
+}
+
+new_get_steps_version <-  function(steps){
+
+  if (!is.null(steps$run)) {
+    run <- steps$run
+
+    if (new_is_cwl_dict(run)) {
+      version <- run$"cwlVersion" #was sbg:toolkitVersion - changing for all new_is_cwl_dict()
+    } else if (new_is_cwl_list(run)) {
+      version <- new_get_el_from_list(run, "sbg:toolkitVersion")
+    } else {
+      stop("`steps$run` is not a proper dict or list")
+    }
+
+  }else{
+
+    if (new_is_cwl_dict(steps)) {
+      version <- steps[["run"]][["cwlVersion"]]
+    } else if (new_is_cwl_list(steps)) {
+      version <- unlist(new_get_el_from_list(new_get_el_from_list(steps,
+                                                                  "run"), "sbg:toolkitVersion"))
+    } else {
+      stop("`steps` is not a proper dict or list")
+    }
+  }
+
+  version
+}

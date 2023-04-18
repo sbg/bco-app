@@ -131,7 +131,7 @@ tabPanel(
               width = 10, offset = 1,
               textInput(
                 inputId = "provenance_license_local",
-                label = "License",
+                label  = "License",
                 value = "https://spdx.org/licenses/CC-BY-4.0.html",
                 placeholder = "e.g. https://spdx.org/licenses/CC-BY-4.0.html"
               )
