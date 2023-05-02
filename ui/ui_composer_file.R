@@ -131,7 +131,7 @@ tabPanel(
               width = 10, offset = 1,
               textInput(
                 inputId = "provenance_license_local",
-                label  = "License",
+                label  = "LICENSE",
                 value = "https://spdx.org/licenses/CC-BY-4.0.html",
                 placeholder = "e.g. https://spdx.org/licenses/CC-BY-4.0.html"
               )
@@ -438,8 +438,8 @@ tabPanel(
             column(
               width = 10, offset = 1,
               p(strong("Pipeline Input List")),
-              uiOutput("desc_pipeline_input_local")
-              # DT::DTOutput("desc_pipeline_input")
+              # uiOutput("desc_pipeline_input_local")
+              DT::DTOutput("df_desc_pipeline_input_local")
             )
           ),
 
@@ -447,8 +447,8 @@ tabPanel(
             column(
               width = 10, offset = 1,
               p(strong("Pipeline Output List")),
-              uiOutput("desc_pipeline_output_local")
-              # DT::DTOutput("desc_pipeline_output")
+              # uiOutput("df_desc_pipeline_output_local")
+              DT::DTOutput("df_desc_pipeline_output_local")
             )
           ),
 

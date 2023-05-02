@@ -276,7 +276,7 @@ load_desc_pipeline_meta <- reactive(
     data.frame(
       "step_number" = as.character(1:length(get_rawcwl() %>% parse_steps() %>% new_get_steps_id())),
       "name" = get_rawcwl() %>% parse_steps() %>% new_get_steps_id(),
-      "description" = unlist({get_rawcwl() %>% new_get_steps_doc()}),
+      "description" = unlist({get_rawcwl() %>% parse_steps() %>% new_get_steps_doc()}),
       "version" = get_rawcwl() %>% parse_steps() %>% new_get_steps_version(),
       stringsAsFactors = FALSE
     )
@@ -290,6 +290,7 @@ load_desc_pipeline_meta <- reactive(
     )
   }
 )
+
 output$desc_pipeline_meta <- DT::renderDT({
   load_desc_pipeline_meta()
 })

@@ -25,9 +25,13 @@ new_is_cwl_list <-  function(steps) {
 new_get_steps_id <- function (steps) {
 
   if (new_is_cwl_dict(steps)) {
-    id <- steps$id
+    if(!is.null(steps$id)){
+      id <- steps$id
+    }else{
+      id <- steps$label #added this label subset because not all workflows have id column 4.14.23
+    }
   } else if (new_is_cwl_list(steps)) {
-    id <- new_get_el_from_list(steps, "id")
+    id <- new_get_el_from_list(steps, "label")
   } else {
     stop("`steps` is not a proper dict or list")
   }
@@ -319,15 +323,21 @@ new_get_steps_doc <- function(steps){
 
   param <- NULL
 
-  if(!is.null(steps$run$cwlVersion)){
-    param <- ifelse(str_detect(steps$run$cwlVersion, 'v\\d+\\.\\d+') == T, "doc", param)
-  }else if(!is.null(steps$cwlVersion)){
-    param <- ifelse(str_detect(steps$cwlVersion, 'v\\d+\\.\\d+') == T, "doc", param)
-  }
+  tryCatch(
+    if(!is.null(steps$run$cwlVersion)){
+      param <- ifelse(str_detect(steps$run$cwlVersion, 'v\\d+\\.\\d+') == T, "doc",
+                      ifelse("sbg:draft-2" %in% c(steps$run$cwlVersion, steps$cwlVersion),
+                             'description'))
+    }else if(!is.null(steps$cwlVersion)){
+      param <- ifelse(str_detect(steps$cwlVersion, 'v\\d+\\.\\d+') == T, "doc",
+                      ifelse("sbg:draft-2" %in% c(steps$run$cwlVersion, steps$cwlVersion),
+                             'description'))
+    }
+  )
 
-  if ("sbg:draft-2" %in% c(steps$run$cwlVersion, steps$cwlVersion)){
-    param <- "description"
-  }
+  # if ("sbg:draft-2" %in% c(steps$run$cwlVersion, steps$cwlVersion)){
+  #   param <- "description"
+  # }
 
   if (is.null(param)) {
     param <- ifelse(str_detect(steps$run$cwlVersion, "v\\d+\\.\\d+"),
@@ -342,14 +352,14 @@ new_get_steps_doc <- function(steps){
     run <- steps$run
 
     if (new_is_cwl_dict(run)) {
-      if(!is.null(run$doc)){
+      if(unique(param) %in% colnames(run)){ #Some of the workflow column positions get changed around or are missing. If statement added to change the level of subsetting with [ depending on if it can find param at all.
         desc <- run[param]
 
         if(is.null(desc)){
           desc <- 'No Description Given'
         }
 
-      }else{
+      }else{ #If param is not in colnames then it is nested deeper in the table so need double [[
         desc <- run[[param]]
 
         if(is.null(desc)){
@@ -378,11 +388,14 @@ new_get_steps_doc <- function(steps){
     }
   }
 
+  #some of the workflows have completely empty rows and this leads
+  #to tables not rendering. This line removes the empty rows.
+  desc <- desc[desc != ""]
+
   desc
 }
 
 new_get_steps_version <-  function(steps){
-
   if (!is.null(steps$run)) {
     run <- steps$run
 
@@ -407,4 +420,120 @@ new_get_steps_version <-  function(steps){
   }
 
   version
+}
+
+#### Tables ####
+#new_get_inputs_doc
+new_get_inputs_desc <- function(inputs){
+
+  desc <- NULL
+
+  if (!is.null(inputs$doc)) {
+    desc <- inputs$doc
+  }else if (!is.null(inputs$description)){
+    desc <- inputs$description
+  }else{
+    desc <- 'No Description For Inputs'
+  }
+
+  #some of the workflows have completely empty rows and this leads
+  #to tables not rendering. This line removes the empty rows.
+  desc <- desc[desc != ""]
+
+  desc
+}
+
+#new_get_inputs_type
+new_get_inputs_type <- function(inputs){
+
+  if(!is.null(inputs$type)){
+    inputs <- inputs %>% mutate(type = sapply(type, toString)) #type column is a nested list. I wanted to turn it to a column of characters or strings, preserving the comma separated input types
+    input_type <- inputs$type
+  }else{
+    input_type <- 'na'
+  }
+
+  input_type
+}
+
+#get_new_inputs_filetype
+get_new_inputs_filetype <- function(inputs){
+
+  if(!is.null(inputs$'sbg:fileTypes')){
+    inputs_filetype <- inputs$'sbg:fileTypes'
+  }else{
+    inputs_filetype <- 'na'
+  }
+
+  inputs_filetype
+}
+
+#get_new_inputs_default_val
+get_new_inputs_default_val <- function(inputs){
+
+  if(!is.null(inputs$'sbg:toolDefaultValue')){
+    inputs_default <- inputs$'sbg:toolDefaultValue'
+  }else{
+    inputs_default <- 'na'
+  }
+
+  inputs_default
+}
+
+#outputs
+#new_get_outputs_doc
+new_get_outputs_desc <- function(outputs){
+
+  desc <- NULL
+
+  if (!is.null(outputs$doc)) {
+    desc <- outputs$doc
+  }else if (!is.null(outputs$description)){
+    desc <- outputs$description
+  }else{
+    desc <- 'No Description For outputs'
+  }
+
+  #some of the workflows have completely empty rows and this leads
+  #to tables not rendering. This line removes the empty rows.
+  desc <- desc[desc != ""]
+
+  desc
+}
+
+#new_get_outputs_type
+new_get_outputs_type <- function(outputs){
+
+  if(!is.null(outputs$type)){
+    outputs <- outputs %>% mutate(type = sapply(type, toString)) #type column is a nested list. I wanted to turn it to a column of characters or strings, preserving the comma separated input types
+    input_type <- outputs$type
+  }else{
+    input_type <- 'na'
+  }
+
+  input_type
+}
+
+#get_new_outputs_filetype
+get_new_outputs_filetype <- function(outputs){
+
+  if(!is.null(outputs$'sbg:fileTypes')){
+    outputs_filetype <- outputs$'sbg:fileTypes'
+  }else{
+    outputs_filetype <- 'na'
+  }
+
+  outputs_filetype
+}
+
+#get_new_outputs_source
+get_new_outputs_source <- function(outputs){
+
+  if(!is.null(outputs$outputSource)){
+    outputs_source <- outputs$outputSource
+  }else{
+    outputs_source <- 'na'
+  }
+
+  outputs_source
 }

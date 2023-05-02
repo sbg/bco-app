@@ -22,21 +22,24 @@ library("stringr")
 library("listviewer")
 library("visNetwork")
 library("tidycwl")
+library('dplyr')
 library("biocompute")
 library("markdown")
 library("reactR")
 library('tools')
 library('shinyalert')
+library('BiocManager')
 
 # 24aeb22ed4224a1387ce6ccb31f98684
 # install.packages("BiocManager")
 # BiocManager::install("sevenbridges")
 # devtools::install_github('jbryer/DTedit')
-# library(BiocManager)
 options(repos = BiocManager::repositories())
-# if (!require("BiocManager", quietly = TRUE))
-#   install.packages("BiocManager")
-#
+
+if (!require("BiocManager", quietly = TRUE)){
+  install.packages("BiocManager")
+}
+
 # BiocManager::install("BiocGenerics")
 # BiocManager::install("sevenbridges")
 # devtools::install_github('jbryer/DTedit')
@@ -83,7 +86,7 @@ server <- function(input, output, session) {
   source(file.path("server", "api.R"), local = TRUE)$value
 
   # app logic - file.path is subfolder, then file.
-  source(file.path("server", "logic-new-visualization-functions.R"), local = TRUE)$value
+  source(file.path("server", "logic-new-visualization-and-table-functions.R"), local = TRUE)$value
   source(file.path("server", "logic-ui-basic.R"), local = TRUE)$value
   source(file.path("server", "logic-import.R"), local = TRUE)$value
   source(file.path("server", "logic-import-local.R"), local = TRUE)$value
