@@ -293,7 +293,7 @@ load_desc_pipeline_meta <- reactive(
 
 output$desc_pipeline_meta <- DT::renderDT({
   load_desc_pipeline_meta()
-})
+}, rownames = F)
 
 # pipeline_prerequisite
 df_desc_pipeline_prerequisite <- data.frame(
@@ -340,25 +340,29 @@ load_desc_pipeline_prerequisite <- reactive(if (file.exists(desc_pipeline_prereq
 
 # pipeline input
 load_desc_pipeline_input <- reactive(
-  if (!is.null(get_taskused()$step_number_input)) {
+  if (!is.null(get_rawcwl() %>% parse_inputs())) {
     data.frame(
-      "step_number" = get_taskused()$step_number_input,
-      "uri" = get_taskused()$input_path,
-      "access_time" = get_taskused()$start_time,
+      "name" = get_rawcwl() %>% parse_inputs() %>% new_get_inputs_label(),
+      "type" = get_rawcwl() %>% parse_inputs() %>% new_get_inputs_type(),
+      "file type" = get_rawcwl() %>% parse_inputs() %>% get_new_inputs_filetype(),
+      "default value" = get_rawcwl() %>% parse_inputs() %>% get_new_inputs_default_val(),
+      "description" = unlist(get_rawcwl() %>% parse_inputs() %>% new_get_inputs_desc()),
       stringsAsFactors = FALSE
     )
   } else {
     data.frame(
       "step_number" = character(),
-      "uri" = character(),
-      "access_time" = character(),
+      "name" = character(),
+      "description" = character(),
+      "version" = character(),
       stringsAsFactors = FALSE
     )
   }
 )
+
 output$desc_pipeline_input <- DT::renderDT({
   load_desc_pipeline_input()
-})
+}, rownames = F)
 
 # TODO: Fix that, no need to give blank row, added due to error in biocompute package
 # pipeline input
@@ -405,25 +409,29 @@ output$desc_pipeline_input <- DT::renderDT({
 
 # pipeline output
 load_desc_pipeline_output <- reactive(
-  if (!is.null(get_taskused()$step_number_output)) {
+  if (!is.null(get_rawcwl() %>% parse_outputs())) {
     data.frame(
-      "step_number" = get_taskused()$step_number_output,
-      "uri" = get_taskused()$output_path,
-      "access_time" = get_taskused()$end_time,
+      "name" = get_rawcwl() %>% parse_outputs() %>% new_get_outputs_label(),
+      "type" = get_rawcwl() %>% parse_outputs() %>% new_get_outputs_type(),
+      "file_type" = get_rawcwl() %>% parse_outputs() %>% get_new_outputs_filetype(),
+      "output_source" = unlist(get_rawcwl() %>% parse_outputs() %>% get_new_outputs_source()),
+      "description" = unlist(get_rawcwl() %>% parse_outputs() %>% new_get_outputs_desc()),
       stringsAsFactors = FALSE
     )
   } else {
     data.frame(
-      "step_number" = character(),
-      "uri" = character(),
-      "access_time" = character(),
+      "name" = character(),
+      "type" = character(),
+      "file type" = character(),
+      "output source" = character(),
+      "description" = character(),
       stringsAsFactors = FALSE
     )
   }
 )
 output$desc_pipeline_output <- DT::renderDT({
   load_desc_pipeline_output()
-})
+}, rownames = F)
 
 # TODO: Fix that, no need to give blank row, added due to error in biocompute package
 # pipeline output
