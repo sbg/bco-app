@@ -41,7 +41,8 @@ tabPanel(
             textInput(
               inputId = "provenance_name_basic",
               label = "Name for the BCO",
-              placeholder = "e.g. My CWL Workflow"
+              placeholder = "e.g. My CWL Workflow",
+              value="test-bco-object"
             )
           ),
 
@@ -67,7 +68,7 @@ tabPanel(
             width = 10, offset = 1,
             textInput(
               inputId = "provenance_license_basic",
-              label = "License",
+              label = "LICENSE",
               value = "https://spdx.org/licenses/CC-BY-4.0.html",
               placeholder = "e.g. https://spdx.org/licenses/CC-BY-4.0.html"
             )
@@ -513,6 +514,239 @@ tabPanel(
               )
             )
           ),
+
+          br(),
+
+          fluidRow(column(
+            width = 10, offset = 1,
+            h4("Save to CGC Platform, BCO Database, or GitHub Project")
+          )),
+
+          fluidRow(column(
+            width = 10, offset = 1,
+            hr()
+          )),
+
+          fluidRow(
+            column(
+              width = 10, offset = 1,
+              column(
+                width = 4,
+                actionButton("btn_push_git_txt", "Push to GitHub", icon = icon("cloud-upload-alt"), class = "btn btn-primary btn-block", style = "margin-left: -6px;")
+              ),
+              column(
+                width = 4,
+                actionButton("btn_push_bco_txt", "Upload to biocomputeobject.org", icon = icon("cloud-upload-alt"), class = "btn btn-primary btn-block", style = "margin-left: -6px;")
+              ),
+              column(
+                width = 4,
+                actionButton("btn_push_cgc_txt", "Upload to Platform", icon = icon("cloud-upload-alt"), class = "btn btn-primary btn-block")
+              )
+            )
+          ),
+
+          bsModal(
+            "gitaccount_txt", "Push BCO to GitHub", "btn_push_git_txt",
+
+            p("Push your genereated BCO file to your GitHub repo."),
+            p("Note: we don't record any of your account information."),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                textInput("userName_txt", label = "Username: ")
+              ),
+              column(
+                width = 5, offset = 0,
+                passwordInput("passUser_txt", label = "Password: ")
+              )
+            ),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                textInput("repo_name_txt", label = "Repository Name: ", placeholder = "e.g. my-bco-project")
+              ),
+              column(
+                width = 5, offset = 0,
+                textInput("commit_info_txt", label = "Commit Message: ", value = "BCO file commit", placeholder = "e.g. add new bco")
+              )
+            ),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                textInput("app_name_txt", label = "Name Your BCO: ", placeholder = "e.g. rna-seq.bco")
+              ),
+            ),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 10, offset = 1,
+                textAreaInput("git_text_txt", label = "Git commit message: ", value = "Type the preferred git commit message here", resize = "none", width = "400px", height = "250px")
+              )
+            ),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                actionButton("push_yes_txt", "Push", class = "btn btn-primary btn-block")
+              ),
+              column(
+                width = 5, offset = 0,
+                uiOutput("btn_open_git_txt")
+              )
+            )
+          ),
+
+          bsModal(
+            "bcoaccount_txt", "Upload to biocomputeobject.org", "btn_push_bco_txt",
+
+            p("Push your genereated BCO file to biocomputeobject.org"),
+            p("Note: we don't record any of your account information."),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                passwordInput("token_bco_txt", label = "Token: ")
+              ),
+              column(
+                width = 5, offset = 0,
+                textInput("bco_prefix_txt", label = "BCO Prefix: ", value = "BCO")
+              )
+            ),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                textInput("bco_schema_txt", label = "BCO Schema: ", value = "IEEE")
+              ),
+              column(
+                width = 5, offset = 0,
+                textInput("bco_owner_group_txt", label = "BCO Owner Group: ", placeholder = "e.g. bco_drafter")
+              )
+            ),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 10, offset = 1,
+                textAreaInput("bco_return_msg_txt", label = "BCO return message: ", resize = "none", width = "400px", height = "250px")
+              )
+            ),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                actionButton("push_yes_bco_txt", "Push", class = "btn btn-primary btn-block")
+              ),
+              column(
+                width = 5, offset = 0,
+                uiOutput("btn_open_bco_db_txt")
+              )
+            )
+          ),
+
+          bsModal(
+            "cgcaccount_txt", "Upload to SevenBridges", "btn_push_cgc_txt",
+
+            p("Push your genereated BCO file to SevenBridges Platform"),
+            p("Note: we don't record any of your account information."),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 10, offset = 1,
+                  selectInput(
+                    inputId = "plat_modal_txt",
+                    label = "Platform",
+                    choices = c("Cancer Genomics Cloud (CGC)" = "cgc", "Seven Bridges Platform (US)" = "aws-us", "Seven Bridges Platform (EU)" = "aws-eu", "BioData Catalyst" = "f4c", "Cavatica" = "cavatica")
+                  ),
+                  conditionalPanel(
+                    condition = "input.plat_modal_txt == 'cgc'",
+                    tags$label(
+                      "Paste the Auth Token from the",
+                      tags$a(href = .platforms[["cgc"]][["token_url"]], "CGC Developer Dashboard", target = "_blank")
+                    )
+                  ),
+                  conditionalPanel(
+                    condition = "input.plat_modal_txt == 'aws-us'",
+                    tags$label(
+                      "Paste the Auth Token from the",
+                      tags$a(href = .platforms[["aws-us"]][["token_url"]], "Seven Bridges Platform (US) Developer Dashboard", target = "_blank")
+                    )
+                  ),
+                  conditionalPanel(
+                    condition = "input.plat_modal_txt == 'aws-eu'",
+                    tags$label(
+                      "Paste the Auth Token from the",
+                      tags$a(href = .platforms[["aws-eu"]][["token_url"]], "Seven Bridges Platform (EU) Developer Dashboard", target = "_blank")
+                    )
+                  ),
+                  conditionalPanel(
+                    condition = "input.plat_modal_txt == 'f4c'",
+                    tags$label(
+                      "Paste the Auth Token from the",
+                      tags$a(href = .platforms[["f4c"]][["token_url"]], "BioData Catalyst Developer Dashboard", target = "_blank")
+                    )
+                  ),
+                  conditionalPanel(
+                    condition = "input.plat_modal_txt == 'cavatica'",
+                    tags$label(
+                      "Paste the Auth Token from the",
+                      tags$a(href = .platforms[["cavatica"]][["token_url"]], "Cavatica Developer Dashboard", target = "_blank")
+                    )
+                )
+              )
+            ),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                passwordInput("token_cgc_txt", label = "Token: ")
+              ),
+              column(
+                width = 5, offset = 0,
+                textInput("cgc_project_txt", label = "Project: ", value = "BCO-Development")
+              )
+            ),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 10, offset = 1,
+                textAreaInput("cgc_return_msg_txt", label = "Platform return message: ", resize = "none", width = "400px", height = "250px")
+              )
+            ),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                actionButton("push_yes_cgc_txt", "Push", class = "btn btn-primary btn-block")
+              ),
+              column(
+                width = 5, offset = 0,
+                uiOutput("btn_open_bco_cgc_db_txt")
+              )
+            )
+          ),
+
+
           br(), br()
         )
       ))
@@ -526,6 +760,11 @@ tabPanel(
         width = 3,
         disabled(actionButton(
           "prev_btn_basic", "Previous",
+          icon("arrow-circle-o-left"),
+          class = "btn btn-block"
+        )),
+        disabled(actionButton(
+          "prev_btn_basic_start", "Start",
           icon("arrow-circle-o-left"),
           class = "btn btn-block"
         ))

@@ -48,6 +48,13 @@ tabPanel(
               ),
             )
           ),
+
+          fluidRow(
+            column(
+              width=3,
+              tags$a(href = "https://github.com/sbg/tidycwl/tree/master/inst/cwl/sbg/workflow", "Example Workflows", target = "_blank")
+            )
+          )
         ))
       )
     ), )
@@ -98,6 +105,7 @@ tabPanel(
                 inputId = "provenance_name_local",
                 label = "Name for the BCO",
                 placeholder = "e.g. My CWL Workflow",
+                value="test-bco-object"
               )
             ),
 
@@ -123,7 +131,7 @@ tabPanel(
               width = 10, offset = 1,
               textInput(
                 inputId = "provenance_license_local",
-                label = "License",
+                label  = "LICENSE",
                 value = "https://spdx.org/licenses/CC-BY-4.0.html",
                 placeholder = "e.g. https://spdx.org/licenses/CC-BY-4.0.html"
               )
@@ -430,8 +438,8 @@ tabPanel(
             column(
               width = 10, offset = 1,
               p(strong("Pipeline Input List")),
-              uiOutput("desc_pipeline_input_local")
-              # DT::DTOutput("desc_pipeline_input")
+              # uiOutput("desc_pipeline_input_local")
+              DT::DTOutput("df_desc_pipeline_input_local")
             )
           ),
 
@@ -439,8 +447,8 @@ tabPanel(
             column(
               width = 10, offset = 1,
               p(strong("Pipeline Output List")),
-              uiOutput("desc_pipeline_output_local")
-              # DT::DTOutput("desc_pipeline_output")
+              # uiOutput("df_desc_pipeline_output_local")
+              DT::DTOutput("df_desc_pipeline_output_local")
             )
           ),
 
@@ -578,100 +586,239 @@ tabPanel(
               width = 5, offset = 1,
               downloadButton("btn_export_pdf_local", "Export as PDF", class = "btn btn-primary btn-block"), style = "margin-left: 100px;"
             )
-          )
+          ),
 
-          # fluidRow(column(
-          #   width = 10, offset = 1,
-          #   h4("Save to the Platform"),
-          #   hr()
-          # )),
-          #
-          # fluidRow(
-          #   column(
-          #     width = 3, offset = 1,
-          #     actionButton("btn_upload_plat_local", "Upload to Platform", icon = icon("cloud-upload-alt"), class = "btn btn-primary btn-block", style = "margin-left: 36px;")
-          #   ),
-          #   column(
-          #     width = 3, offset = 0,
-          #     uiOutput("btn_open_bco_plat_local")
-          #   )
-          # ),
-          #
-          # fluidRow(
-          #   column(
-          #     width = 10, offset = 1,
-          #     tags$head(tags$style("#msg_upload { margin-left: 36px; }")),
-          #     br(),
-          #     column(width = 4, textOutput("msg_upload_local"))
-          #   )
-          # ),
-          #
-          # fluidRow(column(
-          #   width = 10, offset = 1,
-          #   h4("Save to Git Project"),
-          #   hr()
-          # )),
-          #
-          # fluidRow(
-          #   column(
-          #     width = 3, offset = 1,
-          #     actionButton("btn_push_git_local", "Push to GitHub", icon = icon("cloud-upload-alt"), class = "btn btn-primary btn-block", style = "margin-left: 36px;")
-          #   )
-          # ),
-          #
-          # bsModal("gitaccount_local", "Push BCO to GitHub", "btn_push_git_local",
-          #
-          #         p("Push your genereated BCO file to your GitHub repo."),
-          #         p("Note: we don't record any of your account information."),
-          #
-          #         hr(),
-          #
-          #         fluidRow(
-          #           column(
-          #             width = 5, offset = 1,
-          #             textInput("user_name_local",label = "Username: ")
-          #           ),
-          #           column(
-          #             width = 5, offset = 0,
-          #             passwordInput("pass_user_local", label = "Password: ")
-          #           )
-          #         ),
-          #
-          #         fluidRow(
-          #           column(
-          #             width = 5, offset = 1,
-          #             textInput("repo_name_local",label = "Repository Name: ", placeholder = "e.g. my-bco-project")
-          #           ),
-          #           column(
-          #             width = 5, offset = 0,
-          #             textInput("commit_info_local",label = "Commit Message: ", value = "BCO file commit", placeholder = "e.g. add new bco")
-          #           )
-          #         ),
-          #
-          #         hr(),
-          #
-          #         fluidRow(
-          #           column(
-          #             width = 10, offset = 1,
-          #             textAreaInput("git_text_local", label = "Git commit message: ", value = "Type the preferred git commit message here", resize = "none", width = '400px',height = '250px')
-          #           )
-          #         ),
-          #
-          #         hr(),
-          #
-          #         fluidRow(
-          #           column(
-          #             width = 5, offset = 1,
-          #             actionButton("push_yes_local", "Push", class = "btn btn-primary btn-block")
-          #           ),
-          #           column(
-          #             width = 5, offset = 0,
-          #             uiOutput("btn_open_git_local")
-          #           )
-          #         )
-          # ),
-          #
-          # br(), br()
+          br(),
+
+          fluidRow(column(
+            width = 10, offset = 1,
+            h4("Save to CGC Platform, BCO Database, or GitHub Project")
+          )),
+
+          fluidRow(column(
+            width = 10, offset = 1,
+            hr()
+          )),
+
+          fluidRow(
+            column(
+              width = 4,
+              actionButton("btn_push_git_local", "Push to GitHub", icon = icon("cloud-upload-alt"), class = "btn btn-primary btn-block", style = "margin-left: -6px;")
+            ),
+            column(
+              width = 4,
+              actionButton("btn_push_bco_local", "Upload to biocomputeobject.org", icon = icon("cloud-upload-alt"), class = "btn btn-primary btn-block", style = "margin-left: -6px;")
+            ),
+            column(
+              width = 4,
+              actionButton("btn_push_cgc_local", "Upload to Platform", icon = icon("cloud-upload-alt"), class = "btn btn-primary btn-block")
+            )
+
+          ),
+
+          fluidRow(
+            column(
+              width = 10, offset = 1,
+              tags$head(tags$style("#msg_upload { margin-left: 36px; }")),
+              br(),
+              column(width = 4, textOutput("msg_upload_local"))
+            )
+          ),
+
+          bsModal("gitaccount_local", "Push BCO to GitHub", "btn_push_git_local",
+
+                  p("Push your genereated BCO file to your GitHub repo."),
+                  p("Note: we don't record any of your account information."),
+
+                  hr(),
+
+                  fluidRow(
+                    column(
+                      width = 5, offset = 1,
+                      textInput("user_name_local",label = "Username: ")
+                    ),
+                    column(
+                      width = 5, offset = 0,
+                      passwordInput("pass_user_local", label = "Password: ")
+                    )
+                  ),
+
+                  fluidRow(
+                    column(
+                      width = 5, offset = 1,
+                      textInput("repo_name_local",label = "Repository Name: ", placeholder = "e.g. my-bco-project")
+                    ),
+                    column(
+                      width = 5, offset = 0,
+                      textInput("commit_info_local",label = "Commit Message: ", value = "BCO file commit", placeholder = "e.g. add new bco")
+                    )
+                  ),
+
+                  hr(),
+
+                  fluidRow(
+                    column(
+                      width = 10, offset = 1,
+                      textAreaInput("git_text_local", label = "Git commit message: ", value = "Type the preferred git commit message here", resize = "none", width = '400px',height = '250px')
+                    )
+                  ),
+
+                  hr(),
+
+                  fluidRow(
+                    column(
+                      width = 5, offset = 1,
+                      actionButton("push_yes_local", "Push", class = "btn btn-primary btn-block")
+                    ),
+                    column(
+                      width = 5, offset = 0,
+                      uiOutput("btn_open_git_local")
+                    )
+                  )
+          ),
+
+          bsModal(
+            "cgcaccount_local", "Upload to SevenBridges", "btn_push_cgc_local",
+
+            p("Push your genereated BCO file to SevenBridges Platform"),
+            p("Note: we don't record any of your account information."),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 10, offset = 1,
+                  selectInput(
+                    inputId = "plat_modal_local",
+                    label = "Platform",
+                    choices = c("Cancer Genomics Cloud (CGC)" = "cgc", "Seven Bridges Platform (US)" = "aws-us", "Seven Bridges Platform (EU)" = "aws-eu", "BioData Catalyst" = "f4c", "Cavatica" = "cavatica")
+                  ),
+                  conditionalPanel(
+                    condition = "input.plat_modal_local == 'cgc'",
+                    tags$label(
+                      "Paste the Auth Token from the",
+                      tags$a(href = .platforms[["cgc"]][["token_url"]], "CGC Developer Dashboard", target = "_blank")
+                    )
+                  ),
+                  conditionalPanel(
+                    condition = "input.plat_modal_local == 'aws-us'",
+                    tags$label(
+                      "Paste the Auth Token from the",
+                      tags$a(href = .platforms[["aws-us"]][["token_url"]], "Seven Bridges Platform (US) Developer Dashboard", target = "_blank")
+                    )
+                  ),
+                  conditionalPanel(
+                    condition = "input.plat_modal_local == 'aws-eu'",
+                    tags$label(
+                      "Paste the Auth Token from the",
+                      tags$a(href = .platforms[["aws-eu"]][["token_url"]], "Seven Bridges Platform (EU) Developer Dashboard", target = "_blank")
+                    )
+                  ),
+                  conditionalPanel(
+                    condition = "input.plat_modal_local == 'f4c'",
+                    tags$label(
+                      "Paste the Auth Token from the",
+                      tags$a(href = .platforms[["f4c"]][["token_url"]], "BioData Catalyst Developer Dashboard", target = "_blank")
+                    )
+                  ),
+                  conditionalPanel(
+                    condition = "input.plat_modal_local == 'cavatica'",
+                    tags$label(
+                      "Paste the Auth Token from the",
+                      tags$a(href = .platforms[["cavatica"]][["token_url"]], "Cavatica Developer Dashboard", target = "_blank")
+                    )
+                )
+              )
+            ),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                passwordInput("token_cgc_local", label = "Token: ")
+              ),
+              column(
+                width = 5, offset = 0,
+                textInput("cgc_project_local", label = "Project: ", value = "BCO-Development")
+              )
+            ),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 10, offset = 1,
+                textAreaInput("cgc_return_msg_local", label = "Platform return message: ", resize = "none", width = "400px", height = "250px")
+              )
+            ),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                actionButton("push_yes_cgc_local", "Push", class = "btn btn-primary btn-block")
+              ),
+              column(
+                width = 5, offset = 0,
+                uiOutput("btn_open_cgc_local")
+              )
+            )
+          ),
+
+          bsModal(
+            "bcoaccount_local", "Upload to biocomputeobject.org", "btn_push_bco_local",
+
+            p("Push your genereated BCO file to biocomputeobject.org"),
+            p("Note: we don't record any of your account information."),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                passwordInput("token_bco_local", label = "Token: ")
+              ),
+              column(
+                width = 5, offset = 0,
+                textInput("bco_prefix_local", label = "BCO Prefix: ", value = "BCO")
+              )
+            ),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                textInput("bco_schema_local", label = "BCO Schema: ", value = "IEEE")
+              ),
+              column(
+                width = 5, offset = 0,
+                textInput("bco_owner_group_local", label = "BCO Owner Group: ", placeholder = "e.g. bco_drafter")
+              )
+            ),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 10, offset = 1,
+                textAreaInput("bco_return_msg_local", label = "BCO return message: ", resize = "none", width = "400px", height = "250px")
+              )
+            ),
+
+            hr(),
+
+            fluidRow(
+              column(
+                width = 5, offset = 1,
+                actionButton("push_yes_bco_local", "Push", class = "btn btn-primary btn-block")
+              ),
+              column(
+                width = 5, offset = 0,
+                uiOutput("btn_open_bco_db_local")
+              )
+            )
+          ),
+
+          br(), br()
         )
       ))
     )

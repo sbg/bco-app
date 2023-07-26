@@ -441,6 +441,7 @@ observeEvent(input$execution_script_driver_basic, {
 })
 
 # execution_software_prerequisites
+# TODO: Platform URI should be based on the version of the platform that was used for loading the task/app
 df_software_prerequisites_basic <- data.frame(
   "name" = "Seven Bridges Platform",
   "version" = as.character(Sys.Date()),

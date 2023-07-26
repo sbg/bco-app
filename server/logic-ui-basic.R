@@ -55,7 +55,7 @@ rv_page_local <- reactiveValues(page_local = 1)
 
 observe({
   toggleState(id = "prev_btn_local", condition = rv_page_local$page_local > 1)
-  toggleState(id = "next_btn_local", condition = ((rv_page_local$page_local < num_pages) & (tidycwl::is_cwl(get_rawcwl_local()))))
+  # toggleState(id = "next_btn_local", condition = ((rv_page_local$page_local < num_pages) & (tidycwl::is_cwl(get_rawcwl_local()))))
   hide(selector = ".page_local")
   show(paste0("step", rv_page_local$page_local, "_local"))
 })

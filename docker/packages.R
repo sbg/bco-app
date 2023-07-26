@@ -1,10 +1,8 @@
 install.packages(repos = "https://cloud.r-project.org", c(
-  "shiny", "shinydashboard", "shinyBS", "shinyjs",
-  "shinyFeedback", "shinycssloaders", "shinyAce",
-  "DT",  "kableExtra", "reactR", "listviewer",
-  "visNetwork", "bcrypt", "jsonlite",
-  "BiocManager", "remotes",
-  "tidycwl", "biocompute"
+  "shiny", "shinydashboard", "shinyBS", "shinyjs", "shinyFeedback", "dplyr",
+  "shinycssloaders", "shinyAce", "DT",  "kableExtra", "reactR", "listviewer",
+  "visNetwork", "bcrypt", "jsonlite", "BiocManager", "remotes", "tidycwl",
+  "biocompute", "git2r", "httr"
 ))
 
 BiocManager::install("sevenbridges")

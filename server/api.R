@@ -9,7 +9,11 @@
 
 library("sevenbridges")
 library("tools")
+library("httr")
 
+### Seven Bridges API Interface
+
+# Seven Bridges API token can be stored locally
 # tk <- readLines("credentials/token.txt")
 
 # get app list in a project
@@ -318,7 +322,10 @@ gen_bco_domain_table_gt <- function(dframe, name_header, filter_domain) {
     )
 }
 
+### Git Integration
+
 # Git connection
+# https://github.com/jdblischak/workflowrBeta/blob/2a79ade2971e939cc785502c5a0fba54f209890d/R/wflow_git_push.R
 push_bco_to_git <- function(username, password, commit_text, filename_bco, file_bco, repository_url) {
   str_error <- ""
   flg_success <- TRUE
@@ -328,6 +335,8 @@ push_bco_to_git <- function(username, password, commit_text, filename_bco, file_
   dir.create(path_repo)
   ## credentials
   credentials <- git2r::cred_user_pass(username, password)
+  # credentials <- git2r::cred_user_pass("skoc", "XXX")
+  # credentials <- git2r::cred_ssh_key()
 
   env <- new.env()
   assign("error_have", "Successful Operation!", env = env)
@@ -389,3 +398,91 @@ filename_fixer <- function(str, sep = "_", date.format = "%Y_%m_%d_%H_%M_%S", ex
   fname <- paste(fname, extension, sep = ".")
   return(fname)
 }
+
+### BCO Database API Integration
+
+
+upload_draft_bco_to_db <- function(bco_object, token,
+                                   api_endpoint = "https://biocomputeobject.org/api/",
+                                   bco_prefix = 'BCO', bco_schema = 'IEEE', bco_owner_group = 'bco_drafter') {
+
+  bco_json <- bco_object
+
+  response <- httr::POST(url = paste0(api_endpoint, "objects/drafts/create/"),
+                         # Need to wrap the entire bco json in more json for the POST body
+                         body = paste0('{"POST_api_objects_draft_create": [{',
+                                       '"prefix": ', '"', bco_prefix,'",',
+                                       '"schema": ', '"', bco_schema, '",',
+                                       '"owner_group": ', '"', bco_owner_group, '",',
+                                       '"contents": ',  bco_json,
+                                       '}]}'),
+                         httr::add_headers(Authorization = paste0('Token ', token)),
+                         httr::content_type('application/json')
+  )
+
+  if (response$status_code >= 200 & response$status_code < 300) {
+    return(paste("Successful!\n\nPushed to the biocomputeobject.org DB with Status Code:", response$status_code, "!\n"))
+  }else {
+    return(paste("Pushed to the biocomputeobject.org DB with Status Code:", response$status_code, "!"))
+  }
+
+}
+
+upload_draft_bco_to_db_from_file <- function(bco_file_path, token,
+                                   api_endpoint = "https://biocomputeobject.org/api/",
+                                   bco_prefix = 'BCO', bco_schema = 'IEEE', bco_owner_group = 'bco_drafter') {
+
+  bco_json <- jsonlite::fromJSON(bco_file_path)
+
+  response <- httr::POST(url = paste0(api_endpoint, "objects/drafts/create/"),
+                            # Need to wrap the entire bco json in more json for the POST body
+                            body = paste0('{"POST_api_objects_draft_create": [{',
+                                                                              '"prefix": ', '"', bco_prefix,'",',
+                                                                              '"schema": ', '"', bco_schema, '",',
+                                                                              '"owner_group": ', '"', bco_owner_group, '",',
+                                                                              '"contents": ',  jsonlite::toJSON(bco_json),
+                                                                            '}]}'),
+                            httr::add_headers(Authorization = paste0('Token ', token)),
+                            httr::content_type('application/json')
+                          )
+
+  if (response$status_code >= 200 & response$status_code < 300) {
+    return(paste("Successful!\n\nPushed to the biocomputeobject.org DB with Status Code:", response$status_code, "!\n"))
+  }else {
+    return(paste("Pushed to the biocomputeobject.org DB with Status Code:", response$status_code, "!"))
+  }
+
+}
+# TODO
+
+# bco_file_path <- "~/Downloads/rna-seq-quantification-hisat2-stringtie.bco.json"
+# # bco_json <- jsonlite::fromJSON("~/Downloads/rna-seq-quantification-hisat2-stringtie.bco.json")
+# api_endpoint <- "https://biocomputeobject.org/api/"
+# bco_prefix <- 'BCO'
+# bco_schema <- 'IEEE'
+# bco_owner_group <-'bco_drafter'
+# token <- 'e7a6db1eb5afc47bbf2f6d57aef9f9a0ea039b6d'
+#
+# response <- upload_draft_bco_to_db_from_file(bco_file_path, token, api_endpoint, bco_prefix, bco_schema, bco_owner_group)
+#
+# bco_json <- jsonlite::fromJSON(bco_file_path)
+# msg_post_create <- httr::POST(
+#                             url = paste0(api_endpoint, "objects/drafts/create/"),
+#                             # Need to wrap the entire bco json in more json for the POST body
+#                             body = paste0('{"POST_api_objects_draft_create": [{',
+#                                               '"prefix": ', '"', bco_prefix,'",',
+#                                               '"schema": ', '"', bco_schema, '",',
+#                                               '"owner_group": ', '"', bco_owner_group, '",',
+#                                               '"contents": ',  jsonlite::toJSON(bco_json),
+#                                               '}]}'),
+#                             httr::add_headers(Authorization = paste0('Token ', token)),
+#                             httr::content_type('application/json')
+#                           )
+
+#content(msg_post_create)
+#unlist(content(msg_post_create))
+
+# body = paste0('{"POST_api_objects_draft_create": [{', '"contents": ', '"', jsonlite::toJSON(""), '",', '"prefix": ', '"', bco_prefix,
+#               '",', '"schema": ', '"[', bco_schema, ']",',
+#               '"owner_group": ', '"', bco_owner_group, '"', '}]}')
+

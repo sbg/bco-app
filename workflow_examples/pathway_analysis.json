@@ -1,0 +1,519 @@
+{
+  "class": "Workflow",
+  "cwlVersion": "v1.2",
+  "doc": "This workflow MOGSA function is used to identify the MSigDB hallmark pathways\u2019 gene set scores (GSS) with these setting: proc. row \u2000= \u201d center_ssq1\u2033, w. data = \u201clambda1\u201d, and statis = FALSE and the chosen PCs from users. Pathways passed cut-off FDR <0.01 in at least 50% of common samples will be chosen for downstream analysis. The pathways passed the cut-off FDR (ANOVA) <0.01 or FDR(GLM) <0.05 in group of interest will be shown in the heatmap. The Gene set score of each and all data types will be displayed in the heatmap.  \n\nRequired inputs:  \n\n\u2022 Subtype file.  \n\n\u2022 Merge data from the workflow of Data preparation and Multiple factorial analysis (MFA) analysis  \n\n\u2022 MSigDB databases.  \n\nOutput: the results will be available in each database.  \n\nHeatmap of representative significant pathways across subgroups by individual total gene set scores across the common samples.  \n\nHeatmap of representative significant pathways across subgroups: Median of total scores as well each datatypes score.\n\nFor each of significant pathways:   \n\nGraph of gene influential scores: the genes with the highest GIS scores might be the most important genes that contribute to the pathway.  \n\nData-wise decomposition graph: show the contribution of data types scores across the subgroup of interest.  \nFor an example on how to use this workflow, please click here (later)  \nIf you have any questions about this work flow, please contact [bianxi](mailto:bianxi@mail.nih.gov) or [Trinh](mailto:tinh.nguyen@nih.gov)  \n\n\nKeywords: multiomics, multiomic, TCGA",
+  "label": "Pathway Analysis",
+  "$namespaces": {
+    "sbg": "https://sevenbridges.com"
+  },
+  "inputs": [
+    {
+      "id": "subtype_file",
+      "sbg:fileTypes": "NEWMETA",
+      "type": "File?",
+      "sbg:x": -633,
+      "sbg:y": -408
+    },
+    {
+      "id": "merged_data",
+      "sbg:fileTypes": "RDS",
+      "type": "File?",
+      "sbg:x": -622.5576782226562,
+      "sbg:y": -230.877197265625
+    },
+    {
+      "id": "database",
+      "sbg:fileTypes": "GMT",
+      "type": "File[]?",
+      "sbg:x": -648.5576782226562,
+      "sbg:y": -65.87720489501953
+    },
+    {
+      "id": "number_pc",
+      "type": [
+        "null",
+        {
+          "type": "enum",
+          "symbols": [
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "name": "number_pc"
+        }
+      ],
+      "sbg:exposed": true
+    },
+    {
+      "id": "run_tag",
+      "type": "string?",
+      "label": "Run Tag",
+      "doc": "This string will be added to the name of the output folder.",
+      "sbg:exposed": true
+    }
+  ],
+  "outputs": [
+    {
+      "id": "main_dir",
+      "outputSource": [
+        "step3_pathwaysanalysis/main_dir"
+      ],
+      "type": "Directory?",
+      "sbg:x": -300,
+      "sbg:y": -319
+    },
+    {
+      "id": "Logs",
+      "outputSource": [
+        "step3_pathwaysanalysis/Logs"
+      ],
+      "type": "Directory?",
+      "sbg:x": -290,
+      "sbg:y": -116
+    }
+  ],
+  "steps": [
+    {
+      "id": "step3_pathwaysanalysis",
+      "in": [
+        {
+          "id": "merged_data",
+          "source": "merged_data"
+        },
+        {
+          "id": "database",
+          "source": [
+            "database"
+          ]
+        },
+        {
+          "id": "subtype_file",
+          "source": "subtype_file"
+        },
+        {
+          "id": "number_pc",
+          "source": "number_pc"
+        },
+        {
+          "id": "run_tag",
+          "source": "run_tag"
+        }
+      ],
+      "out": [
+        {
+          "id": "main_dir"
+        },
+        {
+          "id": "Logs"
+        }
+      ],
+      "run": {
+        "class": "CommandLineTool",
+        "cwlVersion": "v1.2",
+        "$namespaces": {
+          "sbg": "https://sevenbridges.com"
+        },
+        "id": "bianxi/mogsa-general-use/step3-pathwaysanalysis/31",
+        "baseCommand": [
+          "Rscript",
+          "pathway_analysis.R"
+        ],
+        "inputs": [
+          {
+            "id": "merged_data",
+            "type": "File?",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0
+            },
+            "sbg:fileTypes": "RDS"
+          },
+          {
+            "id": "database",
+            "type": "File[]?",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0
+            },
+            "sbg:fileTypes": "GMT"
+          },
+          {
+            "id": "subtype_file",
+            "type": "File?",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0
+            },
+            "sbg:fileTypes": "NEWMETA"
+          },
+          {
+            "sbg:toolDefaultValue": "3",
+            "id": "number_pc",
+            "type": [
+              "null",
+              {
+                "type": "enum",
+                "symbols": [
+                  "3",
+                  "4",
+                  "5",
+                  "6"
+                ],
+                "name": "number_pc"
+              }
+            ],
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0
+            },
+            "default": "3"
+          },
+          {
+            "id": "run_tag",
+            "type": "string?",
+            "label": "Run Tag",
+            "doc": "This string will be added to the name of the output folder."
+          }
+        ],
+        "outputs": [
+          {
+            "id": "main_dir",
+            "type": "Directory?",
+            "outputBinding": {
+              "glob": "$(inputs.run_tag + \"_Pathways_Analysis_Step3\")",
+              "loadListing": "deep_listing"
+            }
+          },
+          {
+            "id": "Logs",
+            "type": "Directory?",
+            "outputBinding": {
+              "glob": "*.out",
+              "loadListing": "deep_listing"
+            }
+          }
+        ],
+        "label": "Pathways Analysis",
+        "arguments": [
+          {
+            "prefix": "> standard.out && mv Pathways_Analysis_Step3",
+            "shellQuote": false,
+            "position": 99,
+            "valueFrom": "$(inputs.run_tag + \"_Pathways_Analysis_Step3\")"
+          }
+        ],
+        "requirements": [
+          {
+            "class": "ShellCommandRequirement"
+          },
+          {
+            "class": "LoadListingRequirement"
+          },
+          {
+            "class": "DockerRequirement",
+            "dockerPull": "cgc-images.sbgenomics.com/david.roberson/mogsa:22.02.17"
+          },
+          {
+            "class": "InitialWorkDirRequirement",
+            "listing": [
+              {
+                "entryname": "input.R",
+                "entry": "\nmerged_data_path = \"$(inputs.merged_data.path)\"\ndb_path = \"./\"\nsubtype_file = \"$(inputs.subtype_file.path)\"\nnumber_pc = $(inputs.number_pc)",
+                "writable": false
+              },
+              {
+                "entryname": "pathway_analysis.R",
+                "entry": "############### review all result in the folder MFA_evaluated_result to choose the best # of PCs.\n## perform MOGSA analysis...\n### version 1, Feb 4, 22\nrm(list=ls())\n#library(rstudioapi)\nlibrary(knitr)\nlibrary(mogsa)\nlibrary(gplots)\n## if local R.\n#current.path <- getActiveDocumentContext()$path\n#setwd(dirname(current.path ))\nsource(\"input.R\")\n### create a folder to hold result from this.\n#out.dir <- \"./Pathways_Analysis_Step3\"\n#dir.create(out.dir);\ndat <- readRDS(merged_data_path);\n#print(\"merged\")\n#Subtype.file <- \"QC_output/subtypes_updated_common_samples.txt\"\ndat.sub <- read.delim(subtype_file)\nprint(\"sub\")\nhead(dat.sub)\ndat.sub <- dat.sub[order(dat.sub[,2]),]\ndat.sub[,2] <- factor (dat.sub[,2])\n###### check\n## change the genes to upper. and make sure that the order of subtypes should be the same w data.\n### \ndat.r <- NULL;\nfor ( i in 1:length (names(dat) )){\n  rownames(dat[[i]]) <- toupper(rownames(dat[[i]]))\n  curent.type <-dat[[i]]\n  curent.type <- curent.type[, row.names(dat.sub)]\n #print ( \"checking subtypes with the current order of data expression.. Expecting True\")\n #print (identical ( colnames(curent.type), row.names(dat.sub)))\n  dat.r[[length(dat.r) + 1]] <- curent.type\n}\nnames( dat.r) <- names(dat)\nsystem(\"mkdir QC_output\")\nsaveRDS(dat.r, file = \"./QC_output/MOGSA_all_expression_step3_matched_subtypes_orders.rds\")\nwrite.csv (dat.sub, file=\"./QC_output/step3_subtypes_ordered.csv\")\n######\nrm(list=ls())\n## if local R.\n#current.path <- getActiveDocumentContext()$path\n#setwd(dirname(current.path ))\n#library(rstudioapi)\nlibrary(knitr)\nlibrary(mogsa)\nlibrary(gplots)\nsource(\"input.R\")\n### functions to be used in the next part.\n\n### this function helps to select representative based on each RNA subtype\n\nSelect_Pathway_by_Anova<- function(dat.scores, subtypes) {\n  P.table <- NULL;\n  for ( d in 1:nrow(dat.scores)){\n    ######## to see which pathway is significantly different betweeen 3 subtypes\n    currentpathway= row.names(dat.scores)[d];\n    ### this will help to cbind another col for P values for comparision between subtypes\n    current.dat.anova <- as.data.frame (dat.scores[d,])\n    identical ( row.names( current.dat.anova), row.names( subtypes))\n    dat.anova =cbind(current.dat.anova,subtypes[,2])\n    colnames (dat.anova ) <- c(\"normalized.scores\", \"subtypes\");\n    result <- aov(dat.anova$normalized.scores ~ dat.anova$subtypes, data = dat.anova)\n    Pvalue.Prot= as.numeric(summary(result)[[1]][[\"Pr(>F)\"]][1])\n    P.table <- rbind(P.table, c(currentpathway,data.frame(Pvalue.Prot)))\n  }\n  return (P.table);\n}\n\nSelect_Pathway_by_GLM <- function(dat.scores,subtypes.compared, others.subtypes, cc.i,outfile.name) {\n  PCA.adj <- F; \n  out.s   <- c();\n  for (k in 1:nrow(dat.scores)){\n    g <- row.names(dat.scores)[k];\n    out   <- t.test(dat.scores[k,subtypes.compared], dat.scores[k,others.subtypes]);  \n    fit   <- summary(glm(dat.scores[k,] ~ cc.i , family = gaussian))\n    out.s <- rbind(out.s, c(g, fit$coef[2,3], fit$coef[2,4], out$conf.int[1], out$conf.int[2],out$p.value));\n  }\n  colnames(out.s) <- c(\"Pathway_name\",\"glm.t.value\",\"glm.p.value\", \"T.test.95%CInt.low\", \"T.test.95%Cint.high\",\"t.test.pval\");\n  ### choose tthe method: bon, and fdr\n  p.adjust.M <- p.adjust.methods[c(4,7)];\n  p.adj   <- sapply(p.adjust.M, function(meth) p.adjust(out.s[,3], meth));\n  colnames(p.adj) <- c(\"glm.bon\",\"glm.fdr\")\n  out.p   <- cbind(out.s, p.adj);\n  out.p   <- out.p[order(as.numeric(out.p[,3])),];\n  write.table(out.p, outfile.name, sep=\"\\t\", row.names=F, quote=F);\n  result <- filter.function (filename= outfile.name,out.file.name= paste0(outfile.name,\"_filter.top5.lowest5.tval.txt\"));\n  return (result)\n}\n\nfilter.function <- function ( filename,out.file.name) {\n  in.file.name <- read.table (filename, stringsAsFactors = F,header=T)\n  idx <- which(in.file.name[,3]< 0.05);\n  in.file.name.filter <- in.file.name[idx,];\n  ## sort based on glm.t.value\n  in.file.name.filter <- in.file.name.filter[order(as.numeric(in.file.name.filter[,2]),decreasing=T),]\n  dim(in.file.name.filter)\n  ## get the last 5 with p val \n  in.file.name.filter <-rbind(head(in.file.name.filter,n=5),tail(in.file.name.filter,n=5));\n  write.table(in.file.name.filter, out.file.name, sep=\"\\t\", row.names=F, quote=F);\n  ####### to check T.test significant.\n  return (in.file.name.filter);\n}\ndat.median.Score.platform <- function ( platform.GSS, subtypes){\n  ## check identical \n  print (identical ( colnames(platform.GSS),row.names(subtypes)))\n  out.median <- c();\n  names.subt <- levels(subtypes[,2])\n  for (m in 1:nrow(platform.GSS)){\n    current.row= platform.GSS [m,]\n    current.row <- as.data.frame(current.row)\n    c.b  <- cbind(current.row, subtypes)\n    med.sub <- NULL;\n    for ( m.s in 1:length(levels(subtypes[,2] ))){\n      median.temp  <- median(c.b[,1][which (c.b[,3]==names.subt[m.s])])\n      med.sub <- c( med.sub, median.temp)\n    }\n    out.median <- rbind( out.median, med.sub)\n  }\n  row.names(out.median) <- row.names(platform.GSS);\n  colnames(out.median) <- c(paste0( \"median_\",names.subt))\n  return ( out.median)\n}\n## add heatmap.3 function\n\nheatmap.3 <- function(x,\n                      Rowv = TRUE, Colv = if (symm) \"Rowv\" else TRUE,\n                      distfun = dist,\n                      hclustfun = hclust,\n                      dendrogram = c(\"both\",\"row\", \"column\", \"none\"),\n                      symm = FALSE,\n                      scale = c(\"none\",\"row\", \"column\"),\n                      na.rm = TRUE,\n                      revC = identical(Colv,\"Rowv\"),\n                      add.expr,\n                      breaks,\n                      symbreaks = max(x < 0, na.rm = TRUE) || scale != \"none\",\n                      col = \"heat.colors\",\n                      colsep,\n                      rowsep,\n                      sepcolor = \"white\",\n                      sepwidth = c(0.05, 0.05),\n                      cellnote,\n                      notecex = 1,\n                      notecol = \"cyan\",\n                      na.color = par(\"bg\"),\n                      trace = c(\"none\", \"column\",\"row\", \"both\"),\n                      tracecol = \"cyan\",\n                      hline = median(breaks),\n                      vline = median(breaks),\n                      linecol = tracecol,\n                      margins = c(5,5),\n                      ColSideColors,\n                      RowSideColors,\n                      side.height.fraction=0.3,\n                      cexRow = 0.2 + 1/log10(nr),\n                      cexCol = 0.2 + 1/log10(nc),\n                      labRow = NULL,\n                      labCol = NULL,\n                      key = TRUE,\n                      keysize = 1.5,\n                      density.info = c(\"none\", \"histogram\", \"density\"),\n                      denscol = tracecol,\n                      symkey = max(x < 0, na.rm = TRUE) || symbreaks,\n                      densadj = 0.25,\n                      main = NULL,\n                      xlab = NULL,\n                      ylab = NULL,\n                      lmat = NULL,\n                      lhei = NULL,\n                      lwid = NULL,\n                      ColSideColorsSize = 1,\n                      RowSideColorsSize = 1,\n                      KeyValueName=\"Value\",...){\n  \n  invalid <- function (x) {\n    if (missing(x) || is.null(x) || length(x) == 0)\n      return(TRUE)\n    if (is.list(x))\n      return(all(sapply(x, invalid)))\n    else if (is.vector(x))\n      return(all(is.na(x)))\n    else return(FALSE)\n  }\n  \n  x <- as.matrix(x)\n  scale01 <- function(x, low = min(x), high = max(x)) {\n    x <- (x - low)/(high - low)\n    x\n  }\n  retval <- list()\n  scale <- if (symm && missing(scale))\n    \"none\"\n  else match.arg(scale)\n  dendrogram <- match.arg(dendrogram)\n  trace <- match.arg(trace)\n  density.info <- match.arg(density.info)\n  if (length(col) == 1 && is.character(col))\n    col <- get(col, mode = \"function\")\n  if (!missing(breaks) && (scale != \"none\"))\n    warning(\"Using scale=\\\"row\\\" or scale=\\\"column\\\" when breaks are\",\n            \"specified can produce unpredictable results.\", \"Please consider using only one or the other.\")\n  if (is.null(Rowv) || is.na(Rowv))\n    Rowv <- FALSE\n  if (is.null(Colv) || is.na(Colv))\n    Colv <- FALSE\n  else if (Colv == \"Rowv\" && !isTRUE(Rowv))\n    Colv <- FALSE\n  if (length(di <- dim(x)) != 2 || !is.numeric(x))\n    stop(\"`x' must be a numeric matrix\")\n  nr <- di[1]\n  nc <- di[2]\n  if (nr <= 1 || nc <= 1)\n    stop(\"`x' must have at least 2 rows and 2 columns\")\n  if (!is.numeric(margins) || length(margins) != 2)\n    stop(\"`margins' must be a numeric vector of length 2\")\n  if (missing(cellnote))\n    cellnote <- matrix(\"\", ncol = ncol(x), nrow = nrow(x))\n  if (!inherits(Rowv, \"dendrogram\")) {\n    if (((!isTRUE(Rowv)) || (is.null(Rowv))) && (dendrogram %in%\n                                                 c(\"both\", \"row\"))) {\n      if (is.logical(Colv) && (Colv))\n        dendrogram <- \"column\"\n      else dedrogram <- \"none\"\n      warning(\"Discrepancy: Rowv is FALSE, while dendrogram is `\",\n              dendrogram, \"'. Omitting row dendogram.\")\n    }\n  }\n  if (!inherits(Colv, \"dendrogram\")) {\n    if (((!isTRUE(Colv)) || (is.null(Colv))) && (dendrogram %in%\n                                                 c(\"both\", \"column\"))) {\n      if (is.logical(Rowv) && (Rowv))\n        dendrogram <- \"row\"\n      else dendrogram <- \"none\"\n      warning(\"Discrepancy: Colv is FALSE, while dendrogram is `\",\n              dendrogram, \"'. Omitting column dendogram.\")\n    }\n  }\n  if (inherits(Rowv, \"dendrogram\")) {\n    ddr <- Rowv\n    rowInd <- order.dendrogram(ddr)\n  }\n  else if (is.integer(Rowv)) {\n    hcr <- hclustfun(distfun(x))\n    ddr <- as.dendrogram(hcr)\n    ddr <- reorder(ddr, Rowv)\n    rowInd <- order.dendrogram(ddr)\n    if (nr != length(rowInd))\n      stop(\"row dendrogram ordering gave index of wrong length\")\n  }\n  else if (isTRUE(Rowv)) {\n    Rowv <- rowMeans(x, na.rm = na.rm)\n    hcr <- hclustfun(distfun(x))\n    ddr <- as.dendrogram(hcr)\n    ddr <- reorder(ddr, Rowv)\n    rowInd <- order.dendrogram(ddr)\n    if (nr != length(rowInd))\n      stop(\"row dendrogram ordering gave index of wrong length\")\n  }\n  else {\n    rowInd <- nr:1\n  }\n  if (inherits(Colv, \"dendrogram\")) {\n    ddc <- Colv\n    colInd <- order.dendrogram(ddc)\n  }\n  else if (identical(Colv, \"Rowv\")) {\n    if (nr != nc)\n      stop(\"Colv = \\\"Rowv\\\" but nrow(x) != ncol(x)\")\n    if (exists(\"ddr\")) {\n      ddc <- ddr\n      colInd <- order.dendrogram(ddc)\n    }\n    else colInd <- rowInd\n  }\n  else if (is.integer(Colv)) {\n    hcc <- hclustfun(distfun(if (symm)\n      x\n      else t(x)))\n    ddc <- as.dendrogram(hcc)\n    ddc <- reorder(ddc, Colv)\n    colInd <- order.dendrogram(ddc)\n    if (nc != length(colInd))\n      stop(\"column dendrogram ordering gave index of wrong length\")\n  }\n  else if (isTRUE(Colv)) {\n    Colv <- colMeans(x, na.rm = na.rm)\n    hcc <- hclustfun(distfun(if (symm)\n      x\n      else t(x)))\n    ddc <- as.dendrogram(hcc)\n    ddc <- reorder(ddc, Colv)\n    colInd <- order.dendrogram(ddc)\n    if (nc != length(colInd))\n      stop(\"column dendrogram ordering gave index of wrong length\")\n  }\n  else {\n    colInd <- 1:nc\n  }\n  retval$rowInd <- rowInd\n  retval$colInd <- colInd\n  retval$call <- match.call()\n  x <- x[rowInd, colInd]\n  x.unscaled <- x\n  cellnote <- cellnote[rowInd, colInd]\n  if (is.null(labRow))\n    labRow <- if (is.null(rownames(x)))\n      (1:nr)[rowInd]\n  else rownames(x)\n  else labRow <- labRow[rowInd]\n  if (is.null(labCol))\n    labCol <- if (is.null(colnames(x)))\n      (1:nc)[colInd]\n  else colnames(x)\n  else labCol <- labCol[colInd]\n  if (scale == \"row\") {\n    retval$rowMeans <- rm <- rowMeans(x, na.rm = na.rm)\n    x <- sweep(x, 1, rm)\n    retval$rowSDs <- sx <- apply(x, 1, sd, na.rm = na.rm)\n    x <- sweep(x, 1, sx, \"/\")\n  }\n  else if (scale == \"column\") {\n    retval$colMeans <- rm <- colMeans(x, na.rm = na.rm)\n    x <- sweep(x, 2, rm)\n    retval$colSDs <- sx <- apply(x, 2, sd, na.rm = na.rm)\n    x <- sweep(x, 2, sx, \"/\")\n  }\n  if (missing(breaks) || is.null(breaks) || length(breaks) < 1) {\n    if (missing(col) || is.function(col))\n      breaks <- 16\n    else breaks <- length(col) + 1\n  }\n  if (length(breaks) == 1) {\n    if (!symbreaks)\n      breaks <- seq(min(x, na.rm = na.rm), max(x, na.rm = na.rm),\n                    length = breaks)\n    else {\n      extreme <- max(abs(x), na.rm = TRUE)\n      breaks <- seq(-extreme, extreme, length = breaks)\n    }\n  }\n  nbr <- length(breaks)\n  ncol <- length(breaks) - 1\n  if (class(col) == \"function\")\n    col <- col(ncol)\n  min.breaks <- min(breaks)\n  max.breaks <- max(breaks)\n  x[x < min.breaks] <- min.breaks\n  x[x > max.breaks] <- max.breaks\n  if (missing(lhei) || is.null(lhei))\n    lhei <- c(keysize, 4)\n  if (missing(lwid) || is.null(lwid))\n    lwid <- c(keysize, 4)\n  if (missing(lmat) || is.null(lmat)) {\n    lmat <- rbind(4:3, 2:1)\n    \n    if (!missing(ColSideColors)) {\n      #if (!is.matrix(ColSideColors))\n      #stop(\"'ColSideColors' must be a matrix\")\n      if (!is.character(ColSideColors) || nrow(ColSideColors) != nc)\n        stop(\"'ColSideColors' must be a matrix of nrow(x) rows\")\n      lmat <- rbind(lmat[1, ] + 1, c(NA, 1), lmat[2, ] + 1)\n      #lhei <- c(lhei[1], 0.2, lhei[2])\n      lhei=c(lhei[1], side.height.fraction*ColSideColorsSize/2, lhei[2])\n    }\n    \n    if (!missing(RowSideColors)) {\n      #if (!is.matrix(RowSideColors))\n      #stop(\"'RowSideColors' must be a matrix\")\n      if (!is.character(RowSideColors) || ncol(RowSideColors) != nr)\n        stop(\"'RowSideColors' must be a matrix of ncol(x) columns\")\n      lmat <- cbind(lmat[, 1] + 1, c(rep(NA, nrow(lmat) - 1), 1), lmat[,2] + 1)\n      #lwid <- c(lwid[1], 0.2, lwid[2])\n      lwid <- c(lwid[1], side.height.fraction*RowSideColorsSize/2, lwid[2])\n    }\n    lmat[is.na(lmat)] <- 0\n  }\n  \n  if (length(lhei) != nrow(lmat))\n    stop(\"lhei must have length = nrow(lmat) = \", nrow(lmat))\n  if (length(lwid) != ncol(lmat))\n    stop(\"lwid must have length = ncol(lmat) =\", ncol(lmat))\n  op <- par(no.readonly = TRUE)\n  on.exit(par(op))\n  \n  layout(lmat, widths = lwid, heights = lhei, respect = FALSE)\n  \n  if (!missing(RowSideColors)) {\n    if (!is.matrix(RowSideColors)){\n      par(mar = c(margins[1], 0, 0, 0.5))\n      image(rbind(1:nr), col = RowSideColors[rowInd], axes = FALSE)\n    } else {\n      par(mar = c(margins[1], 0, 0, 0.5))\n      rsc = t(RowSideColors[,rowInd, drop=F])\n      rsc.colors = matrix()\n      rsc.names = names(table(rsc))\n      rsc.i = 1\n      for (rsc.name in rsc.names) {\n        rsc.colors[rsc.i] = rsc.name\n        rsc[rsc == rsc.name] = rsc.i\n        rsc.i = rsc.i + 1\n      }\n      rsc = matrix(as.numeric(rsc), nrow = dim(rsc)[1])\n      image(t(rsc), col = as.vector(rsc.colors), axes = FALSE)\n      if (length(rownames(RowSideColors)) > 0) {\n        axis(1, 0:(dim(rsc)[2] - 1)/max(1,(dim(rsc)[2] - 1)), rownames(RowSideColors), las = 2, tick = FALSE)\n      }\n    }\n  }\n  \n  if (!missing(ColSideColors)) {\n    \n    if (!is.matrix(ColSideColors)){\n      par(mar = c(0.5, 0, 0, margins[2]))\n      image(cbind(1:nc), col = ColSideColors[colInd], axes = FALSE)\n    } else {\n      par(mar = c(0.5, 0, 0, margins[2]))\n      csc = ColSideColors[colInd, , drop=F]\n      csc.colors = matrix()\n      csc.names = names(table(csc))\n      csc.i = 1\n      for (csc.name in csc.names) {\n        csc.colors[csc.i] = csc.name\n        csc[csc == csc.name] = csc.i\n        csc.i = csc.i + 1\n      }\n      csc = matrix(as.numeric(csc), nrow = dim(csc)[1])\n      image(csc, col = as.vector(csc.colors), axes = FALSE)\n      if (length(colnames(ColSideColors)) > 0) {\n        axis(2, 0:(dim(csc)[2] - 1)/max(1,(dim(csc)[2] - 1)), colnames(ColSideColors), las = 2, tick = FALSE)\n      }\n    }\n  }\n  \n  par(mar = c(margins[1], 0, 0, margins[2]))\n  x <- t(x)\n  cellnote <- t(cellnote)\n  if (revC) {\n    iy <- nr:1\n    if (exists(\"ddr\"))\n      ddr <- rev(ddr)\n    x <- x[, iy]\n    cellnote <- cellnote[, iy]\n  }\n  else iy <- 1:nr\n  image(1:nc, 1:nr, x, xlim = 0.5 + c(0, nc), ylim = 0.5 + c(0, nr), axes = FALSE, xlab = \"\", ylab = \"\", col = col, breaks = breaks, ...)\n  retval$carpet <- x\n  if (exists(\"ddr\"))\n    retval$rowDendrogram <- ddr\n  if (exists(\"ddc\"))\n    retval$colDendrogram <- ddc\n  retval$breaks <- breaks\n  retval$col <- col\n  if (!invalid(na.color) & any(is.na(x))) { # load library(gplots)\n    mmat <- ifelse(is.na(x), 1, NA)\n    image(1:nc, 1:nr, mmat, axes = FALSE, xlab = \"\", ylab = \"\",\n          col = na.color, add = TRUE)\n  }\n  axis(1, 1:nc, labels = labCol, las = 2, line = -0.5, tick = 0,\n       cex.axis = cexCol)\n  if (!is.null(xlab))\n    mtext(xlab, side = 1, line = margins[1] - 1.25)\n  axis(4, iy, labels = labRow, las = 2, line = -0.5, tick = 0,\n       cex.axis = cexRow)\n  if (!is.null(ylab))\n    mtext(ylab, side = 4, line = margins[2] - 1.25)\n  if (!missing(add.expr))\n    eval(substitute(add.expr))\n  if (!missing(colsep))\n    for (csep in colsep) rect(xleft = csep + 0.5, ybottom = rep(0, length(csep)), xright = csep + 0.5 + sepwidth[1], ytop = rep(ncol(x) + 1, csep), lty = 1, lwd = 1, col = sepcolor, border = sepcolor)\n  if (!missing(rowsep))\n    for (rsep in rowsep) rect(xleft = 0, ybottom = (ncol(x) + 1 - rsep) - 0.5, xright = nrow(x) + 1, ytop = (ncol(x) + 1 - rsep) - 0.5 - sepwidth[2], lty = 1, lwd = 1, col = sepcolor, border = sepcolor)\n  min.scale <- min(breaks)\n  max.scale <- max(breaks)\n  x.scaled <- scale01(t(x), min.scale, max.scale)\n  if (trace %in% c(\"both\", \"column\")) {\n    retval$vline <- vline\n    vline.vals <- scale01(vline, min.scale, max.scale)\n    for (i in colInd) {\n      if (!is.null(vline)) {\n        abline(v = i - 0.5 + vline.vals, col = linecol,\n               lty = 2)\n      }\n      xv <- rep(i, nrow(x.scaled)) + x.scaled[, i] - 0.5\n      xv <- c(xv[1], xv)\n      yv <- 1:length(xv) - 0.5\n      lines(x = xv, y = yv, lwd = 1, col = tracecol, type = \"s\")\n    }\n  }\n  if (trace %in% c(\"both\", \"row\")) {\n    retval$hline <- hline\n    hline.vals <- scale01(hline, min.scale, max.scale)\n    for (i in rowInd) {\n      if (!is.null(hline)) {\n        abline(h = i + hline, col = linecol, lty = 2)\n      }\n      yv <- rep(i, ncol(x.scaled)) + x.scaled[i, ] - 0.5\n      yv <- rev(c(yv[1], yv))\n      xv <- length(yv):1 - 0.5\n      lines(x = xv, y = yv, lwd = 1, col = tracecol, type = \"s\")\n    }\n  }\n  if (!missing(cellnote))\n    text(x = c(row(cellnote)), y = c(col(cellnote)), labels = c(cellnote),\n         col = notecol, cex = notecex)\n  par(mar = c(margins[1], 0, 0, 0))\n  if (dendrogram %in% c(\"both\", \"row\")) {\n    plot(ddr, horiz = TRUE, axes = FALSE, yaxs = \"i\", leaflab = \"none\")\n  }\n  else plot.new()\n  par(mar = c(0, 0, if (!is.null(main)) 5 else 0, margins[2]))\n  if (dendrogram %in% c(\"both\", \"column\")) {\n    plot(ddc, axes = FALSE, xaxs = \"i\", leaflab = \"none\")\n  }\n  else plot.new()\n  if (!is.null(main))\n    title(main, cex.main = 1.5 * op[[\"cex.main\"]])\n  if (key) {\n    par(mar = c(5, 4, 2, 1), cex = 0.75)\n    tmpbreaks <- breaks\n    if (symkey) {\n      max.raw <- max(abs(c(x, breaks)), na.rm = TRUE)\n      min.raw <- -max.raw\n      tmpbreaks[1] <- -max(abs(x), na.rm = TRUE)\n      tmpbreaks[length(tmpbreaks)] <- max(abs(x), na.rm = TRUE)\n    }\n    else {\n      min.raw <- min(x, na.rm = TRUE)\n      max.raw <- max(x, na.rm = TRUE)\n    }\n    \n    z <- seq(min.raw, max.raw, length = length(col))\n    image(z = matrix(z, ncol = 1), col = col, breaks = tmpbreaks,\n          xaxt = \"n\", yaxt = \"n\")\n    par(usr = c(0, 1, 0, 1))\n    lv <- pretty(breaks)\n    xv <- scale01(as.numeric(lv), min.raw, max.raw)\n    axis(1, at = xv, labels = lv)\n    if (scale == \"row\")\n      mtext(side = 1, \"Row Z-Score\", line = 2)\n    else if (scale == \"column\")\n      mtext(side = 1, \"Column Z-Score\", line = 2)\n    else mtext(side = 1, KeyValueName, line = 2)\n    if (density.info == \"density\") {\n      dens <- density(x, adjust = densadj, na.rm = TRUE)\n      omit <- dens$x < min(breaks) | dens$x > max(breaks)\n      dens$x <- dens$x[-omit]\n      dens$y <- dens$y[-omit]\n      dens$x <- scale01(dens$x, min.raw, max.raw)\n      lines(dens$x, dens$y/max(dens$y) * 0.95, col = denscol,\n            lwd = 1)\n      axis(2, at = pretty(dens$y)/max(dens$y) * 0.95, pretty(dens$y))\n      title(\"Color Key\\nand Density Plot\")\n      par(cex = 0.5)\n      mtext(side = 2, \"Density\", line = 2)\n    }\n    else if (density.info == \"histogram\") {\n      h <- hist(x, plot = FALSE, breaks = breaks)\n      hx <- scale01(breaks, min.raw, max.raw)\n      hy <- c(h$counts, h$counts[length(h$counts)])\n      lines(hx, hy/max(hy) * 0.95, lwd = 1, type = \"s\",\n            col = denscol)\n      axis(2, at = pretty(hy)/max(hy) * 0.95, pretty(hy))\n      title(\"Color Key\\nand Histogram\")\n      par(cex = 0.5)\n      mtext(side = 2, \"Count\", line = 2)\n    }\n    else title(\"Color Key\")\n  }\n  else plot.new()\n  retval$colorTable <- data.frame(low = retval$breaks[-length(retval$breaks)],\n                                  high = retval$breaks[-1], color = retval$col)\n  invisible(retval)\n}\n\n### end function.\n################################# do pathway analysis based on the first 3 PCs chosen from previous step.\n## User choose nf=3 the number of nf should be given by user.\nnf_User= number_pc\n### create a folder to hold result from this.\n#out.dir <- \"sbgenomics/output-files/Pathways_Analysis_Step3\"\nout.dir <- \"./Pathways_Analysis_Step3\"\ndir.create(out.dir);\nInput_file =\"./QC_output/MOGSA_all_expression_step3_matched_subtypes_orders.rds\"\ndat <- readRDS(file=Input_file);\ndat.sub <- read.csv  ( \"./QC_output/step3_subtypes_ordered.csv\", row.names=1)\n\n### check once more time\nfor ( i in 1:length (names(dat) )){\n  curent.type <-dat[[i]]\n  print (identical ( colnames(curent.type), row.names(dat.sub)))\n}\n\ndat.sub[,2] <- factor (dat.sub[,2])\ncolor.subtypes <- rainbow(length(levels(dat.sub[,2])))[dat.sub[,2]]\nmy.palette <- colorpanel(1000,\"blue\",\"white\",\"red\")\ngene.list <- lapply(dat, rownames)\n#path <- \"../../MOGSA/Input/Database/\"\npath<- db_path\n## if local R\ndb.names <- dir(path, pattern <- \".gmt\")\n### store the info into txt file named parameters\nparameters <- NULL;\nfile_type <-  as.matrix(names(dat))\nrow.names(file_type) <- rep(\"FileTypes\",length(file_type))\ndb.used <- as.matrix(db.names)\nrow.names(db.used) <- rep(\"db.used\",length(db.names))\nnf_testing <- nf_User\nparameters <- rbind(parameters,Input_file, file_type, db.used, nf_User)\nwrite.csv (parameters, paste0(out.dir, \"/parameters.csv\"))\n\nfor ( i in 1: length(db.names )){\n  out.dir.sub <- paste0(out.dir,\"/Result_\",db.names [i],\"/\");\n  dir.create(out.dir.sub);\n  predatabase<- prepMsigDB(file=paste0(path,db.names [i]));\n  if (i==3){\n    sup.dat <- prepSupMoa(gene.list, geneSets=predatabase, minMatch = 5, maxMatch = 500 );\n  }else { sup.dat <- prepSupMoa(gene.list, geneSets=predatabase);}\n  mogsa.dat <- mogsa(x = dat, sup=sup.dat , nf=nf_User,\n                     proc.row = \"center_ssq1\", w.data = \"lambda1\", statis = FALSE)\n  p.mat <- getmgsa(mogsa.dat, \"p.val\");\n  p.val.checked <- mogsa.dat@sup@p.val\n  #identical (p.val.checked, p.mat)\n  ##### same matrix with dimension. \n  p.val.corrected <- mogsa.dat@sup@p.val.corrected\n  colnames(p.val.corrected) <- colnames(p.mat)\n  row.names(p.val.corrected) <- row.names(p.mat)\n  #### sort based on P val. corrected.\n  top.gs.based.on.val.corrected <- sort(rowSums(p.val.corrected < 0.01), decreasing = TRUE)\n  ## get the name of pathway.\n  top.gs.name.corrected <- names(top.gs.based.on.val.corrected)\n  ## mapped back in the order.\n  p.val.corrected <- p.val.corrected[top.gs.name.corrected, ]\n  ## \n  table.count.p <- NULL;\n  for (j in 1:nrow(p.val.corrected) ){\n    table.count.p <- rbind(table.count.p,length (which (p.val.corrected[j,] <0.01)))\n  }\n  row.names(table.count.p) <- row.names(p.val.corrected)\n  colnames(table.count.p) <- \"#ofPTs.having.Pval.corrected.01\"\n  ## at least  50% of caes having P values smaller 0.01\n  idx.p.val.50 <- which (table.count.p[,1] > nrow(dat.sub)/2)\n  idx.p.val.45.name <- names(idx.p.val.50)\n  scores.mogsa<- getmgsa(mogsa.dat, \"score\")\n  write.csv (scores.mogsa,paste0(out.dir.sub ,\"/Total_scores_AllPathways.csv\" ))\n  dat.scores <- scores.mogsa[idx.p.val.45.name, ]\n  ## sigGSS FDR <0.01 in at least 50Percent of cases.\n  write.csv (dat.scores,paste0(out.dir.sub ,\"/Total_scores_Pathways_Passed_FDR(GSS).0.01_In_50Percent_cases.csv\" ))\n  ## score data. for each.\n  scores.data.mogsa<- getmgsa(mogsa.dat, \"score.data\")\n  saveRDS(scores.data.mogsa, paste0(out.dir.sub ,\"DataType_scores_AllPathways.rds\"))\n  ### obttain the sign.\n  ### get the pathways acrosss three analysis.\n  scores.data.sig.mogsa <- NULL;\n  for ( type  in 1: length(scores.data.mogsa)){\n    c.temp <- scores.data.mogsa[[type]]\n    c.temp <- c.temp[idx.p.val.45.name,]\n    scores.data.sig.mogsa[[length(scores.data.sig.mogsa) + 1]] <- c.temp\n  }\n  names(scores.data.sig.mogsa) <- names(scores.data.mogsa)\n  saveRDS(scores.data.sig.mogsa, paste0(out.dir.sub ,\"DataType_scores_Pathways_Passed_FDR(GSS).0.01_In_50Percent_cases.rds\"))\n\n  \n  ### This is to evaluate whether the groups are signicant. Only perform for 2 subtypes\n  if ( length(levels(dat.sub[,2])) >2){\n    out.Anova <- Select_Pathway_by_Anova (dat.scores=dat.scores,subtypes=dat.sub) \n    #head(out.Anova)\n    out.Anova  <- as.data.frame(out.Anova)\n    row.names(out.Anova) <- out.Anova[,1]\n    FDR.anova = p.adjust(out.Anova[,2],\"fdr\", nrow(out.Anova));\n    out.Anova.s <- cbind(out.Anova,FDR.anova )\n    write.csv (as.matrix.data.frame( out.Anova.s ),paste0(out.dir.sub,\"/PathwayW_Anova_stat_GroupInterest.csv\"))\n    out.Anova.s.filtered <- out.Anova.s[which (out.Anova.s[,3] < 0.01),]\n    out.Anova.s.filtered <- out.Anova.s.filtered[,-1];\n    colnames(out.Anova.s.filtered ) <- c( \"Anova_Pvalues\", \"FDR_Val\")\n    dat.scores.f <- dat.scores[row.names ( out.Anova.s.filtered),]\n    ## only record if there are more than 2 subgroups of interest.\n    write.csv (as.matrix.data.frame( out.Anova.s.filtered ),paste0(out.dir.sub,\"/Sig_PathwayW_Anova_stat_Pass_FDR_0.01_GroupInterest.csv\"))\n    write.csv (dat.scores.f,paste0(out.dir.sub,\"/Total_GSS_based_Anova_sig_cutoff_FDR.01.csv\"))\n    \n  }else{\n    ## just assign \n    dat.scores.f <- dat.scores\n  }\n  #dim(dat.scores.f)\n  #identical (colnames(  dat.scores.f),row.names(dat.sub) )\n  Flag <- NULL;\n  if (nrow(dat.scores.f) ==0 ){\n    print (\"There is no signicant pahtways different across the subgroups of interest\")\n    Flag = 0\n  }else{\n    Flag = 1\n    }\n  ### This step used to choose representative for each group.\n### if flag =1 do do the selective pathways for each subgroup\n  if ( Flag==1){\n    glm.C <- NULL;\n    for ( s in 1:length(levels(dat.sub[,2]) )){\n      outfile.name=paste0(out.dir.sub ,levels(dat.sub[,2])[s],\"_glm_out.txt\")\n      All.i <- 1:nrow(dat.sub)\n      sub.compared.i <- which(dat.sub[,2]==levels(dat.sub[,2])[s])\n      others.subtypes=All.i[-sub.compared.i]\n      y   <- rep(0, nrow(dat.sub));\n      y[sub.compared.i] <- 1;\n      ## arrange subtypes: rest, sub.compared.\n      cc.i <- c(y[-sub.compared.i] , y[sub.compared.i])\n      #print ( y)\n      #print ( cc.i)\n      ###arrange GLM.dat\n      GLM.dat <- dat.scores.f[,c(others.subtypes,sub.compared.i)]\n      #print (identical ( row.names(dat.sub[c(others.subtypes,sub.compared.i),]), colnames(GLM.dat) ) )\n      glm.out <- Select_Pathway_by_GLM (dat.scores= GLM.dat,subtypes.compared=sub.compared.i, others.subtypes=others.subtypes, cc.i= cc.i, outfile.name= outfile.name); \n      #dim(dat.scores.f)\n      glm.C <- rbind ( glm.C, glm.out)\n}\n\n    ### remove duplicate .\n    ### looking for a way to get better presentation of pathways.\n    Flag <- NULL;\n    #which(glm.C$glm.t.value>0)\n    glm.C.up <- glm.C[ which(glm.C$glm.t.value>0),]\n    glm.C.Up.unique <- glm.C.up [!duplicated( glm.C.up[1]),];\n    dim(glm.C.Up.unique)\n    if ( nrow(glm.C.Up.unique)==0 ){\n      print ( \"There is no representative significantly  different pathways for the observation groups/subtypes. Please check!\")\n      Flag = 0}\n    if ( nrow(glm.C.Up.unique)==1) {\n      print ( \"There is only One representative significantly different pathway for the observation groups/subtypes. No figures will be available\")\n      Flag = 1}\n    if ( nrow(glm.C.Up.unique) >=2) {\n      print ( \"There is more than one representative significantly  different pathways for the observation groups/subtypes. Heatmap figure will be available\")\n      Flag = 2}\n    \n    #### mapped back to dat.scores.\n    if (  Flag >=1){\n      dat.scores_glm <- dat.scores.f[ glm.C.Up.unique[,1],];\n      write.csv (dat.scores_glm,paste0( out.dir.sub ,\"All_Datatypes_Sig_GS_Scores_Subgroups.csv\") )\n      \n    }\n    #identical (colnames(dat.scores_glm),row.names(dat.sub ));\n    ####### \n    ###### heatmap for individual total scores and which datatypes contribute the most for the group of observation.\n    \n    if ( Flag ==2) {\n      \n      ### add the observation of datatypes.\n      Median.total.scores.glm <- dat.median.Score.platform (platform.GSS= dat.scores_glm, subtypes=dat.sub )\n      colnames(Median.total.scores.glm) <- paste0(\"Median.total.scores.glm\", colnames(Median.total.scores.glm))\n      All.type.median <- NULL;\n      \n      for ( type in 1:length(scores.data.sig.mogsa )){\n        c.temp <- scores.data.sig.mogsa[[type]]\n        c.temp.f <- c.temp[glm.C.Up.unique[,1],]\n        identical ( colnames(c.temp.f),row.names(dat.sub))\n        ## store data for users to explore.\n        write.csv ( c.temp.f, paste0( out.dir.sub ,names(scores.data.sig.mogsa)[type],\"_Sig_GS_Scores_Subgroups.csv\"))\n        out.temp <- dat.median.Score.platform (platform.GSS= c.temp.f, subtypes=dat.sub )\n        colnames(out.temp) <- paste0( names(scores.data.sig.mogsa)[type],\"_\", colnames(out.temp))\n        All.type.median <- cbind ( All.type.median, out.temp)\n      }\n      # names(All.type.median) <- names( scores.data.sig.mogsa)\n      ## add total scores.\n      identical(row.names( Median.total.scores.glm), row.names(All.type.median))\n      total.And.datatype.Median.scores <- cbind (Median.total.scores.glm,All.type.median  )\n      write.csv ( total.And.datatype.Median.scores, paste0(out.dir.sub ,\"Median_Scores_Total_And_Data.types.OfSubtypesForSigRep_Pathways.csv\"))\n      \n      index.ordered <- NULL;\n      sub.t.inv <- levels(dat.sub[,2])\n      for ( sub in 1:length (sub.t.inv )){\n        idx <- grep ( sub.t.inv[sub],colnames(total.And.datatype.Median.scores))\n        index.ordered <- c( index.ordered, idx)\n      }\n      ### \n      total.And.datatype.Median.scores.ordered <- total.And.datatype.Median.scores [,unique(index.ordered)]\n      \n      \n      write.csv (total.And.datatype.Median.scores.ordered, paste0(out.dir.sub ,\"Median_Scores_Total_And_Data.types.OfSubtypesForSigRep_Pathways_orded_by_subtypes.csv\"))\n      \n      col.sub <- unique(color.subtypes)\n      sub.type.color <- NULL;\n      for ( sub in 1:length ( sub.t.inv)){\n        ## replicate each color based on the number of datatype.\n        temp <- rep (col.sub[sub],length( names(dat))+1)\n        sub.type.color <- c (sub.type.color,temp)\n      }\n      ## layer for datatype.\n      ## we have total scores and # of datatypes.\n      datatypes <- c (\"All_Datatypes\" ,names(dat))\n      data.type.color <- hcl.colors(length( datatypes ))[factor(datatypes)]\n      ## replicate them to the # of subtypes.\n      \n      color.data.type <- rep (data.type.color,  length ( sub.t.inv))\n      ####\n      color.sub.data.type <- cbind(color.data.type,sub.type.color )\n      ###########\n      pdf(paste0(out.dir.sub ,\"/Rep.pathways_toal_GSS_chosen_by_GLM.pdf\"),15,10); \n      heatmap.3(as.matrix(dat.scores_glm),trace = \"n\", scale = \"row\", margins = c(7, 20), ColSideColors=as.matrix(color.subtypes),\n                col=my.palette,offsetRow=-.3,cexCol=0.6,cexRow=0.8,lhei=c(1.5,10), Colv=FALSE, Rowv = FALSE)\n      legend(0.85,1.03, legend=levels(dat.sub[,2]), col= unique(color.subtypes),\n             cex=0.8, lty=1, lwd=4, xpd=TRUE);\n      dev.off();\n      #####\n      pdf(paste0(out.dir.sub ,\"/Rep_Signal_pathways.pdf\"),15,10); \n      \n      heatmap.3(as.matrix(total.And.datatype.Median.scores.ordered), scale= 'row', col=my.palette, ColSideColors=as.matrix(color.sub.data.type), key=TRUE, cexRow=0.8, cexCol=0.8,keysize=0.5, trace = \"n\", ColSideColorsSize = 6.0,\n                margins = c(7, 20) ,Colv=FALSE, Rowv=FALSE,dendrogram=\"none\",lhei=c(1.5,10), sepwidth=c(0.05,0.05),sepcolor=\"gray\",colsep = c(1:nrow(total.And.datatype.Median.scores.ordered)), rowsep = c(1:nrow(total.And.datatype.Median.scores.ordered)))\n      legend(0.85,1.1, legend=levels(dat.sub[,2]), fill= unique(color.subtypes), cex=0.9,xpd=TRUE, title = \"SubGroup\", border=TRUE);\n      legend(0.6,1.1, legend=datatypes, fill=data.type.color, title = \"Pathway_signal\", cex=0.9,xpd=TRUE, border=TRUE);\n      dev.off();\n      write.csv (  row.names(total.And.datatype.Median.scores.ordered), paste0(out.dir.sub ,\"/Rep_Names_Signal_pathways_heatmap.csv\"))\n    #}\n    ## decompose gss and GIS info\n   # if ( nrow(glm.C.Up.unique) >= 1) {\n      for ( p in 1:length(row.names(dat.scores_glm))){\n        ## create directory\n        dir.create(paste0(out.dir.sub ,\"/\",row.names(dat.scores_glm)[p]));\n        pdf(paste0(out.dir.sub,\"/\",row.names(dat.scores_glm)[p],\"/\",row.names(dat.scores_glm)[p],\"GIS.pdf\"));\n        dat.pathway.GIS= GIS(mogsa.dat, row.names(dat.scores_glm)[p],Fvalue = TRUE, ff = dat.sub[,2],nf = nf_User);\n        dev.off();\n        write.csv ( dat.pathway.GIS, paste0(out.dir.sub,\"/\",row.names(dat.scores_glm)[p],\"/\",row.names(dat.scores_glm)[p],\"GIS_Scores.csv\"))\n        pdf(paste0(out.dir.sub,\"/\",row.names(dat.scores_glm)[p],\"/\",row.names(dat.scores_glm)[p],\"datawise_decomposition.pdf\"))\n        ###\n        decompose.gs.group(mogsa.dat,row.names(dat.scores_glm)[p],dat.sub[,2], decomp = \"data\", nf = nf_User, x.legend = \"bottomright\", y.legend = NULL, plot = TRUE, main = row.names(dat.scores_glm)[p] )\n        dev.off();\n      }\n    }\n  }\n}\n\n########## end.\n\n",
+                "writable": false
+              },
+              "$(inputs.database)"
+            ]
+          },
+          {
+            "class": "InlineJavascriptRequirement"
+          }
+        ],
+        "hints": [
+          {
+            "class": "sbg:SaveLogs",
+            "value": "*.out"
+          },
+          {
+            "class": "sbg:SaveLogs",
+            "value": "*.R"
+          }
+        ],
+        "sbg:projectName": "MOGSA General Use",
+        "sbg:revisionsInfo": [
+          {
+            "sbg:revision": 0,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1653342219,
+            "sbg:revisionNotes": "Copy of bianxi/mogsa-breast-cancer-full-test/step3-pathwaysanalysis/4"
+          },
+          {
+            "sbg:revision": 1,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1653342385,
+            "sbg:revisionNotes": "NEWMETA"
+          },
+          {
+            "sbg:revision": 2,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1653492552,
+            "sbg:revisionNotes": "pc num as drop down"
+          },
+          {
+            "sbg:revision": 3,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1653492635,
+            "sbg:revisionNotes": "default 3"
+          },
+          {
+            "sbg:revision": 4,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1653495407,
+            "sbg:revisionNotes": ""
+          },
+          {
+            "sbg:revision": 5,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1653495528,
+            "sbg:revisionNotes": "test label, description"
+          },
+          {
+            "sbg:revision": 6,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1653495635,
+            "sbg:revisionNotes": ""
+          },
+          {
+            "sbg:revision": 7,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1655344918,
+            "sbg:revisionNotes": "new functions added, major update"
+          },
+          {
+            "sbg:revision": 8,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1655389181,
+            "sbg:revisionNotes": ""
+          },
+          {
+            "sbg:revision": 9,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1655389534,
+            "sbg:revisionNotes": "file path"
+          },
+          {
+            "sbg:revision": 10,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1655390994,
+            "sbg:revisionNotes": ""
+          },
+          {
+            "sbg:revision": 11,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1655391631,
+            "sbg:revisionNotes": ""
+          },
+          {
+            "sbg:revision": 12,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1655392100,
+            "sbg:revisionNotes": ""
+          },
+          {
+            "sbg:revision": 13,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1655393025,
+            "sbg:revisionNotes": ""
+          },
+          {
+            "sbg:revision": 14,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1655393837,
+            "sbg:revisionNotes": ""
+          },
+          {
+            "sbg:revision": 15,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1655394664,
+            "sbg:revisionNotes": ""
+          },
+          {
+            "sbg:revision": 16,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1655395469,
+            "sbg:revisionNotes": ""
+          },
+          {
+            "sbg:revision": 17,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1655402207,
+            "sbg:revisionNotes": ""
+          },
+          {
+            "sbg:revision": 18,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1655406619,
+            "sbg:revisionNotes": ""
+          },
+          {
+            "sbg:revision": 19,
+            "sbg:modifiedBy": "david.roberson",
+            "sbg:modifiedOn": 1657218084,
+            "sbg:revisionNotes": "rename path folder"
+          },
+          {
+            "sbg:revision": 20,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1657648860,
+            "sbg:revisionNotes": "tag not required"
+          },
+          {
+            "sbg:revision": 21,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1658173563,
+            "sbg:revisionNotes": "Trinh update, exit FDR < cut off"
+          },
+          {
+            "sbg:revision": 22,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1658241876,
+            "sbg:revisionNotes": "standard.out"
+          },
+          {
+            "sbg:revision": 23,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1658242289,
+            "sbg:revisionNotes": "debug"
+          },
+          {
+            "sbg:revision": 24,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1658332014,
+            "sbg:revisionNotes": "logs"
+          },
+          {
+            "sbg:revision": 25,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1658337720,
+            "sbg:revisionNotes": "Trinh update"
+          },
+          {
+            "sbg:revision": 26,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1658347927,
+            "sbg:revisionNotes": "comment out unnecessary standard.out"
+          },
+          {
+            "sbg:revision": 27,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1658507040,
+            "sbg:revisionNotes": "Trinh update 2"
+          },
+          {
+            "sbg:revision": 28,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1658517051,
+            "sbg:revisionNotes": ""
+          },
+          {
+            "sbg:revision": 29,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1658858521,
+            "sbg:revisionNotes": "Trinh update"
+          },
+          {
+            "sbg:revision": 30,
+            "sbg:modifiedBy": "bianxi",
+            "sbg:modifiedOn": 1658942815,
+            "sbg:revisionNotes": "trinh update 3"
+          },
+          {
+            "sbg:revision": 31,
+            "sbg:modifiedBy": "nguyentt6",
+            "sbg:modifiedOn": 1675265208,
+            "sbg:revisionNotes": "Change the name of the Ap"
+          }
+        ],
+        "sbg:image_url": null,
+        "sbg:appVersion": [
+          "v1.2"
+        ],
+        "sbg:id": "bianxi/mogsa-general-use/step3-pathwaysanalysis/31",
+        "sbg:revision": 31,
+        "sbg:revisionNotes": "Change the name of the Ap",
+        "sbg:modifiedOn": 1675265208,
+        "sbg:modifiedBy": "nguyentt6",
+        "sbg:createdOn": 1653342219,
+        "sbg:createdBy": "bianxi",
+        "sbg:project": "bianxi/mogsa-general-use",
+        "sbg:sbgMaintained": false,
+        "sbg:validationErrors": [],
+        "sbg:contributors": [
+          "nguyentt6",
+          "bianxi",
+          "david.roberson"
+        ],
+        "sbg:latestRevision": 31,
+        "sbg:publisher": "sbg",
+        "sbg:content_hash": "a18e9447ca7f7a6398b8bc7321d0f3c14780473eded0fb7f5ef5b389876d159cc",
+        "sbg:workflowLanguage": "CWL"
+      },
+      "label": "Pathway Analysis",
+      "sbg:x": -470.5576171875,
+      "sbg:y": -227.876953125
+    }
+  ],
+  "requirements": [
+    {
+      "class": "LoadListingRequirement"
+    },
+    {
+      "class": "InlineJavascriptRequirement"
+    },
+    {
+      "class": "StepInputExpressionRequirement"
+    }
+  ],
+  "sbg:projectName": "BCO-CWL Examples",
+  "sbg:revisionsInfo": [
+    {
+      "sbg:revision": 0,
+      "sbg:modifiedBy": "phil_webster",
+      "sbg:modifiedOn": 1676561893,
+      "sbg:revisionNotes": "Copy of bianxi/commit-meerzaman-lab-cbiit-nci/pathway-analysis/7"
+    }
+  ],
+  "sbg:image_url": "https://cgc.sbgenomics.com/ns/brood/images/phil_webster/bco-cwl-examples/pathway-analysis/0.png",
+  "sbg:toolAuthor": "Trinh Nguyen",
+  "sbg:categories": [
+    "NCI/CBIIT",
+    "Multiomics"
+  ],
+  "sbg:appVersion": [
+    "v1.2"
+  ],
+  "id": "https://cgc-api.sbgenomics.com/v2/apps/phil_webster/bco-cwl-examples/pathway-analysis/0/raw/",
+  "sbg:id": "phil_webster/bco-cwl-examples/pathway-analysis/0",
+  "sbg:revision": 0,
+  "sbg:revisionNotes": "Copy of bianxi/commit-meerzaman-lab-cbiit-nci/pathway-analysis/7",
+  "sbg:modifiedOn": 1676561893,
+  "sbg:modifiedBy": "phil_webster",
+  "sbg:createdOn": 1676561893,
+  "sbg:createdBy": "phil_webster",
+  "sbg:project": "phil_webster/bco-cwl-examples",
+  "sbg:sbgMaintained": false,
+  "sbg:validationErrors": [],
+  "sbg:contributors": [
+    "phil_webster"
+  ],
+  "sbg:latestRevision": 0,
+  "sbg:publisher": "sbg",
+  "sbg:content_hash": "ac3336f532fa64bdb53b0768eb5c882bd2be557ab3be0f378c1beccaeac2b7b78",
+  "sbg:workflowLanguage": "CWL",
+  "sbg:copyOf": "bianxi/commit-meerzaman-lab-cbiit-nci/pathway-analysis/7"
+}

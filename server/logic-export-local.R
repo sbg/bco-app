@@ -44,7 +44,7 @@ get_description_local <- reactive({
     input$desc_platform_local,
     load_desc_pipeline_meta_local(),
     load_desc_pipeline_prerequisite_local(),
-    load_desc_pipeline_input_local(),
+    load_df_desc_pipeline_input_local(), #was using previous load_desc_pipeline_input_local. Changed to new table to generate BCO.
     load_desc_pipeline_output_local()
   )
 })

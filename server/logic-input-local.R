@@ -178,7 +178,7 @@ load_df_contributors_local <- reactive(if (file.exists(contributors_fname)) read
 output$vis_cwl_workflow_local <- renderVisNetwork({
   if(tidycwl::is_cwl(get_rawcwl_local())) {
     if(!is.null(get_rawcwl_local() %>% parse_inputs())) {
-      tryCatch({get_graph(
+      tryCatch({new_get_graph(
         get_rawcwl_local() %>% parse_inputs(),
         get_rawcwl_local() %>% parse_outputs(),
         get_rawcwl_local() %>% parse_steps()
@@ -203,8 +203,17 @@ output$vis_cwl_workflow_local <- renderVisNetwork({
 
 # text
 observeEvent(get_rawcwl_local(), {
-  updateTextAreaInput(session, "usability_text_local", value = tidycwl::parse_meta(get_rawcwl_local())$"description")
-})
+
+  # CWL1.0+ descriptions are stored in the "doc" metadata field
+  # Some legacy workflows use the "description" metadata field
+  if (!is.null(tidycwl::parse_meta(get_rawcwl_local())$"doc")) {
+    wf_description <- tidycwl::parse_meta(get_rawcwl_local())$"doc"
+  } else {
+    wf_description <- tidycwl::parse_meta(get_rawcwl_local())$"description"
+  }
+  updateTextAreaInput(session, "usability_text_local", value = wf_description)
+  }
+)
 
 # 3.1 fhir
 
@@ -317,26 +326,28 @@ load_desc_xref_local <- reactive(if (file.exists(desc_xref_fname_local)) readRDS
 # pipeline_meta
 load_desc_pipeline_meta_local <- reactive(
   if (!is.null(get_rawcwl_local() %>% parse_steps())) {
-    data.frame(
-      "step_number" = as.character(1:length(get_rawcwl_local() %>% parse_steps() %>% get_steps_id())),
-      "name" = get_rawcwl_local() %>% parse_steps() %>% get_steps_id(),
-      "description" = unlist(get_rawcwl_local() %>% parse_steps() %>% get_steps_doc()),
-      "version" = get_rawcwl_local() %>% parse_steps() %>% get_steps_version(),
-      stringsAsFactors = FALSE
-    )
-  } else {
-    data.frame(
-      "step_number" = character(),
-      "name" = character(),
-      "description" = character(),
-      "version" = character(),
-      stringsAsFactors = FALSE
+  data.frame(
+    "step_number" = as.character(1:length(get_rawcwl_local() %>% parse_steps() %>% new_get_steps_id())),
+    "name" = get_rawcwl_local() %>% parse_steps() %>% new_get_steps_id(),
+    "description" = unlist(get_rawcwl_local() %>% parse_steps() %>% new_get_steps_doc()),
+    "version" = get_rawcwl_local() %>% parse_steps() %>% new_get_steps_version(),
+    stringsAsFactors = FALSE
+  )
+} else {
+  data.frame(
+    "step_number" = character(),
+    "name" = character(),
+    "description" = character(),
+    "version" = character(),
+    stringsAsFactors = FALSE
     )
   }
 )
+
+
 output$desc_pipeline_meta_local <- DT::renderDT({
   load_desc_pipeline_meta_local()
-})
+}, rownames = F)
 
 # df_desc_pipeline_meta_local <- data.frame(
 #   "step_number" = character(),
@@ -424,89 +435,123 @@ DTedit::dtedit(
 load_desc_pipeline_prerequisite_local <- reactive(if (file.exists(desc_pipeline_prerequisite_fname_local)) readRDS(desc_pipeline_prerequisite_fname_local) else NULL)
 
 # pipeline input
-df_desc_pipeline_input_local <- data.frame(
-  "step_number" = as.character(),
-  "uri" = character(),
-  "access_time" = as.Date(integer(), origin = "1970-01-01"),
-  stringsAsFactors = FALSE
+load_df_desc_pipeline_input_local <- reactive(
+  if (!is.null(get_rawcwl_local() %>% parse_inputs())) {
+    data.frame(
+      "name" = get_rawcwl_local() %>% parse_inputs() %>% new_get_inputs_label(),
+      "type" = get_rawcwl_local() %>% parse_inputs() %>% new_get_inputs_type(),
+      "file type" = get_rawcwl_local() %>% parse_inputs() %>% get_new_inputs_filetype(),
+      "default value" = get_rawcwl_local() %>% parse_inputs() %>% get_new_inputs_default_val(),
+      "description" = unlist(get_rawcwl_local() %>% parse_inputs() %>% new_get_inputs_desc()),
+      stringsAsFactors = FALSE
+    )
+  } else {
+    data.frame(
+      "step_number" = character(),
+      "name" = character(),
+      "description" = character(),
+      "version" = character(),
+      stringsAsFactors = FALSE
+    )
+  }
 )
+
+output$df_desc_pipeline_input_local <- DT::renderDT({
+  load_df_desc_pipeline_input_local()
+  }, rownames = F)
 
 # tmp file storing the latest edited df
-desc_pipeline_input_fname_local <- tempfile(fileext = ".rds")
-
-desc_pipeline_input_local.insert.callback <- function(data, row) {
-  df_desc_pipeline_input_local <- data#rbind(data, df_desc_pipeline_input_local)
-  saveRDS(df_desc_pipeline_input_local, file = desc_pipeline_input_fname_local)
-  return(df_desc_pipeline_input_local)
-}
-
-desc_pipeline_input_local.update.callback <- function(data, olddata, row) {
-  df_desc_pipeline_input_local <- data#[row, ] <- data[1, ]
-  saveRDS(df_desc_pipeline_input_local, file = desc_pipeline_input_fname_local)
-  return(df_desc_pipeline_input_local)
-}
-
-desc_pipeline_input_local.delete.callback <- function(data, row) {
-  df_desc_pipeline_input_local <- data[-row, ]
-  saveRDS(df_desc_pipeline_input_local, file = desc_pipeline_input_fname_local)
-  return(df_desc_pipeline_input_local)
-}
-
-DTedit::dtedit(
-  input, output,
-  name = "desc_pipeline_input_local",
-  thedata = df_desc_pipeline_input_local,
-  edit.label.cols = c("Step Number", "URI", "Access Time"),
-  callback.insert = desc_pipeline_input_local.insert.callback,
-  callback.update = desc_pipeline_input_local.update.callback,
-  callback.delete = desc_pipeline_input_local.delete.callback
-)
+# desc_pipeline_input_fname_local <- tempfile(fileext = ".rds")
+#
+# desc_pipeline_input_local.insert.callback <- function(data, row) {
+#   df_desc_pipeline_input_local <- data#rbind(data, df_desc_pipeline_input_local)
+#   saveRDS(df_desc_pipeline_input_local, file = desc_pipeline_input_fname_local)
+#   return(df_desc_pipeline_input_local)
+# }
+#
+# desc_pipeline_input_local.update.callback <- function(data, olddata, row) {
+#   df_desc_pipeline_input_local <- data#[row, ] <- data[1, ]
+#   saveRDS(df_desc_pipeline_input_local, file = desc_pipeline_input_fname_local)
+#   return(df_desc_pipeline_input_local)
+# }
+#
+# desc_pipeline_input_local.delete.callback <- function(data, row) {
+#   df_desc_pipeline_input_local <- data[-row, ]
+#   saveRDS(df_desc_pipeline_input_local, file = desc_pipeline_input_fname_local)
+#   return(df_desc_pipeline_input_local)
+# }
+#
+# DTedit::dtedit(
+#   input, output,
+#   name = "desc_pipeline_input_local",
+#   thedata = df_desc_pipeline_input_local,
+#   edit.label.cols = c("Step Number", "URI", "Access Time"),
+#   callback.insert = desc_pipeline_input_local.insert.callback,
+#   callback.update = desc_pipeline_input_local.update.callback,
+#   callback.delete = desc_pipeline_input_local.delete.callback
+# )
 
 # load the edited df
-load_desc_pipeline_input_local <- reactive(if (file.exists(desc_pipeline_input_fname_local)) readRDS(desc_pipeline_input_fname_local) else NULL)
+# load_desc_pipeline_input_local <- reactive(if (file.exists(desc_pipeline_input_fname_local)) readRDS(desc_pipeline_input_fname_local) else NULL)
 
+# tmp file storing the latest edited df
+# desc_pipeline_output_fname_local <- tempfile(fileext = ".rds")
+#
+# desc_pipeline_output_local.insert.callback <- function(data, row) {
+#   df_desc_pipeline_output_local <- data#rbind(data, df_desc_pipeline_output_local)
+#   saveRDS(df_desc_pipeline_output_local, file = desc_pipeline_output_fname_local)
+#   return(df_desc_pipeline_output_local)
+# }
+#
+# desc_pipeline_output_local.update.callback <- function(data, olddata, row) {
+#   df_desc_pipeline_output_local <- data#[row, ] <- data[1, ]
+#   saveRDS(df_desc_pipeline_output_local, file = desc_pipeline_output_fname_local)
+#   return(df_desc_pipeline_output_local)
+# }
+#
+# desc_pipeline_output_local.delete.callback <- function(data, row) {
+#   df_desc_pipeline_output_local <- data[-row, ]
+#   saveRDS(df_desc_pipeline_output_local, file = desc_pipeline_output_fname_local)
+#   return(df_desc_pipeline_output_local)
+# }
+#
+# DTedit::dtedit(
+#   input, output,
+#   name = "desc_pipeline_output_local",
+#   thedata = df_desc_pipeline_output_local,
+#   edit.label.cols = c("Step Number", "URI", "Access Time"),
+#   callback.insert = desc_pipeline_output_local.insert.callback,
+#   callback.update = desc_pipeline_output_local.update.callback,
+#   callback.delete = desc_pipeline_output_local.delete.callback
+# )
+
+# load the edited df
+load_desc_pipeline_output_local <- reactive(
+  if (!is.null(get_rawcwl_local() %>% parse_outputs())) {
+    data.frame(
+      "name" = get_rawcwl_local() %>% parse_outputs() %>% new_get_outputs_label(),
+      "type" = get_rawcwl_local() %>% parse_outputs() %>% new_get_outputs_type(),
+      "file_type" = get_rawcwl_local() %>% parse_outputs() %>% get_new_outputs_filetype(),
+      "output_source" = unlist(get_rawcwl_local() %>% parse_outputs() %>% get_new_outputs_source()),
+      "description" = unlist(get_rawcwl_local() %>% parse_outputs() %>% new_get_outputs_desc()),
+      stringsAsFactors = FALSE
+    )
+  } else {
+    data.frame(
+      "name" = character(),
+      "type" = character(),
+      "file type" = character(),
+      "output source" = character(),
+      "description" = character(),
+      stringsAsFactors = FALSE
+    )
+  }
+)
 
 # pipeline output
-df_desc_pipeline_output_local <- data.frame(
-  "step_number" = character(),
-  "uri" = character(),
-  "access_time" = as.Date(integer(), origin = "1970-01-01"),
-  stringsAsFactors = FALSE
-)
-
-# tmp file storing the latest edited df
-desc_pipeline_output_fname_local <- tempfile(fileext = ".rds")
-
-desc_pipeline_output_local.insert.callback <- function(data, row) {
-  df_desc_pipeline_output_local <- data#rbind(data, df_desc_pipeline_output_local)
-  saveRDS(df_desc_pipeline_output_local, file = desc_pipeline_output_fname_local)
-  return(df_desc_pipeline_output_local)
-}
-
-desc_pipeline_output_local.update.callback <- function(data, olddata, row) {
-  df_desc_pipeline_output_local <- data#[row, ] <- data[1, ]
-  saveRDS(df_desc_pipeline_output_local, file = desc_pipeline_output_fname_local)
-  return(df_desc_pipeline_output_local)
-}
-
-desc_pipeline_output_local.delete.callback <- function(data, row) {
-  df_desc_pipeline_output_local <- data[-row, ]
-  saveRDS(df_desc_pipeline_output_local, file = desc_pipeline_output_fname_local)
-  return(df_desc_pipeline_output_local)
-}
-
-DTedit::dtedit(
-  input, output,
-  name = "desc_pipeline_output_local",
-  thedata = df_desc_pipeline_output_local,
-  edit.label.cols = c("Step Number", "URI", "Access Time"),
-  callback.insert = desc_pipeline_output_local.insert.callback,
-  callback.update = desc_pipeline_output_local.update.callback,
-  callback.delete = desc_pipeline_output_local.delete.callback
-)
-
-# load the edited df
-load_desc_pipeline_output_local <- reactive(if (file.exists(desc_pipeline_output_fname_local)) readRDS(desc_pipeline_output_fname_local) else NULL)
+output$df_desc_pipeline_output_local <- DT::renderDT({
+  load_desc_pipeline_output_local()
+}, rownames = F)
 
 # 5. execution
 

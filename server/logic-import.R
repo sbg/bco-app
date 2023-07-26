@@ -13,7 +13,7 @@ observeEvent({
   #   removeModal()
   # } else {
   projects <- character(0)
-  
+
   if (!is_token(token) & (token != '')) {
     msg = "Please Check Your Token, Not Valid!"
     showModal(modalDialog(msg, footer = NULL))
@@ -23,7 +23,7 @@ observeEvent({
       showModal(modalDialog("Loading projects and workflows...", footer = NULL))
       lst_project <- get_list_project_sbgapi(plat, token)
       removeModal()
-      
+
       if (is_token(token) & is.null(lst_project)) {
         msg = "Please Check Your Project! No Project to List."
         showModal(modalDialog(msg, footer = NULL))

@@ -134,23 +134,23 @@ load_df_contributors <- reactive(if (file.exists(contributors_fname)) readRDS(co
 output$vis_cwl_workflow <- renderVisNetwork({
   if(tidycwl::is_cwl(get_rawcwl()) ) {
     if(!is.null(get_rawcwl() %>% parse_inputs())) {
-    tryCatch({get_graph(
-              get_rawcwl() %>% parse_inputs(),
-              get_rawcwl() %>% parse_outputs(),
-              get_rawcwl() %>% parse_steps()
-              ) %>% visualize_graph() %>%
-                    visGroups(groupname = "input", color = "#E69F00", shadow = list(enabled = TRUE)) %>%
-                    visGroups(groupname = "output", color = "#56B4E9", shadow = list(enabled = TRUE)) %>%
-                    visGroups(groupname = "step", color = "#009E73", shadow = list(enabled = TRUE)) %>%
-                    visLegend(width = 0.1, position = "right", main = "Legend") %>%
-                    visInteraction(navigationButtons = TRUE)
-            }, error = function(err){
-              print("Could not prepare the visualizatoin data!")
-              # give warning on the visual
-              nodes <- data.frame(id = 1:5, label = c('Not', 'Valid', 'App', 'to', 'Visualize'), shape = c('text'))
-              edges <- data.frame(from = c(1,2,3,4), to = c(2,3,4,5))
-              visNetwork(nodes, edges) %>% visInteraction(navigationButtons = TRUE)
-            })
+      tryCatch({new_get_graph(
+        get_rawcwl() %>% parse_inputs(),
+        get_rawcwl() %>% parse_outputs(),
+        get_rawcwl() %>% parse_steps()
+      ) %>% visualize_graph() %>%
+          visGroups(groupname = "input", color = "#E69F00", shadow = list(enabled = TRUE)) %>%
+          visGroups(groupname = "output", color = "#56B4E9", shadow = list(enabled = TRUE)) %>%
+          visGroups(groupname = "step", color = "#009E73", shadow = list(enabled = TRUE)) %>%
+          visLegend(width = 0.1, position = "right", main = "Legend") %>%
+          visInteraction(navigationButtons = TRUE)
+      }, error = function(err){
+        print("Could not prepare the visualizatoin data!")
+        # give warning on the visual
+        nodes <- data.frame(id = 1:5, label = c('Not', 'Valid', 'App', 'to', 'Visualize'), shape = c('text'))
+        edges <- data.frame(from = c(1,2,3,4), to = c(2,3,4,5))
+        visNetwork(nodes, edges) %>% visInteraction(navigationButtons = TRUE)
+      })
     }
   }
 })
@@ -274,10 +274,10 @@ load_desc_xref <- reactive(if (file.exists(desc_xref_fname)) readRDS(desc_xref_f
 load_desc_pipeline_meta <- reactive(
   if (!is.null(get_rawcwl() %>% parse_steps())) {
     data.frame(
-      "step_number" = as.character(1:length(get_rawcwl() %>% parse_steps() %>% get_steps_id())),
-      "name" = get_rawcwl() %>% parse_steps() %>% get_steps_id(),
-      "description" = unlist({get_rawcwl() %>% parse_steps() %>% get_steps_doc()}),
-      "version" = get_rawcwl() %>% parse_steps() %>% get_steps_version(),
+      "step_number" = as.character(1:length(get_rawcwl() %>% parse_steps() %>% new_get_steps_id())),
+      "name" = get_rawcwl() %>% parse_steps() %>% new_get_steps_id(),
+      "description" = unlist({get_rawcwl() %>% parse_steps() %>% new_get_steps_doc()}),
+      "version" = get_rawcwl() %>% parse_steps() %>% new_get_steps_version(),
       stringsAsFactors = FALSE
     )
   } else {
@@ -290,9 +290,10 @@ load_desc_pipeline_meta <- reactive(
     )
   }
 )
+
 output$desc_pipeline_meta <- DT::renderDT({
   load_desc_pipeline_meta()
-})
+}, rownames = F)
 
 # pipeline_prerequisite
 df_desc_pipeline_prerequisite <- data.frame(
@@ -339,25 +340,29 @@ load_desc_pipeline_prerequisite <- reactive(if (file.exists(desc_pipeline_prereq
 
 # pipeline input
 load_desc_pipeline_input <- reactive(
-  if (!is.null(get_taskused()$step_number_input)) {
+  if (!is.null(get_rawcwl() %>% parse_inputs())) {
     data.frame(
-      "step_number" = get_taskused()$step_number_input,
-      "uri" = get_taskused()$input_path,
-      "access_time" = get_taskused()$start_time,
+      "name" = get_rawcwl() %>% parse_inputs() %>% new_get_inputs_label(),
+      "type" = get_rawcwl() %>% parse_inputs() %>% new_get_inputs_type(),
+      "file type" = get_rawcwl() %>% parse_inputs() %>% get_new_inputs_filetype(),
+      "default value" = get_rawcwl() %>% parse_inputs() %>% get_new_inputs_default_val(),
+      "description" = unlist(get_rawcwl() %>% parse_inputs() %>% new_get_inputs_desc()),
       stringsAsFactors = FALSE
     )
   } else {
     data.frame(
       "step_number" = character(),
-      "uri" = character(),
-      "access_time" = character(),
+      "name" = character(),
+      "description" = character(),
+      "version" = character(),
       stringsAsFactors = FALSE
     )
   }
 )
+
 output$desc_pipeline_input <- DT::renderDT({
   load_desc_pipeline_input()
-})
+}, rownames = F)
 
 # TODO: Fix that, no need to give blank row, added due to error in biocompute package
 # pipeline input
@@ -404,25 +409,29 @@ output$desc_pipeline_input <- DT::renderDT({
 
 # pipeline output
 load_desc_pipeline_output <- reactive(
-  if (!is.null(get_taskused()$step_number_output)) {
+  if (!is.null(get_rawcwl() %>% parse_outputs())) {
     data.frame(
-      "step_number" = get_taskused()$step_number_output,
-      "uri" = get_taskused()$output_path,
-      "access_time" = get_taskused()$end_time,
+      "name" = get_rawcwl() %>% parse_outputs() %>% new_get_outputs_label(),
+      "type" = get_rawcwl() %>% parse_outputs() %>% new_get_outputs_type(),
+      "file_type" = get_rawcwl() %>% parse_outputs() %>% get_new_outputs_filetype(),
+      "output_source" = unlist(get_rawcwl() %>% parse_outputs() %>% get_new_outputs_source()),
+      "description" = unlist(get_rawcwl() %>% parse_outputs() %>% new_get_outputs_desc()),
       stringsAsFactors = FALSE
     )
   } else {
     data.frame(
-      "step_number" = character(),
-      "uri" = character(),
-      "access_time" = character(),
+      "name" = character(),
+      "type" = character(),
+      "file type" = character(),
+      "output source" = character(),
+      "description" = character(),
       stringsAsFactors = FALSE
     )
   }
 )
 output$desc_pipeline_output <- DT::renderDT({
   load_desc_pipeline_output()
-})
+}, rownames = F)
 
 # TODO: Fix that, no need to give blank row, added due to error in biocompute package
 # pipeline output
@@ -876,6 +885,12 @@ observe({
                 (nchar(input$userName) > 3) & (nchar(input$passUser) > 5))
 })
 
+observe({
+  toggleState(id = "push_txt_yes",
+              condition = (str_detect(input$urlRepo_txt, regex("^(?:http(s)?://)?[\\w.-]+(?:\\.[\\w\\.-]+)+")) == TRUE) &
+                (nchar(input$userName_txt) > 3) & (nchar(input$passUser_txt) > 5))
+})
+
 observeEvent(input$userName, {
   if (nchar(input$userName) > 3) showFeedbackSuccess("userName") else hideFeedback("userName")
 })
@@ -884,11 +899,28 @@ observeEvent(input$passUser, {
   if (nchar(input$passUser) > 5) showFeedbackSuccess("passUser") else hideFeedback("passUser")
 })
 
+observeEvent(input$userName_txt, {
+  if (nchar(input$userName_txt) > 3) showFeedbackSuccess("userName_txt") else hideFeedback("userName_txt")
+})
+
+observeEvent(input$passUser_txt, {
+  if (nchar(input$passUser_txt) > 5) showFeedbackSuccess("passUser_txt") else hideFeedback("passUser_txt")
+})
+
 observeEvent(push_to_git(), {
 
   if (is.null(input$userName) || is.null(input$passUser) || is.null(input$repo_name)) {
     updateTextAreaInput(session, "git_text", value = "Please check your Username, password and URL!")
   } else {
     updateTextAreaInput(session, "git_text", value = push_to_git()$"summary")
+  }
+})
+
+observeEvent(push_to_git_txt(), {
+
+  if (is.null(input$userName_txt) || is.null(input$passUser_txt) || is.null(input$repo_name_txt)) {
+    updateTextAreaInput(session, "git_txt_text", value = "Please check your Username, password and URL!")
+  } else {
+    updateTextAreaInput(session, "git_txt_text", value = push_to_git_txt()$"summary")
   }
 })

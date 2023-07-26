@@ -1,0 +1,1113 @@
+{
+  "steps": [
+    {
+      "out": [
+        {
+          "id": "out_alignments"
+        }
+      ],
+      "in": [
+        {
+          "id": "in_reads",
+          "source": [
+            "in_reads"
+          ]
+        },
+        {
+          "id": "in_linear_reference",
+          "source": "in_linear_reference"
+        },
+        {
+          "id": "in_graph_reference",
+          "source": "in_graph_reference"
+        },
+        {
+          "id": "in_cram_reference",
+          "source": "in_cram_reference"
+        },
+        {
+          "id": "output_format",
+          "default": "bam"
+        },
+        {
+          "id": "sort_output",
+          "default": true
+        },
+        {
+          "id": "mark_duplicates",
+          "default": true
+        },
+        {
+          "id": "generate_index",
+          "default": true
+        },
+        {
+          "id": "sample_id",
+          "valueFrom": "${ return (inputs.in_reads[0].metadata && ('sample_id' in inputs.in_reads[0].metadata)) ? null : 'SAMPLE' }"
+        }
+      ],
+      "id": "graf_aligner",
+      "label": "GRAF Aligner",
+      "sbg:x": 260,
+      "sbg:y": 181,
+      "run": {
+        "hints": [
+          {
+            "value": "c5.18xlarge;ebs-gp2;600",
+            "class": "sbg:AWSInstanceType"
+          }
+        ],
+        "outputs": [
+          {
+            "secondaryFiles": [
+              ".bai",
+              ".crai"
+            ],
+            "outputBinding": {
+              "glob": "${\n    // Get output name from fastq inputs\n\n    var input_1, input_2;\n    var name, output_name, full_name, full_name2;\n\n    function common_substring(a, b) {\n        var i = 0;\n        while (a[i] === b[i] && i < a.length) {\n            i = i + 1;\n        }\n        return a.slice(0, i);\n    }\n\n    if (inputs.output_name != \"\") {\n        name = inputs.output_name;\n    }\n    else {\n\n        // Set output file name\n        if (inputs.in_reads[0] instanceof Array) {\n            input_1 = inputs.in_reads[0][0] // scatter mode\n            input_2 = inputs.in_reads[0][1]\n        } else if (inputs.in_reads instanceof Array) {\n            input_1 = inputs.in_reads[0]\n            input_2 = inputs.in_reads[1]\n        } else {\n            input_1 = [].concat(inputs.in_reads)[0]\n            input_2 = input_1\n        }\n        full_name = input_1.path.split('/')[input_1.path.split('/').length - 1]\n\n        if (inputs.in_reads.length == 1) {\n            name = full_name\n            if (name.slice(-3, name.length) === '.gz' || name.slice(-3, name.length) === '.GZ')\n                name = name.slice(0, -3)\n            if (name.slice(-3, name.length) === '.fq' || name.slice(-3, name.length) === '.FQ')\n                name = name.slice(0, -3)\n            if (name.slice(-6, name.length) === '.fastq' || name.slice(-6, name.length) === '.FASTQ')\n                name = name.slice(0, -6)\n\n        } else {\n            full_name2 = input_2.path.split('/')[input_2.path.split('/').length - 1]\n            name = common_substring(full_name, full_name2)\n\n            if (name.slice(-1, name.length) === '_' || name.slice(-1, name.length) === '.')\n                name = name.slice(0, -1)\n            if (name.slice(-2, name.length) === 'p_' || name.slice(-1, name.length) === 'p.')\n                name = name.slice(0, -2)\n            if (name.slice(-2, name.length) === 'P_' || name.slice(-1, name.length) === 'P.')\n                name = name.slice(0, -2)\n            if (name.slice(-3, name.length) === '_p_' || name.slice(-3, name.length) === '.p.')\n                name = name.slice(0, -3)\n            if (name.slice(-3, name.length) === '_pe' || name.slice(-3, name.length) === '.pe')\n                name = name.slice(0, -3)\n        }\n    }\n    if (inputs.output_format) {\n      if ((inputs.output_format === 'bam') && (name.slice(-4) !== '.bam'))\n        name = name + '.bam';\n      else if ((inputs.output_format == 'cram') && (name.slice(-5) != '.cram'))\n        name = name + '.cram';\n    }\n    if ((name.slice(-4) !== '.bam') && (name.slice(-5) !== '.cram')) {\n        output_name = name +'.bam';\n    }\n    else {\n        output_name = name;\n    }\n\n    return output_name;\n}",
+              "outputEval": "${\n    return inheritMetadata(self, inputs.in_reads)\n\n}"
+            },
+            "id": "out_alignments",
+            "doc": "BAM or CRAM file with aligned reads.",
+            "type": "File",
+            "label": "Alignments",
+            "sbg:fileTypes": "BAM, CRAM"
+          }
+        ],
+        "sbg:revisionNotes": "1.0rc3",
+        "requirements": [
+          {
+            "class": "ShellCommandRequirement"
+          },
+          {
+            "coresMin": "${\n    if (!inputs.threads) {\n        return 1;\n    } else {\n        return inputs.threads;\n    }\n}",
+            "ramMin": "${\n    if (!inputs.memory) {\n        return 28000;\n    } else {\n        return inputs.memory;\n    }\n}",
+            "class": "ResourceRequirement"
+          },
+          {
+            "class": "DockerRequirement",
+            "dockerPull": "internal-images.sbgenomics.com/alexey/gwgs:1.0rc3"
+          },
+          {
+            "expressionLib": [
+              "var updateMetadata = function(file, key, value) {\n    file['metadata'][key] = value;\n    return file;\n};\n\nvar setMetadata = function(file, metadata) {\n    if (!('metadata' in file)) {\n        file['metadata'] = {};\n    }\n    for (var key in metadata) {\n        file['metadata'][key] = metadata[key];\n    }\n    return file;\n};\n\nvar inheritMetadata = function(o1, o2) {\n    var commonMetadata = {};\n    if (!Array.isArray(o2)) {\n        o2 = [o2];\n    }\n    for (var i = 0; i < o2.length; i++) {\n        var example = o2[i]['metadata'];\n        for (var key in example) {\n            if (i == 0)\n                commonMetadata[key] = example[key];\n            else {\n                if (!(commonMetadata[key] == example[key])) {\n                    delete commonMetadata[key];\n                }\n            }\n        }\n    }\n    if (!Array.isArray(o1)) {\n        o1 = setMetadata(o1, commonMetadata);\n    } else {\n        for (var i = 0; i < o1.length; i++) {\n            o1[i] = setMetadata(o1[i], commonMetadata);\n        }\n    }\n    return o1;\n};\n\nvar toArray = function(file) {\n    return [].concat(file);\n};\n\nvar groupBy = function(files, key) {\n    var groupedFiles = [];\n    var tempDict = {};\n    for (var i = 0; i < files.length; i++) {\n        var value = files[i]['metadata'][key];\n        if (value in tempDict)\n            tempDict[value].push(files[i]);\n        else tempDict[value] = [files[i]];\n    }\n    for (var key in tempDict) {\n        groupedFiles.push(tempDict[key]);\n    }\n    return groupedFiles;\n};\n\nvar orderBy = function(files, key, order) {\n    var compareFunction = function(a, b) {\n        if (a['metadata'][key].constructor === Number) {\n            return a['metadata'][key] - b['metadata'][key];\n        } else {\n            var nameA = a['metadata'][key].toUpperCase();\n            var nameB = b['metadata'][key].toUpperCase();\n            if (nameA < nameB) {\n                return -1;\n            }\n            if (nameA > nameB) {\n                return 1;\n            }\n            return 0;\n        }\n    };\n\n    files = files.sort(compareFunction);\n    if (order == undefined || order == \"asc\")\n        return files;\n    else\n        return files.reverse();\n};"
+            ],
+            "class": "InlineJavascriptRequirement"
+          }
+        ],
+        "class": "CommandLineTool",
+        "cwlVersion": "v1.0",
+        "arguments": [
+          {
+            "valueFrom": "${\n    /////// Set input reads in the correct order depending of the paired end from metadata.\n    // Borrowed from BWA wrapper.\n\n    var read_metadata, pe1, order;\n\n    //Read metadata for input reads\n    if (!Array.isArray(inputs.in_reads)) {\n        return '-q ' + inputs.in_reads.path\n    }\n    if (inputs.in_reads[0].metadata) {\n        read_metadata = inputs.in_reads[0].metadata\n    } else {\n        read_metadata = []\n    }\n    order = 0 // Consider this as normal order given at input: pe1 pe2\n\n    // Check if paired end 1 corresponds to the first given read\n    if (read_metadata == []) {\n        order = 0\n    } else if ('paired_end' in read_metadata) {\n        pe1 = read_metadata.paired_end\n        if (pe1 != 1) order = 1 // change order\n    }\n\n    // Return reads in the correct order\n    if (inputs.in_reads.length == 1) {\n        return '-q ' + inputs.in_reads[0].path; // Only one read present\n    } else if (inputs.in_reads.length == 2) {\n        if (order == 0) return '-q ' + inputs.in_reads[0].path + ' -Q ' + inputs.in_reads[1].path;\n        else return '-q ' + inputs.in_reads[1].path + ' -Q ' + inputs.in_reads[0].path;\n    }\n\n}",
+            "shellQuote": false,
+            "position": 2,
+            "prefix": ""
+          },
+          {
+            "valueFrom": "${\n    var param_list, read_metadata;\n\n    function add_param(key, val) {\n        if (!val) {\n            return;\n        }\n        param_list.push(key + ' ' + '\\'' + val + '\\'');\n    }\n\n    param_list = []\n\n    //Read metadata for input reads\n\n    if (!Array.isArray(inputs.in_reads)) {\n        if (inputs.in_reads.metadata) {\n            read_metadata = inputs.in_reads.metadata;\n        } else {\n            read_metadata = [];\n        }\n    } else {\n        if (inputs.in_reads[0].metadata) {\n            read_metadata = inputs.in_reads[0].metadata;\n        } else {\n            read_metadata = [];\n        }\n    }\n\n    if (inputs.group_id) {\n        add_param('--read_group_id', inputs.group_id);\n    }\n\n    if (inputs.read_group_platform) {\n        add_param('--read_group_platform', inputs.read_group_platform);\n    } else if ('platform' in read_metadata) {\n        add_param('--read_group_platform', read_metadata.platform);\n    }\n\n    if (inputs.sample_id) {\n        add_param('--read_group_sample', inputs.sample_id);\n    } else if ('sample_id' in read_metadata) {\n        add_param('--read_group_sample', read_metadata.sample_id);\n    }\n\n    if (inputs.read_group_unit_id) {\n        add_param('--read_group_unit', inputs.read_group_unit_id);\n    } else if ('platform_unit_id' in read_metadata) {\n        add_param('--read_group_unit', read_metadata.platform_unit_id);\n    }\n\n    if (inputs.read_group_library_id) {\n        add_param('--read_group_library', inputs.read_group_library_id);\n    } else if ('library_id' in read_metadata) {\n        add_param('--read_group_library', read_metadata.library_id);\n    }\n\n    return param_list.join(' ');\n}",
+            "shellQuote": false,
+            "position": 3,
+            "prefix": ""
+          },
+          {
+            "valueFrom": "${\n    return  (inputs.sort_output) ?\n        \" --sort --tmp ./sort.chunk.XXXXXX --sort_mem 30000 --hts_threads 40 --merge_threads 12 --keep\" : \"\"\n}\n",
+            "shellQuote": false,
+            "position": 101,
+            "prefix": ""
+          },
+          {
+            "valueFrom": "${\n    // Break the execution if more than 2 fastq files are received\n    var message = 'The Seven Bridges Graph Workflow allows processing two FASTQ files per task, please make sure that your Sample ID and Library ID metadata fields are properly set and utilise batching for multiple samples/libraries.';\n    if (inputs.in_reads.length > 2) {\n        throw (message);\n    } else {\n        return \"\";\n    }\n}",
+            "shellQuote": false,
+            "position": 150,
+            "prefix": ""
+          },
+          {
+            "valueFrom": "${\n    function get_output_name() {\n        function common_substring(a, b) {\n            var i = 0;\n            while (a[i] === b[i] && i < a.length) {\n                i = i + 1;\n            }\n            return a.slice(0, i);\n        }\n\n        var input_1, input_2;\n        var full_name, full_name2;\n        var name, output_name;\n\n        if (inputs.output_name != \"\") {\n            name = inputs.output_name;\n        }\n        else {\n          // Set output file name\n          if (inputs.in_reads[0] instanceof Array) {\n            input_1 = inputs.in_reads[0][0];\n            // scatter mode\n            input_2 = inputs.in_reads[0][1];\n          } else if (inputs.in_reads instanceof Array) {\n            input_1 = inputs.in_reads[0];\n            input_2 = inputs.in_reads[1];\n          } else {\n            input_1 = [].concat(inputs.in_reads)[0];\n            input_2 = input_1;\n          }\n          full_name = input_1.path.split('/')[input_1.path.split('/').length - 1];\n          if (inputs.in_reads.length == 1) {\n            name = full_name;\n            if (name.slice(-3, name.length) === '.gz' || name.slice(-3, name.length) === '.GZ')\n                name = name.slice(0, -3);\n            if (name.slice(-3, name.length) === '.fq' || name.slice(-3, name.length) === '.FQ')\n                name = name.slice(0, -3);\n            if (name.slice(-6, name.length) === '.fastq' || name.slice(-6, name.length) === '.FASTQ')\n                name = name.slice(0, -6);\n\n          } else {\n            full_name2 = input_2.path.split('/')[input_2.path.split('/').length - 1];\n            name = common_substring(full_name, full_name2);\n\n            if (name.slice(-1, name.length) === '_' || name.slice(-1, name.length) === '.')\n                name = name.slice(0, -1);\n            if (name.slice(-2, name.length) === 'p_' || name.slice(-1, name.length) === 'p.')\n                name = name.slice(0, -2);\n            if (name.slice(-2, name.length) === 'P_' || name.slice(-1, name.length) === 'P.')\n                name = name.slice(0, -2);\n            if (name.slice(-3, name.length) === '_p_' || name.slice(-3, name.length) === '.p.')\n                name = name.slice(0, -3);\n            if (name.slice(-3, name.length) === '_pe' || name.slice(-3, name.length) === '.pe')\n                name = name.slice(0, -3);\n          }\n        }\n\n        if (inputs.output_format) {\n           if ((inputs.output_format === 'bam') && (name.slice(-4) !== '.bam'))\n               name = name + '.bam';\n            else if ((inputs.output_format == 'cram') && (name.slice(-5) != '.cram'))\n               name = name + '.cram';\n        }\n        if ((name.slice(-4) !== '.bam') && (name.slice(-5) !== '.cram')) {\n            output_name = name +'.bam';\n        }\n        else {\n            output_name = name;\n        }\n        return output_name;\n    }\n\n    var name = get_output_name();\n\n    if (inputs.generate_index) {\n        if (name.slice(-5) == '.cram')\n            return \"--index -o \" + name;\n        else\n            return \"-o \" + name + \" && sambamba index -t 36 \" + name;\n    }\n\n    return \"-o \" + name;\n}",
+            "shellQuote": false,
+            "position": 160,
+            "prefix": ""
+          }
+        ],
+        "id": "graf_aligner",
+        "doc": "GRAF Aligner is a fast and accurate read aligner that works on Genome Graphs. Genome Graphs are usually constructed from, but not limited to, a linear reference plus a VCF file containing known variants.\n\nGRAF Aligner algorithms are described in details in the paper [Fast and accurate genomic analyses using genome graphs](https://www.nature.com/articles/s41588-018-0316-4).",
+        "label": "GRAF Aligner",
+        "inputs": [
+          {
+            "id": "in_reads",
+            "doc": "Input sequence reads. If two files are passed in or if interleaved_reads is set, paired-end search is performed. Input can also be a single file in SAM, BAM or CRAM format.",
+            "type": "File[]",
+            "label": "Reads",
+            "sbg:fileTypes": "FQ, FASTQ, FQ.GZ, FASTQ.GZ, SAM, BAM, CRAM"
+          },
+          {
+            "secondaryFiles": [
+              "${\n    var ext = self.nameext.toLowerCase();\n    if ((ext == \".fasta\") || (ext == \".fa\")) {\n        return self.basename + \".fai\"\n    }\n    else if (inputs.output_format == \"cram\") {\n        throw \"CRAM output requires indexed FASTA as input\";\n    }\n    return null;\n}\n"
+            ],
+            "doc": "Reference genome (FASTA or serialized graph) file. If CRAM is selected as output format, this should be an indexed FASTA file.",
+            "id": "in_linear_reference",
+            "inputBinding": {
+              "valueFrom": "${\n    if (inputs.in_linear_reference) {\n        var fileName = inputs.in_linear_reference.path.toLowerCase();\n        if (fileName.match(/\\.fa(sta)?(\\.gz)?$/)) {\n            return \"--reference \" + inputs.in_linear_reference.path;\n        } else if (fileName.match(/(\\.7bg|\\.gg)/)) {\n            return \"--in_graph \" + inputs.in_linear_reference.path;\n        }\n    } else {\n        throw \"Reference should be specified as FASTA or binary graph.\";\n    }\n    return \"\"\n}",
+              "shellQuote": false,
+              "position": 0
+            },
+            "type": "File",
+            "label": "Linear reference",
+            "sbg:fileTypes": "FASTA, FA, FASTA.GZ, FA.GZ, GG"
+          },
+          {
+            "doc": "Population variant database for graph construction.",
+            "id": "in_graph_reference",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--vcf"
+            },
+            "type": "File?",
+            "label": "Graph reference",
+            "sbg:fileTypes": "VCF, VCF.GZ, BCF"
+          },
+          {
+            "secondaryFiles": [
+              ".fai"
+            ],
+            "doc": "Reference FASTA file for decoding input CRAM.",
+            "id": "in_cram_reference",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--cram_ref"
+            },
+            "type": "File?",
+            "label": "CRAM reference",
+            "sbg:fileTypes": "FA, FASTA"
+          },
+          {
+            "id": "interleaved_reads",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--interleaved_FQ"
+            },
+            "type": "boolean?",
+            "label": "Interleaved reads",
+            "doc": "Signals that the input reads contain interleaved reads from both ends."
+          },
+          {
+            "id": "output_name",
+            "doc": "A file name for the output. If it doesn't have .bam/.cram extension, the extension will be added. If not set, the output name will be created from the input reads name.",
+            "type": "string?",
+            "label": "Output filename",
+            "default": ""
+          },
+          {
+            "id": "output_format",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--fmt"
+            },
+            "type": [
+              "null",
+              {
+                "type": "enum",
+                "name": "output_format",
+                "symbols": [
+                  "bam",
+                  "cram"
+                ]
+              }
+            ],
+            "label": "Output format",
+            "doc": "Switch between BAM and CRAM output. Default is BAM."
+          },
+          {
+            "id": "sort_output",
+            "doc": "Select if you want the output file to be coordinate sorted. Default is to preserve input order.",
+            "type": "boolean?",
+            "label": "Sort output"
+          },
+          {
+            "id": "mark_duplicates",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--markdup"
+            },
+            "type": "boolean?",
+            "label": "Mark duplicates",
+            "doc": "Enables marking PCR and optical duplicates."
+          },
+          {
+            "id": "generate_index",
+            "doc": "Generate index file (.bai or .crai depending on the output file format).",
+            "type": "boolean?",
+            "label": "Generate index"
+          },
+          {
+            "id": "trim_adapters",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--trim"
+            },
+            "type": "boolean?",
+            "label": "Trim adapters",
+            "doc": "Detect and trim Illumina adapter sequences."
+          },
+          {
+            "id": "n_reads",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--n_reads"
+            },
+            "type": "int?",
+            "label": "Number of reads to process",
+            "doc": "Number of reads (pairs if paired-end search) to process from the FASTQ file(s). Enables FASTQ splitting when combined with the skip_reads setting."
+          },
+          {
+            "id": "skip_reads",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--skip_reads"
+            },
+            "type": "int?",
+            "label": "Number of first reads to skip",
+            "doc": "Number of reads (pair if paired-end search) to skip from the FASTQ file. Enables FASTQ splitting when combined with the n_reads setting."
+          },
+          {
+            "id": "group_id",
+            "doc": "Read group ID for reads. Default: a random string. If none of read group parameters is set in task settings or in input metadata, the read group line will be dropped from the BAM header.",
+            "type": "string?",
+            "label": "Read group ID"
+          },
+          {
+            "id": "sample_id",
+            "doc": "Sample ID to put in the @RG line of the output file. Default: inherit from input reads metadata.",
+            "type": "string?",
+            "label": "Read group sample ID"
+          },
+          {
+            "id": "read_group_platform",
+            "doc": "Sequence platform of reads. Default: inherit from input reads metadata.",
+            "type": [
+              "null",
+              {
+                "type": "enum",
+                "name": "read_group_platform",
+                "symbols": [
+                  "ILLUMINA",
+                  "CAPILLARY",
+                  "LS454",
+                  "SOLID",
+                  "HELICOS",
+                  "IONTORRENT",
+                  "ONT",
+                  "PACBIO",
+                  "ILLUMINA HISEQ"
+                ]
+              }
+            ],
+            "label": "Read group platform"
+          },
+          {
+            "id": "read_group_library_id",
+            "doc": "Specify the library ID for @RG line in the output file. Default: inherit from input reads metadata.",
+            "type": "string?",
+            "label": "Read group library ID"
+          },
+          {
+            "id": "read_group_unit_id",
+            "doc": "Specify the read group / platform unit. Default: inherit from input reads metadata.",
+            "type": "string?",
+            "label": "Read group unit ID"
+          },
+          {
+            "id": "insert_length",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--insert_length"
+            },
+            "type": "int?",
+            "label": "Insert length",
+            "doc": "Insert length for paired-end reads. If not specified, will be estimated based on the first 10,000 reads."
+          },
+          {
+            "id": "insert_length_sd",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--insert_length_sd"
+            },
+            "type": "int?",
+            "label": "Insert length standard deviation",
+            "doc": "Standard deviation of insert length for paired-end reads. If not specified, and insert length is specified, will be set to insert length / 4. Otherwise will be estimated from the the first 10,000 read pairs."
+          },
+          {
+            "id": "hash_block_size",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--hash_block_size"
+            },
+            "type": "int?",
+            "label": "Hash block size",
+            "doc": "k-mer size for index. Default: 21"
+          },
+          {
+            "id": "hash_block_step",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--hash_block_step"
+            },
+            "type": "int?",
+            "label": "Hash block step",
+            "doc": "k-mer interval for index. Default: 7"
+          },
+          {
+            "id": "hash_table_size_log2",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--hash_table_size_log2"
+            },
+            "type": "int?",
+            "label": "Hash table size",
+            "doc": "Ideally set to 2*hash block size."
+          },
+          {
+            "id": "glia_min_score",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--min_glia_score"
+            },
+            "type": "int?",
+            "label": "Minimum GLIA score",
+            "doc": "Mininum allowed SW score. Default: Read length/3."
+          },
+          {
+            "id": "glia_score_match",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--glia_score_match"
+            },
+            "type": "int?",
+            "label": "GLIA match score",
+            "doc": "GLIA match score. Default: 1"
+          },
+          {
+            "id": "glia_score_mismatch",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--glia_score_mismatch"
+            },
+            "type": "int?",
+            "label": "GLIA mismatch penalty",
+            "doc": "GLIA mismatch penalty. Default: 4"
+          },
+          {
+            "id": "glia_score_open_gap",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--glia_score_open_gap"
+            },
+            "type": "int?",
+            "label": "GLIA gap opening penalty",
+            "doc": "GLIA gap opening penalty. Default: 6"
+          },
+          {
+            "id": "glia_score_extend_gap",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--glia_score_extend_gap"
+            },
+            "type": "int?",
+            "label": "GLIA gap extension penalty",
+            "doc": "GLIA gap extension penalty. Default: 1"
+          },
+          {
+            "id": "unpaired_penalty",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--unpaired_penalty"
+            },
+            "type": "int?",
+            "label": "Improper pair penalty",
+            "doc": "The penalty of an two template reads not being a proper pair. Default: 17."
+          },
+          {
+            "id": "memory",
+            "doc": "Amount of memory in MB to request. Default: 16000.",
+            "type": "int?",
+            "label": "Memory"
+          },
+          {
+            "id": "threads",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "-t"
+            },
+            "type": "int?",
+            "label": "Threads",
+            "doc": "Number of alignment threads. Default: number of virtual cores available."
+          },
+          {
+            "id": "extras",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0
+            },
+            "type": "string?",
+            "label": "Extras",
+            "doc": "Extra command line options."
+          },
+          {
+            "id": "in_configuration",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 0,
+              "prefix": "--cfg"
+            },
+            "type": "File?",
+            "label": "Configuration",
+            "doc": "YAML or JSON file with aligner configuration parameters. Parameters that are explicitely set as tool inputs have priority."
+          }
+        ],
+        "baseCommand": [
+          "aligner"
+        ],
+        "$namespaces": {
+          "sbg": "https://sevenbridges.com"
+        }
+      }
+    },
+    {
+      "out": [
+        {
+          "id": "out_variants"
+        }
+      ],
+      "in": [
+        {
+          "id": "in_alignments",
+          "source": "graf_aligner/out_alignments"
+        },
+        {
+          "id": "in_linear_reference",
+          "source": "in_linear_reference"
+        },
+        {
+          "id": "in_graph_reference",
+          "source": "in_graph_reference"
+        },
+        {
+          "id": "in_intervals",
+          "source": "in_intervals"
+        },
+        {
+          "id": "annotations",
+          "default": "all"
+        },
+        {
+          "id": "call_conf",
+          "default": 10
+        },
+        {
+          "id": "max_thread_count",
+          "default": 0
+        }
+      ],
+      "id": "graf_variant_caller",
+      "label": "GRAF Variant Caller",
+      "sbg:x": 560,
+      "sbg:y": 181,
+      "run": {
+        "outputs": [
+          {
+            "outputBinding": {
+              "glob": "*.vcf"
+            },
+            "id": "out_variants",
+            "doc": "Output variants in VCF or gVCF.",
+            "type": "File",
+            "label": "Variants",
+            "sbg:fileTypes": "VCF"
+          }
+        ],
+        "sbg:revisionNotes": "1.0rc3",
+        "requirements": [
+          {
+            "class": "ShellCommandRequirement"
+          },
+          {
+            "coresMin": "${\n    if (!inputs.max_thread_count) {\n        return 36;\n    } else {\n        return (inputs.max_thread_count);\n    }\n}",
+            "ramMin": "${\n    var mem_per_thread = 498;\n    if (!inputs.max_thread_count) {\n        return 36 * mem_per_thread;\n    } else {\n        return (inputs.max_thread_count) * mem_per_thread;\n    }\n}",
+            "class": "ResourceRequirement"
+          },
+          {
+            "class": "DockerRequirement",
+            "dockerPull": "internal-images.sbgenomics.com/alexey/gwgs:1.0rc3"
+          },
+          {
+            "listing": [],
+            "class": "InitialWorkDirRequirement"
+          },
+          {
+            "expressionLib": [
+              "var updateMetadata = function(file, key, value) {\n    file['metadata'][key] = value;\n    return file;\n};\n\nvar setMetadata = function(file, metadata) {\n    if (!('metadata' in file)) {\n        file['metadata'] = {};\n    }\n    for (var key in metadata) {\n        file['metadata'][key] = metadata[key];\n    }\n    return file;\n};\n\nvar inheritMetadata = function(o1, o2) {\n    var commonMetadata = {};\n    if (!Array.isArray(o2)) {\n        o2 = [o2];\n    }\n    for (var i = 0; i < o2.length; i++) {\n        var example = o2[i]['metadata'];\n        for (var key in example) {\n            if (i == 0)\n                commonMetadata[key] = example[key];\n            else {\n                if (!(commonMetadata[key] == example[key])) {\n                    delete commonMetadata[key];\n                }\n            }\n        }\n    }\n    if (!Array.isArray(o1)) {\n        o1 = setMetadata(o1, commonMetadata)\n    } else {\n        for (var i = 0; i < o1.length; i++) {\n            o1[i] = setMetadata(o1[i], commonMetadata);\n        }\n    }\n    return o1;\n};\n\nvar toArray = function(file) {\n    return [].concat(file);\n};\n\nvar groupBy = function(files, key) {\n    var groupedFiles = [];\n    var tempDict = {};\n    for (var i = 0; i < files.length; i++) {\n        var value = files[i]['metadata'][key];\n        if (value in tempDict)\n            tempDict[value].push(files[i]);\n        else tempDict[value] = [files[i]];\n    }\n    for (var key in tempDict) {\n        groupedFiles.push(tempDict[key]);\n    }\n    return groupedFiles;\n};\n\nvar orderBy = function(files, key, order) {\n    var compareFunction = function(a, b) {\n        if (a['metadata'][key].constructor === Number) {\n            return a['metadata'][key] - b['metadata'][key];\n        } else {\n            var nameA = a['metadata'][key].toUpperCase();\n            var nameB = b['metadata'][key].toUpperCase();\n            if (nameA < nameB) {\n                return -1;\n            }\n            if (nameA > nameB) {\n                return 1;\n            }\n            return 0;\n        }\n    };\n\n    files = files.sort(compareFunction);\n    if (order == undefined || order == \"asc\")\n        return files;\n    else\n        return files.reverse();\n};"
+            ],
+            "class": "InlineJavascriptRequirement"
+          }
+        ],
+        "class": "CommandLineTool",
+        "temporaryFailCodes": [
+          1
+        ],
+        "cwlVersion": "v1.0",
+        "arguments": [
+          {
+            "valueFrom": "${\n    if (inputs.output_name)\n        return '';\n\n    var filename = '';\n    if (inputs.in_alignments instanceof Array)\n        filename = inputs.in_alignments[0].path;\n    else\n        filename = inputs.in_alignments.path;\n    var paths = filename.split('/');\n    var names = paths[paths.length - 1].split('.');\n    var nn = '';\n    var lind;\n    if ((filename.charAt(filename.length - 4) + filename.charAt(filename.length - 3) + filename.charAt(filename.length - 2) + filename.charAt(filename.length - 1)) == '.bam') {\n        lind = names.length - 1;\n    } else {\n        lind = names.length;\n    }\n    for (var i = 0; i < lind; i++) {\n        if (i != 0)\n            nn += '.';\n        nn += names[i];\n    }\n    if (inputs.emit_gvcf && inputs.emit_gvcf === true) {\n        nn += '.g';\n    }\n    return '-v ' + nn + '.vcf';\n}",
+            "shellQuote": false,
+            "position": 1,
+            "prefix": ""
+          }
+        ],
+        "successCodes": [
+          0
+        ],
+        "id": "graf_variant_caller",
+        "doc": "GRAF Variant Caller is a fast small variants (SNPs/indels) caller implementing local reassembly of haplotypes on active regions. It is designed to work with graph reference genomes, usually constructed from a linear reference and a VCF file containing known variants. When using alignment files generated by GRAF Graph Aligner, GRAF Variant Caller is able to utilise the embedded graph information to boost sensitivity.\n\nGRAF Variant Caller algorithms are described in details in the paper [Fast and accurate genomic analyses using genome graphs](https://www.nature.com/articles/s41588-018-0316-4).",
+        "label": "GRAF Variant Caller",
+        "inputs": [
+          {
+            "secondaryFiles": [
+              "${ return self.basename + ((self.nameext.toLowerCase() == '.cram') ? '.crai' : '.bai'); }"
+            ],
+            "doc": "Input alignments file in BAM or CRAM format.",
+            "id": "in_alignments",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 5,
+              "prefix": "-b"
+            },
+            "type": "File",
+            "label": "Alignments",
+            "sbg:fileTypes": "BAM, CRAM"
+          },
+          {
+            "secondaryFiles": [
+              ".fai"
+            ],
+            "doc": "Input linear reference file in FASTA format.",
+            "id": "in_linear_reference",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 3,
+              "prefix": "-f"
+            },
+            "type": "File",
+            "label": "Linear reference",
+            "sbg:fileTypes": "FASTA, FA"
+          },
+          {
+            "secondaryFiles": [
+              ".tbi"
+            ],
+            "doc": "Graph genome reference file for graph-aware variant calling.",
+            "id": "in_graph_reference",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 6,
+              "prefix": "-g"
+            },
+            "type": "File?",
+            "label": "Graph reference",
+            "sbg:fileTypes": "VCF.GZ"
+          },
+          {
+            "doc": "Call variants on intervals chr:start-end.",
+            "id": "in_intervals",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 2,
+              "prefix": "-a"
+            },
+            "type": "File?",
+            "label": "Intervals",
+            "sbg:fileTypes": "BED"
+          },
+          {
+            "sbg:toolDefaultValue": "default",
+            "doc": "Annotations to add to the output variants.",
+            "id": "annotations",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 9,
+              "prefix": "-x"
+            },
+            "type": [
+              "null",
+              {
+                "type": "enum",
+                "name": "annotations",
+                "symbols": [
+                  "all",
+                  "default",
+                  "none"
+                ]
+              }
+            ],
+            "label": "Annotations"
+          },
+          {
+            "sbg:toolDefaultValue": 30,
+            "doc": "Minimum confidence level for a variant to be called.",
+            "id": "call_conf",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 10,
+              "prefix": "-s"
+            },
+            "type": "float?",
+            "label": "Phred-scaled variant calling threshold"
+          },
+          {
+            "sbg:toolDefaultValue": "false",
+            "doc": "Emit gVCF in place of regular output VCF.",
+            "id": "emit_gvcf",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 12,
+              "prefix": "-z"
+            },
+            "type": "boolean?",
+            "label": "Emit gVCF"
+          },
+          {
+            "id": "intervals_string",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 3,
+              "prefix": "-i"
+            },
+            "type": "string?",
+            "label": "Intervals string",
+            "doc": "Interval to call variants over."
+          },
+          {
+            "id": "output_name",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 11,
+              "prefix": "-v"
+            },
+            "type": "string?",
+            "label": "Output name",
+            "doc": "Output filename."
+          },
+          {
+            "sbg:toolDefaultValue": "false",
+            "doc": "Enable graph AF-based prior probs.",
+            "id": "use_af_priors",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 18,
+              "prefix": "-P"
+            },
+            "type": "boolean?",
+            "label": "Use graph AF prior probs"
+          },
+          {
+            "sbg:toolDefaultValue": 100000,
+            "doc": "Maximum size of reassembly window.",
+            "id": "window_size",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 17,
+              "prefix": "-k"
+            },
+            "type": "int?",
+            "label": "Maximum window size"
+          },
+          {
+            "id": "max_haplotypes",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 8,
+              "prefix": "-h"
+            },
+            "type": "int?",
+            "label": "Maximum number of haplotypes",
+            "doc": "Maximum number of haplotypes to try in the HMM."
+          },
+          {
+            "sbg:toolDefaultValue": 36,
+            "doc": "Maximum number of threads.",
+            "id": "max_thread_count",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 16,
+              "prefix": "-t"
+            },
+            "type": "int?",
+            "label": "Maximum number of threads"
+          },
+          {
+            "sbg:toolDefaultValue": "false",
+            "doc": "Alternative method of assembly.",
+            "id": "use_string_overlap",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 15,
+              "prefix": "-p"
+            },
+            "type": "boolean?",
+            "label": "Use string overlap assembler"
+          },
+          {
+            "sbg:toolDefaultValue": "false",
+            "doc": "Disable experimental improvements.",
+            "id": "conservative_mode",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 7,
+              "prefix": "-c"
+            },
+            "type": "boolean?",
+            "label": "Conservative mode"
+          },
+          {
+            "id": "experimental_x",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 13,
+              "prefix": "-X"
+            },
+            "type": "float?",
+            "label": "Experimental x",
+            "doc": "Experimental parameter for developer use."
+          },
+          {
+            "id": "experimental_y",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 14,
+              "prefix": "-Y"
+            },
+            "type": "float?",
+            "label": "Experimental y",
+            "doc": "Experimental parameter for developer use."
+          }
+        ],
+        "baseCommand": [
+          "/usr/local/bin/rasm"
+        ],
+        "$namespaces": {
+          "sbg": "https://sevenbridges.com"
+        }
+      }
+    },
+    {
+      "out": [
+        {
+          "id": "out_filtered_variants"
+        }
+      ],
+      "in": [
+        {
+          "id": "in_variants",
+          "source": "graf_variant_caller/out_variants"
+        }
+      ],
+      "id": "variant_filtration",
+      "label": "Variant Filtration",
+      "sbg:x": 740,
+      "sbg:y": 181,
+      "run": {
+        "sbg:appVersion": [
+          "v1.0"
+        ],
+        "outputs": [
+          {
+            "id": "out_filtered_variants",
+            "type": "File",
+            "outputBinding": {
+              "glob": "*_filtered.vcf"
+            }
+          }
+        ],
+        "sbg:sbgMaintained": false,
+        "requirements": [
+          {
+            "class": "ShellCommandRequirement"
+          },
+          {
+            "class": "DockerRequirement",
+            "dockerPull": "images.sbgenomics.com/vladimirk/bcftools:1.3"
+          },
+          {
+            "class": "InlineJavascriptRequirement"
+          }
+        ],
+        "class": "CommandLineTool",
+        "cwlVersion": "v1.0",
+        "arguments": [
+          {
+            "valueFrom": "${\n    return inputs.in_variants.nameroot + \"_filtered.vcf\";\n}",
+            "shellQuote": false,
+            "position": 0,
+            "prefix": "-o"
+          },
+          {
+            "valueFrom": "(TYPE=\"snp\" && (INFO/AD_Ratio[1] < 0.20 || INFO/MBQ[1] < 15 || INFO/QD < 1 || INFO/MQRankSum < -8 || INFO/FS > 50)) || (TYPE=\"indel\" && INFO/AD_Ratio[1] < 0.15)",
+            "shellQuote": true,
+            "position": 0,
+            "prefix": "-e"
+          },
+          {
+            "valueFrom": "v",
+            "shellQuote": false,
+            "position": 0,
+            "prefix": "-O"
+          },
+          {
+            "valueFrom": "FP",
+            "shellQuote": false,
+            "position": 0,
+            "prefix": "-s"
+          },
+          {
+            "valueFrom": "x",
+            "shellQuote": false,
+            "position": 0,
+            "prefix": "-m"
+          }
+        ],
+        "sbg:validationErrors": [],
+        "id": "variant_filtration",
+        "label": "Variant Filtration",
+        "inputs": [
+          {
+            "id": "in_variants",
+            "inputBinding": {
+              "shellQuote": false,
+              "position": 20
+            },
+            "type": "File"
+          }
+        ],
+        "baseCommand": [
+          "bcftools",
+          "filter"
+        ],
+        "$namespaces": {
+          "sbg": "https://sevenbridges.com"
+        }
+      }
+    }
+  ],
+  "sbg:image_url": "https://cgc.sbgenomics.com/ns/brood/images/phil_webster/bco-cwl-examples/graf-germline-variant-detection-workflow-1-0/0.png",
+  "sbg:links": [
+    {
+      "id": "https://www.sevenbridges.com/graph/",
+      "label": "Homepage"
+    },
+    {
+      "id": "https://github.com/sbg/docs/raw/master/GRAF/Seven_Bridges_GRAF_User_Guide.pdf",
+      "label": "Documentation"
+    },
+    {
+      "id": "https://github.com/sbg/docs/raw/master/GRAF/Seven_Bridges_GRAF_End_User_License_Agreement.pdf",
+      "label": "End-user license agreement"
+    }
+  ],
+  "requirements": [
+    {
+      "class": "InlineJavascriptRequirement"
+    },
+    {
+      "class": "StepInputExpressionRequirement"
+    }
+  ],
+  "class": "Workflow",
+  "sbg:expand_workflow": false,
+  "hints": [
+    {
+      "value": "c5.18xlarge;ebs-gp2;700",
+      "class": "sbg:AWSInstanceType"
+    }
+  ],
+  "sbg:toolAuthor": "Seven Bridges",
+  "doc": "The GRAF Germline Variant Detection Workflow enables accurate alignment and variant calling by utilizing a **genome graph** reference that can address the bias and other limitations inherent in linear genome references. Seven Bridges has constructed a comprehensive **pan-genome graph** that incorporates the diverse genetic composition of all populations around the world. By using this pan-genome graph, the GRAF Germline Variant Detection Workflow makes graph technology applicable at the whole genome level, enabling [highly accurate and fast read alignment and variant calling](https://www.nature.com/articles/s41588-018-0316-4). The current version of the workflow is 1.0 and supports both GRCh37 and GRCh38 versions of the Pan-Genome graphs.\n\n## Methods and Algorithms\n#### Graph reference\nThe graph reference augments the linear representation of the human genome (GRCh37 or GRCh38) with additional information on the genetic diversity of various human populations. The pan-genome graphs provided by Seven Bridges contain single nucleotide polymorphisms, insertions, deletions and other structural variations observed with significant frequency in a large number of populations.\n#### Alignment\nThe GRAF Aligner is a fast and accurate short read aligner capable of aligning sequencing reads to the genome graph reference. It is designed to process single and paired reads from NGS sequencing technologies.\n#### Variant calling\nThe GRAF Variant Caller is designed to work in tandem with the GRAF Aligner and detect both small variants and structural variants with assistance from the data available on population genome variability.\n#### Filtering\nThe following hard filtering criteria is applied to the variants detected by the GRAF Variant Caller. Variants satisfying the criteria are marked as false positives but not removed from the VCF file.\n* SNPs: AD_Ratio[1] < 0.20, MBQ[1] < 15, QD < 1, MQRankSum < -8, FS > 50\n* Indels: AD_Ratio[1] < 0.15\n\n## Inputs\n#### Reads\nNGS sequencing reads. Several formats are supported:\n* A single FASTQ or FASTQ.GZ file with single end (unpaired) reads.\n* A pair of FASTQ or FASTQ.GZ files with paired end reads. The *Paired-end* metadata field on the input files must be set as *1* and *2* to denote the pairs of reads prior to task execution.\n* A single BAM or CRAM file with either single end or paired end reads. Pair property is determined from flag 0x1 (see SAM specification). When the input file is a CRAM file encoded relative to a reference, the indexed reference file should be provided as **CRAM reference** input.\n\n#### Linear reference\nA FASTA file representing the linear reference used as the basis for genome graph construction. This file must be indexed, with .fai index available in the same path as the FASTA file. Valid references files (*GRCh38.GRAF.Linear_Reference.v1.fasta* and *GRCh37.GRAF.Linear_Reference.v1.fasta*) and their indices are available in the public reference files.\n#### Graph reference\nA VCF.GZ file containing the variants used to construct the genome graph reference. This file must be indexed, with .tbi index available in the same path as the VCF.GZ file. The variants in the file must be represented relative to the FASTA file passed to **Linear reference** input. Valid pan-genome graphs (*GRCh38.GRAF.Pan_Genome_Reference.v1.vcf.gz* and *GRCh37.GRAF.Pan_Genome_Reference.v1.vcf.gz*) and their indices are available in the public reference files. The current pipeline does not accept custom graphs.\n#### Intervals\nThe target regions for variant calling in BED format. This BED file is also used to parallelize variant calling in multithreaded environment. Suggested files for the whole genome (*GRCh38.GRAF.Genome_Intervals.v1.bed* and *GRCh37.GRAF.Genome_Intervals.v1.bed*) are available in the public reference files.\n\n## Outputs\n#### Alignments\nRead alignments as output from the GRAF Aligner. The alignment file is coordinate-sorted and indexed, with .bai / .crai index as a secondary file with the alignment file.\n#### Variants\nA VCF file containing the final list of variants detected by the GRAF Variant Caller. Variants that do not pass the hard filtering criteria are marked with FP in the FILTER column.",
+  "sbg:revisionsInfo": [
+    {
+      "sbg:revision": 0,
+      "sbg:modifiedBy": "phil_webster",
+      "sbg:modifiedOn": 1676561827,
+      "sbg:revisionNotes": "Copy of admin/sbg-public-data/graf-germline-variant-detection-workflow-1-0/3"
+    }
+  ],
+  "$namespaces": {
+    "sbg": "https://sevenbridges.com"
+  },
+  "sbg:wrapperAuthor": "Seven Bridges",
+  "outputs": [
+    {
+      "outputSource": [
+        "graf_aligner/out_alignments"
+      ],
+      "secondaryFiles": [
+        ".bai",
+        ".crai"
+      ],
+      "id": "out_alignments",
+      "doc": "BAM or CRAM file with aligned reads.",
+      "sbg:fileTypes": "BAM, CRAM",
+      "label": "Alignments",
+      "type": "File",
+      "sbg:y": 413,
+      "sbg:x": 466.33966064453125
+    },
+    {
+      "outputSource": [
+        "variant_filtration/out_filtered_variants"
+      ],
+      "id": "out_filtered_variants",
+      "doc": "Output variants in VCF or gVCF.",
+      "sbg:fileTypes": "VCF",
+      "label": "Filtered variants",
+      "type": "File",
+      "sbg:y": 181,
+      "sbg:x": 890
+    }
+  ],
+  "sbg:license": "",
+  "cwlVersion": "v1.0",
+  "inputs": [
+    {
+      "id": "in_reads",
+      "doc": "Input reads in FASTQ, SAM, BAM or CRAM format.",
+      "sbg:fileTypes": "FQ, FASTQ, FQ.GZ, FASTQ.GZ",
+      "label": "Reads",
+      "type": "File[]",
+      "sbg:y": -23,
+      "sbg:x": 109
+    },
+    {
+      "secondaryFiles": [
+        ".fai"
+      ],
+      "sbg:suggestedValue": {
+        "path": "5eea5653c80cb0e4b57ee42f",
+        "name": "GRCh38.GRAF.Linear_Reference.v1.fa",
+        "class": "File",
+        "secondaryFiles": [
+          {
+            "path": "5eea52f2c80cb0e4ae7ee42f",
+            "name": "GRCh38.GRAF.Linear_Reference.v1.fa.fai",
+            "class": "File"
+          }
+        ]
+      },
+      "id": "in_linear_reference",
+      "doc": "Reference fasta file for graph construction.",
+      "sbg:fileTypes": "FASTA, FA",
+      "label": "Linear reference",
+      "type": "File",
+      "sbg:y": 98,
+      "sbg:x": -18.03125
+    },
+    {
+      "secondaryFiles": [
+        ".tbi"
+      ],
+      "sbg:suggestedValue": {
+        "path": "5eea525bc80cb0e4ad7ee42f",
+        "name": "GRCh38.GRAF.Pan_Genome_Reference.v1.vcf.gz",
+        "class": "File",
+        "secondaryFiles": [
+          {
+            "path": "5eea52fdc80cb0e4af7ee42f",
+            "name": "GRCh38.GRAF.Pan_Genome_Reference.v1.vcf.gz.tbi",
+            "class": "File"
+          }
+        ]
+      },
+      "id": "in_graph_reference",
+      "doc": "Variant database in VCF.GZ file with Tabix index.",
+      "sbg:fileTypes": "VCF.GZ",
+      "label": "Graph reference",
+      "type": "File",
+      "sbg:y": 266,
+      "sbg:x": -13.03125
+    },
+    {
+      "sbg:suggestedValue": {
+        "path": "5eea51ecc80cb0e4ac7ee42f",
+        "name": "GRCh38.GRAF.Genome_Intervals.v1.bed",
+        "class": "File"
+      },
+      "id": "in_intervals",
+      "doc": "Set of target intervals for variant calling; also used to distribute workload among variant caller execution threads.",
+      "sbg:fileTypes": "BED",
+      "label": "Intervals",
+      "type": "File",
+      "sbg:y": -87,
+      "sbg:x": 275.96875
+    },
+    {
+      "secondaryFiles": [
+        ".fai"
+      ],
+      "id": "in_cram_reference",
+      "doc": "When input reads are in CRAM format and a reference file is required for decoding, this should be the indexed FASTA file.",
+      "sbg:fileTypes": "FASTA, FA",
+      "label": "CRAM reference",
+      "type": "File?",
+      "sbg:y": 408,
+      "sbg:x": 74
+    }
+  ],
+  "sbg:projectName": "BCO-CWL Examples",
+  "label": "GRAF Germline Variant Detection Workflow",
+  "sbg:categories": [
+    "Alignment",
+    "Variant Calling",
+    "Graph",
+    "Genomics",
+    "CWL1.0"
+  ],
+  "sbg:appVersion": [
+    "v1.0"
+  ],
+  "id": "https://cgc-api.sbgenomics.com/v2/apps/phil_webster/bco-cwl-examples/graf-germline-variant-detection-workflow-1-0/0/raw/",
+  "sbg:id": "phil_webster/bco-cwl-examples/graf-germline-variant-detection-workflow-1-0/0",
+  "sbg:revision": 0,
+  "sbg:revisionNotes": "Copy of admin/sbg-public-data/graf-germline-variant-detection-workflow-1-0/3",
+  "sbg:modifiedOn": 1676561827,
+  "sbg:modifiedBy": "phil_webster",
+  "sbg:createdOn": 1676561827,
+  "sbg:createdBy": "phil_webster",
+  "sbg:project": "phil_webster/bco-cwl-examples",
+  "sbg:sbgMaintained": false,
+  "sbg:validationErrors": [],
+  "sbg:contributors": [
+    "phil_webster"
+  ],
+  "sbg:latestRevision": 0,
+  "sbg:publisher": "sbg",
+  "sbg:content_hash": "a07f42dc5ce033a3180cdead4da7ff91945ed30abbd93f113e908698b08ad37a9",
+  "sbg:workflowLanguage": "CWL",
+  "sbg:copyOf": "admin/sbg-public-data/graf-germline-variant-detection-workflow-1-0/3"
+}
