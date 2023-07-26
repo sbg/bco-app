@@ -24,9 +24,7 @@ library("visNetwork")
 library("tidycwl")
 library('dplyr')
 library("biocompute")
-<<<<<<< HEAD
 library('shinyalert')
-=======
 library("markdown")
 library("reactR")
 library('tools')
