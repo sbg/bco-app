@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>1.5 Generating BioCompute Objects with BCO App | BioCompute Object App User Manual</title>
+  <meta name="description" content="User manual of the BCO App by Seven Bridges" />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="1.5 Generating BioCompute Objects with BCO App | BioCompute Object App User Manual" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://sbg.github.io/bco-app/assets/cover.png" />
+  <meta property="og:description" content="User manual of the BCO App by Seven Bridges" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="1.5 Generating BioCompute Objects with BCO App | BioCompute Object App User Manual" />
+  
+  <meta name="twitter:description" content="User manual of the BCO App by Seven Bridges" />
+  <meta name="twitter:image" content="https://sbg.github.io/bco-app/assets/cover.png" />
+
+<meta name="author" content="Seven Bridges" />
+
+
+<meta name="date" content="2023-07-27" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="start-page.html"/>
+<link rel="next" href="biocompute-object-utilities.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">BCO App User Manual</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome to the BCO App</a></li>
+<li class="chapter" data-level="1" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>1</b> BioCompute Objects</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="login.html"><a href="login.html"><i class="fa fa-check"></i><b>1.1</b> BCO App Overview</a></li>
+<li class="chapter" data-level="1.2" data-path="menu-options.html"><a href="menu-options.html"><i class="fa fa-check"></i><b>1.2</b> Menu Options</a></li>
+<li class="chapter" data-level="1.3" data-path="installing-and-accessing-the-bco-app.html"><a href="installing-and-accessing-the-bco-app.html"><i class="fa fa-check"></i><b>1.3</b> Installing and Accessing the BCO App</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="installing-and-accessing-the-bco-app.html"><a href="installing-and-accessing-the-bco-app.html#docker"><i class="fa fa-check"></i><b>1.3.1</b> Containerized app</a></li>
+<li class="chapter" data-level="1.3.2" data-path="installing-and-accessing-the-bco-app.html"><a href="installing-and-accessing-the-bco-app.html#hosted"><i class="fa fa-check"></i><b>1.3.2</b> Cancer Genomics Cloud hosted app</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="start-page.html"><a href="start-page.html"><i class="fa fa-check"></i><b>1.4</b> Getting Started with the BCO App</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="start-page.html"><a href="start-page.html#login-page-deployment-specific"><i class="fa fa-check"></i><b>1.4.1</b> Login Page (Deployment Specific)</a></li>
+<li class="chapter" data-level="1.4.2" data-path="start-page.html"><a href="start-page.html#landing-page"><i class="fa fa-check"></i><b>1.4.2</b> Landing Page</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="generating-biocompute-objects-with-bco-app.html"><a href="generating-biocompute-objects-with-bco-app.html"><i class="fa fa-check"></i><b>1.5</b> Generating BioCompute Objects with BCO App</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="generating-biocompute-objects-with-bco-app.html"><a href="generating-biocompute-objects-with-bco-app.html#composer"><i class="fa fa-check"></i><b>1.5.1</b> Platform Composer</a></li>
+<li class="chapter" data-level="1.5.2" data-path="generating-biocompute-objects-with-bco-app.html"><a href="generating-biocompute-objects-with-bco-app.html#import-cwl"><i class="fa fa-check"></i><b>1.5.2</b> Step 1 - Import the Target CWL App</a></li>
+<li class="chapter" data-level="1.5.3" data-path="generating-biocompute-objects-with-bco-app.html"><a href="generating-biocompute-objects-with-bco-app.html#provenance"><i class="fa fa-check"></i><b>1.5.3</b> Step 2 - Provenance, Usability, and Extension Domains</a></li>
+<li class="chapter" data-level="1.5.4" data-path="generating-biocompute-objects-with-bco-app.html"><a href="generating-biocompute-objects-with-bco-app.html#execution"><i class="fa fa-check"></i><b>1.5.4</b> Step 3 - Execution and Parametric Domains</a></li>
+<li class="chapter" data-level="1.5.5" data-path="generating-biocompute-objects-with-bco-app.html"><a href="generating-biocompute-objects-with-bco-app.html#description"><i class="fa fa-check"></i><b>1.5.5</b> Step 4 - Description Domain</a></li>
+<li class="chapter" data-level="1.5.6" data-path="generating-biocompute-objects-with-bco-app.html"><a href="generating-biocompute-objects-with-bco-app.html#io-error"><i class="fa fa-check"></i><b>1.5.6</b> Step 5 - I/O and Error Domain</a></li>
+<li class="chapter" data-level="1.5.7" data-path="generating-biocompute-objects-with-bco-app.html"><a href="generating-biocompute-objects-with-bco-app.html#export"><i class="fa fa-check"></i><b>1.5.7</b> Step 6 - Review and Export</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="biocompute-object-utilities.html"><a href="biocompute-object-utilities.html"><i class="fa fa-check"></i><b>1.6</b> BioCompute Object Utilities</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="biocompute-object-utilities.html"><a href="biocompute-object-utilities.html#validator"><i class="fa fa-check"></i><b>1.6.1</b> BioCompute Object (BCO) Validator</a></li>
+<li class="chapter" data-level="1.6.2" data-path="biocompute-object-utilities.html"><a href="biocompute-object-utilities.html#browser"><i class="fa fa-check"></i><b>1.6.2</b> Interactive BCO Browser</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="appendix-i-platform-authentication-guide.html"><a href="appendix-i-platform-authentication-guide.html"><i class="fa fa-check"></i>Appendix I : Platform Authentication Guide</a>
+<ul>
+<li class="chapter" data-level="" data-path="authentication-token.html"><a href="authentication-token.html"><i class="fa fa-check"></i>Authentication Token</a></li>
+<li class="chapter" data-level="" data-path="locate-authentication-token.html"><a href="locate-authentication-token.html"><i class="fa fa-check"></i>Locate Authentication Token</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="appendix-ii-biocompute-object-domains.html"><a href="appendix-ii-biocompute-object-domains.html"><i class="fa fa-check"></i>Appendix II: BioCompute Object Domains</a>
+<ul>
+<li class="chapter" data-level="" data-path="top-level-field.html"><a href="top-level-field.html"><i class="fa fa-check"></i>Top Level Field</a></li>
+<li class="chapter" data-level="" data-path="provenance-domain.html"><a href="provenance-domain.html"><i class="fa fa-check"></i>Provenance Domain</a></li>
+<li class="chapter" data-level="" data-path="usability-domain.html"><a href="usability-domain.html"><i class="fa fa-check"></i>Usability Domain</a></li>
+<li class="chapter" data-level="" data-path="extension-domain.html"><a href="extension-domain.html"><i class="fa fa-check"></i>Extension Domain</a></li>
+<li class="chapter" data-level="" data-path="description-domain.html"><a href="description-domain.html"><i class="fa fa-check"></i>Description Domain</a></li>
+<li class="chapter" data-level="" data-path="execution-domain.html"><a href="execution-domain.html"><i class="fa fa-check"></i>Execution Domain</a></li>
+<li class="chapter" data-level="" data-path="parametric-domain.html"><a href="parametric-domain.html"><i class="fa fa-check"></i>Parametric Domain</a></li>
+<li class="chapter" data-level="" data-path="input-output-domain.html"><a href="input-output-domain.html"><i class="fa fa-check"></i>Input Output Domain</a></li>
+<li class="chapter" data-level="" data-path="error-domain.html"><a href="error-domain.html"><i class="fa fa-check"></i>Error Domain</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="database.html"><a href="database.html"><i class="fa fa-check"></i><b>2</b> Uploading BioCompute Objects to the BCO Database</a></li>
+<li class="divider"></li>
+<li><a href="https://www.sevenbridges.com/" target="blank">&copy; 2020 Seven Bridges</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">BioCompute Object App User Manual</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="generating-biocompute-objects-with-bco-app" class="section level2 hasAnchor" number="1.5">
+<h2><span class="header-section-number">1.5</span> Generating BioCompute Objects with BCO App<a href="generating-biocompute-objects-with-bco-app.html#generating-biocompute-objects-with-bco-app" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The following example details generating a BCO from a CWL workflow on the Cancer Genomics Cloud. We selected this example because the Platform Composer includes elements of the text composer and the CWL composer. Reading through the example will outline the steps required to generate a BCO object.</p>
+<div id="composer" class="section level3 hasAnchor" number="1.5.1">
+<h3><span class="header-section-number">1.5.1</span> Platform Composer<a href="generating-biocompute-objects-with-bco-app.html#composer" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="import-cwl" class="section level3 hasAnchor" number="1.5.2">
+<h3><span class="header-section-number">1.5.2</span> Step 1 - Import the Target CWL App<a href="generating-biocompute-objects-with-bco-app.html#import-cwl" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>After you click the “<strong>Platform Composer</strong>” page of the BCO App under the “<strong>Generators</strong>” tab, you will see the initial step of the BCO generation, the Import step:</p>
+<div class="float">
+<img src="assets/step-initial.png" alt="Initial Page of the Platform Composer" />
+<div class="figcaption">Initial Page of the Platform Composer</div>
+</div>
+<p>The BCO Creator/Composer includes six steps, each step corresponding to a BCO domain, to generate a new BioCompute Object (BCO):</p>
+<p>Step 1: Import workflow written Common Workflow Language (CWL).</p>
+<p>Step 2: Set BCO fields in the Provenance, Usability, and Extension Domains.</p>
+<p>Step 3: Set BCO fields in the Execution and Parametric Domains.</p>
+<p>Step 4: Set the Description Domain fields.</p>
+<p>Step 5: Set the fields in the I/O and Error Domain.</p>
+<p>Step 6: Generate BCO</p>
+<p>Once user entry is completed, you can generate and review the BCO associated with the workflow. A generated BCO can be downloaded, published to a Git page, and uploaded to your Seven Bridges platform.</p>
+<p>This first Import step (Figure 3) collects the following information from you to initiate the generation process: <strong>Platform</strong>, <strong>Authentication Token</strong>, <strong>Project</strong>, <strong>Task of the Project</strong> (optional), and <strong>Application Name</strong>. Select a name for a <strong>Platform</strong> that you want to fetch a CWL file of an application.</p>
+<div class="float">
+<img src="assets/import-blank.png" alt="Required Platform Composer" />
+<div class="figcaption">Required Platform Composer</div>
+</div>
+<p>After that, paste your authentication token to “<strong>Paste the auth token from…</strong>” field. Colored text in the name of the field is a direct link to the authentication token page of the selected platform (See <strong>Appendix I</strong> for additional information). Projects, tasks, and applications that exist in the account of the user will be fetched once a valid authentication token is entered. Finally, the target application can be selected from “<strong>Choose the CWL workflow to import</strong>” field to fetch a CWL of a target application to work with to generate a BioCompute Object. Optionally, a user could selected an completed task at this step which would include the workflow information in the generated CWL.</p>
+</div>
+<div id="provenance" class="section level3 hasAnchor" number="1.5.3">
+<h3><span class="header-section-number">1.5.3</span> Step 2 - Provenance, Usability, and Extension Domains<a href="generating-biocompute-objects-with-bco-app.html#provenance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In step 2, User enters Provenance, Usability, and Extension Domains of BCO.</p>
+<p>The BCO App automatically enters some fields from information parsed from the selected CWL workflow. Users are prompted to complete the remaining fields. You can find the complete detailed list of Provenance, Usability, and Extension Domain fields in <strong>Appendix II</strong>. See Figure 4 and 5 for Provenance Domain Entry fields.</p>
+<div class="float">
+<img src="assets/step-provenance-1.png" alt="Example of Provenance Domain fields automatically filled by the BCO App." />
+<div class="figcaption">Example of Provenance Domain fields automatically filled by the BCO App.</div>
+</div>
+<div class="float">
+<img src="assets/step-provenance-2.png" alt="Example of Provenance Domain Fields to be entered by the user." />
+<div class="figcaption">Example of Provenance Domain Fields to be entered by the user.</div>
+</div>
+</div>
+<div id="execution" class="section level3 hasAnchor" number="1.5.4">
+<h3><span class="header-section-number">1.5.4</span> Step 3 - Execution and Parametric Domains<a href="generating-biocompute-objects-with-bco-app.html#execution" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In step 3, You are prompted to enter text in the Execution and Parametric Domains fields. Some entries will spark a pop up box as shown in Figure 6. See <strong>Appendix II</strong> for a complete list of fields in the Execution and Parametric Domain.</p>
+<div class="float">
+<img src="assets/edit-entry.png" alt="Example of adding a new entry or editing existence one in the field." />
+<div class="figcaption">Example of adding a new entry or editing existence one in the field.</div>
+</div>
+</div>
+<div id="description" class="section level3 hasAnchor" number="1.5.5">
+<h3><span class="header-section-number">1.5.5</span> Step 4 - Description Domain<a href="generating-biocompute-objects-with-bco-app.html#description" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The user is prompted to enter information from the in the Description Domain. Some of the fields will be pre-populated as shown in Figure 7. See <strong>Appendix II</strong> for a complete list Description Domain fields.</p>
+<div class="float">
+<img src="assets/step-description.png" alt="Description Domain example from Step 4" />
+<div class="figcaption">Description Domain example from Step 4</div>
+</div>
+<p>You can find the complete list of the details of the Description Domain fields in Appendix II and Table 5.</p>
+</div>
+<div id="io-error" class="section level3 hasAnchor" number="1.5.6">
+<h3><span class="header-section-number">1.5.6</span> Step 5 - I/O and Error Domain<a href="generating-biocompute-objects-with-bco-app.html#io-error" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Next, you are prompted to enter information for the I/O and Error Domains. Some of the fields will be pre-populated as shown in Figure 8 and 9 below. You can find the complete detailed list of I/O and Error Domains’ fields in <strong>Appendix II</strong>.</p>
+<div class="float">
+<img src="assets/step-io.png" alt="I/O Domain example from Step 5" />
+<div class="figcaption">I/O Domain example from Step 5</div>
+</div>
+<div class="float">
+<img src="assets/step-error.png" alt="Error Domain example from Step 5" />
+<div class="figcaption">Error Domain example from Step 5</div>
+</div>
+<p>You can find the complete detailed list of I/O and Error Domains’ fields in Appendix II, Table 8, and Table 9.</p>
+</div>
+<div id="export" class="section level3 hasAnchor" number="1.5.7">
+<h3><span class="header-section-number">1.5.7</span> Step 6 - Review and Export<a href="generating-biocompute-objects-with-bco-app.html#export" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>As the last step of BCO Composer, you can review your generated BCO file in “<strong>Review &amp; Export</strong>” after “<strong>Generate &amp; Preview BCO</strong>” button is clicked. The <strong>BCO ID</strong> of the generated BCO file is automatically assigned:</p>
+<div class="float">
+<img src="assets/step-review-export.png" alt="Review the generated BCO file" />
+<div class="figcaption">Review the generated BCO file</div>
+</div>
+<p>The BCO App includes several BCO export features (Figure 11). A user can export a BCO file in JSON file format, “<strong>Export as JSON</strong>”. The generated BCO file is downloaded as a JSON file (Figure 12).</p>
+<div class="float">
+<img src="assets/export-buttons.png" alt="Export and save features" />
+<div class="figcaption">Export and save features</div>
+</div>
+<div class="float">
+<img src="assets/output-json.png" alt="Example View of the Downloaded BCO JSON file" />
+<div class="figcaption">Example View of the Downloaded BCO JSON file</div>
+</div>
+<p>Users can also generate a PDF reports for the BioCompute Object with “<strong>Export as PDF</strong>” button. The report includes human readable summaries for all the BCO domains, the BioCompute Object specification, and the raw JSON of the generated BCO:</p>
+<div class="float">
+<img src="assets/output-pdf.png" alt="Example View of the Generated PDF Report in Step 6" />
+<div class="figcaption">Example View of the Generated PDF Report in Step 6</div>
+</div>
+<p>In addition to export features, there are two very useful save features in the BCO App: <strong>Save to the Platform</strong> and <strong>Save to GitHub</strong>.</p>
+<p>The first one is <strong>Save to the Platform</strong>, automatically saves the generated BCO file into “<strong>BCO</strong>” folder under “<strong>Files</strong>” of your project. You can see the example of the generated files in the project’s “<strong>Files/BCO</strong>” folder in Figure 14.</p>
+<p>Also, there is no need to open the platform in the external browser window. When “<strong>Save to the Platform</strong>” button is clicked, the direct link (to the platform) appears near the “<strong>Upload Succeeeded</strong>” warning to access the generated file on the platform easily (Figure 15).</p>
+<div class="float">
+<img src="assets/output-platform.png" alt="Generated BCO exported to the Seven Bridges Platform." />
+<div class="figcaption">Generated BCO exported to the Seven Bridges Platform.</div>
+</div>
+<div class="float">
+<img src="assets/export-buttons-2.png" alt="Save to the Seven Bridges Platform with direct links to the platform in Step 6." />
+<div class="figcaption">Save to the Seven Bridges Platform with direct links to the platform in Step 6.</div>
+</div>
+<p>A second way to save the generated BCO is to publish the BCO to GitHub. “<strong>Save to GitHub</strong>”, automatically saves the generated BCO file into your GitHub account. “<strong>GitHub Connection</strong>” popup window streamlines the process of publishing the BCO JSON file to your git page (Figure 16).</p>
+<p>The <strong>GitHub Connection</strong> popup window requires the <strong>username</strong> and <strong>password</strong> of the user’s GitHub account to complete the connection and push operations. The user also enters the target <strong>Repository Name</strong> to push the generated BCO file. The <strong>Git Commit Message</strong> contains GitHub response messaged that may include indication of a successful or failed operation.</p>
+<div class="float">
+<img src="assets/git-page.png" alt="GitHub connection window in Step 6" />
+<div class="figcaption">GitHub connection window in Step 6</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="start-page.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="biocompute-object-utilities.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bco-app-user-manual.pdf", "bco-app-user-manual.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
